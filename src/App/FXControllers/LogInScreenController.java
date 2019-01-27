@@ -1,6 +1,6 @@
 package App.FXControllers;
 
-import App.EmployeeAccount;
+import App.Classes.EmployeeAccount;
 import DatabaseConnector.Authenticate;
 import DatabaseConnector.NotManagerException;
 import javafx.fxml.FXML;
@@ -33,22 +33,23 @@ public class LogInScreenController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        /** To test UI */
-
-        /**
-         EmployeeAccount activeAccount = new EmployeeAccount();
-         //activeAccount.setEmployeeType("manager");
-         if(username.equals("") && password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
-         incorrectCredentials.setVisible(false);
-         createAndShowMainWindow(activeAccount);
-         }else{ //If credentials cannot be authenticated
-         incorrectCredentials.setVisible(true);
-         }
-         */
+        /* To test UI */
 
 
-        /** To test UI with DATABASE */
-        try {
+        EmployeeAccount activeAccount = new EmployeeAccount();
+        activeAccount.setAccType("Manager");
+
+        if(username.equals("") && password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
+            incorrectCredentials.setVisible(false);
+            createAndShowMainWindow(activeAccount);
+        }else { //If credentials cannot be authenticated
+            incorrectCredentials.setVisible(true);
+        }
+
+
+
+        /* To test UI with DATABASE */
+        /*try {
             EmployeeAccount activeAccount = Authenticate.authenticate(username, password);
 
             if (activeAccount == null) {
@@ -60,7 +61,7 @@ public class LogInScreenController {
         } catch (NotManagerException e) {
             incorrectCredentials.setText(e.getMessage());
             incorrectCredentials.setVisible(true);
-        }
+        }*/
     }
 
     /**
@@ -70,14 +71,21 @@ public class LogInScreenController {
     private void createAndShowMainWindow(EmployeeAccount activeAccount){
         String filename; //The name of the appropriate FXML file
 
-        /**
+        /*
          * renamed from getEmployeeType() to getAccType(). This should be clarified later
          * We have 3 account types, 'Manager', 'Operator', 'Admin'
          */
-        if(activeAccount.getAccType().equals("Manager")){
-            filename = "ManagerSystem";
-        }else{
-            filename = "OperatorSystem";
+        switch(activeAccount.getAccType()){
+            case "Manager":
+                filename = "ManagerSystem";
+                break;
+            case "Operator":
+                filename = "OperatorSystem";
+                break;
+            default: //Account is not a manager or operator - reject  log in
+                filename = "";
+                //TODO: reject log in
+                break;
         }
 
         try{
@@ -92,7 +100,7 @@ public class LogInScreenController {
             closeLoginScreen();
         }catch (IOException e){
             System.out.println(e);
-            System.exit(0);
+            System.exit(2);
         }
     }
 

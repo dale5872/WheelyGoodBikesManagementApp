@@ -1,4 +1,4 @@
-package App;
+package App.Classes;
 
 public class Account {
     private int userID;

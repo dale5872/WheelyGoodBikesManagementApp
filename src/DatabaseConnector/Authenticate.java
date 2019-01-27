@@ -1,9 +1,9 @@
 package DatabaseConnector;
 
-import App.EmployeeAccount;
+import App.Classes.EmployeeAccount;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import App.Location;
+import App.Classes.Location;
 
 public class Authenticate {
 

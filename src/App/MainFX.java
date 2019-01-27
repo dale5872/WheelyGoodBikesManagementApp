@@ -1,4 +1,4 @@
-package App;
+package app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,8 +27,6 @@ public class MainFX extends Application {
         }catch (IOException e){
             System.out.println(e);
             System.exit(2);
-            // 0 Exit code means the program ran successfully,
-            // any other exit code means there was an error
         }
     }
 }
