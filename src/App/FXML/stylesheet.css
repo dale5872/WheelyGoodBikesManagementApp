@@ -17,3 +17,35 @@
 .green-button:pressed{
 	-fx-background-color: #71AF33;
 }
+
+.nav-bar-tab{
+	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+	-fx-background-radius: 0;
+}
+
+.nav-bar-tab-inactive{
+	-fx-background-color: #5E5E5E;
+	-fx-text-fill: white;
+}
+
+.nav-bar-tab-active{
+	-fx-background-color: #9AF445;
+	-fx-text-fill: black;
+}
+
+.nav-bar-tab:hover{
+	-fx-background-color: #9AF445;
+	-fx-text-fill: black;
+}
+
+.nav-bar-tab:pressed{
+	-fx-background-color: #88D33D;
+	-fx-text-fill: black;
+}
+
+.nav-bar-tab:disabled{
+	-fx-opacity: 1;
+}
+
+

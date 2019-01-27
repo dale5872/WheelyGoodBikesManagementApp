@@ -1,8 +1,10 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+
 import DatabaseConnector.Authenticate;
 import DatabaseConnector.NotManagerException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
@@ -28,16 +31,14 @@ public class LogInScreenController {
      * If credentials are authenticated, creates and opens the main window, closing the log in window
      */
     @FXML
-    private void login(){
+    protected void login(){
         incorrectCredentials.setVisible(false);
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         /* To test UI */
-
-
         EmployeeAccount activeAccount = new EmployeeAccount();
-        activeAccount.setAccType("Manager");
+        activeAccount.setAccType("Operator");
 
         if(username.equals("") && password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
             incorrectCredentials.setVisible(false);
