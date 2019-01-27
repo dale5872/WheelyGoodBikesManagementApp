@@ -1,5 +1,5 @@
+//TODO: Documentation
 package App.Classes;
-
 public class EmployeeAccount extends Account {
 
     private int employeeID;
@@ -10,6 +10,7 @@ public class EmployeeAccount extends Account {
     public EmployeeAccount() {
         super();
     }
+
     public EmployeeAccount(int employeeID, String employeeType, int userID, String username, String name, String email, String phoneNumber, Location loc, String accType) {
         super(userID, username, name, email, phoneNumber, accType);
         this.employeeID = employeeID;
