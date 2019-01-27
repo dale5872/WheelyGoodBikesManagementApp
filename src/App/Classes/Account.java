@@ -1,3 +1,5 @@
+//TODO: Create system for retrieving user accounts
+// i.e. create class that allows for database querying certain user information
 package App.Classes;
 
 public class Account {

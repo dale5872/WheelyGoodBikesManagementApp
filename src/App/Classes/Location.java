@@ -1,5 +1,6 @@
+//TODO: Get all equipment available (not bikes) for certain locations
+//TODO: Memory saving so object is not always holding database data
 package App.Classes;
-
 import DatabaseConnector.Query;
 import DatabaseConnector.Results;
 import DatabaseConnector.InsertFailedException;

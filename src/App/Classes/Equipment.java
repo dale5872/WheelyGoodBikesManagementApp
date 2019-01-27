@@ -1,3 +1,4 @@
+//TODO: Documentation
 package App.Classes;
 
 public class Equipment {
@@ -44,3 +45,4 @@ public class Equipment {
         return this.image;
     }
 }
+
