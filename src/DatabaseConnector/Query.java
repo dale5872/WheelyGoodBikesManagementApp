@@ -8,6 +8,7 @@ public class Query {
 
     private String query;
     private Logger lgr = Logger.getLogger(Query.class.getName());
+    private SQLConnector sqlCon;
 
     /**
      * @param query - SQL Query to be executed
@@ -24,13 +25,7 @@ public class Query {
      * Query on the database
      */
     public Results executeQuery() {
-        //Connect to the database and return the SQL Connection Object
-        SQLConnector sqlCon = new SQLConnector();
-        if(!sqlCon.connect()) {
-            lgr.log(Level.SEVERE, "Connection to the database failed, aborting query execution");
-            return null;
-        }
-        Connection con = sqlCon.getConnectionObject();
+        Connection con = connectToDB();
 
         try{
             //Create SQL Statement, create ResultSet object and fill that object
@@ -67,9 +62,6 @@ public class Query {
                 r++;
             }
 
-            //Disconnect and log
-            sqlCon.disconnect();
-            lgr.log(Level.INFO, ("Query executed, SQL Connection closed."));
             return results;
 
         } catch (SQLException e) {
@@ -90,6 +82,37 @@ public class Query {
         return executeQuery();
     }
 
+    public boolean insertQuery(String query) {
+        this.query = query;
+        return insertQuery();
+    }
+
+    public boolean insertQuery() {
+        Connection con = connectToDB();
+        lgr.log(Level.INFO, "Executing insert query");
+
+        try {
+            Statement st = con.createStatement();
+            int rowsAffected = st.executeUpdate(this.query);
+            disconnectDB();
+
+            if(rowsAffected > 0) {
+                lgr.log(Level.INFO, "SQL INSERT statement executed successfully.");
+                return true;
+            } else {
+                lgr.log(Level.SEVERE, "SQL INSERT statement executed unsuccessfully.");
+                return false;
+            }
+
+
+        } catch (SQLException e) {
+            disconnectDB();
+            lgr.log(Level.SEVERE, e.getMessage(), e);
+            sqlCon.disconnect();
+            return false;
+        }
+    }
+
     /**
      * @param query - Query to be updated
      */
@@ -99,5 +122,21 @@ public class Query {
 
     public Logger returnLogger() {
         return lgr;
+    }
+
+    private Connection connectToDB() {
+        //Connect to the database and return the SQL Connection Object
+        sqlCon = new SQLConnector();
+        if(!sqlCon.connect()) {
+            lgr.log(Level.SEVERE, "Connection to the database failed, aborting query execution");
+            return null;
+        }
+        return sqlCon.getConnectionObject();
+    }
+
+    private void disconnectDB () {
+        //Disconnect and log
+        sqlCon.disconnect();
+        lgr.log(Level.INFO, ("Query executed, SQL Connection closed."));
     }
 }
