@@ -33,6 +33,11 @@
                                 </VBox>
                                 <HBox alignment="BOTTOM_CENTER" prefHeight="800.0" prefWidth="200.0" GridPane.columnIndex="1">
                                     <children>
+                              <Label fx:id="userLabel" text="userLabel" textFill="WHITE" textOverrun="CLIP">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
                                         <ToggleButton fx:id="pinkTabButton" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="Pink Tab" textOverrun="CLIP">
                                             <font>
                                                 <Font size="20.0" />
@@ -72,6 +77,24 @@
                                                 <String fx:value="nav-bar-tab-inactive" />
                                             </styleClass>
                                         </ToggleButton>
+                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="80.0" prefWidth="150.0" text="Logout" textOverrun="CLIP">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="nav-bar-tab" />
+                                    <String fx:value="nav-bar-tab-inactive" />
+                                 </styleClass>
+                              </ToggleButton>
+                              <ToggleButton fx:id="userButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="user" textOverrun="CLIP">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="nav-bar-tab" />
+                                    <String fx:value="nav-bar-tab-inactive" />
+                                 </styleClass>
+                              </ToggleButton>
                                     </children>
                                 </HBox>
                             </children>

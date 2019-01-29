@@ -48,7 +48,7 @@ public class LogInScreenController {
 
 
         /* To test UI with DATABASE */
-        /*try {
+        try {
             EmployeeAccount activeAccount = Authenticate.authenticate(username, password);
 
             if (activeAccount == null) {
@@ -60,7 +60,7 @@ public class LogInScreenController {
         } catch (NotManagerException e) {
             incorrectCredentials.setText(e.getMessage());
             incorrectCredentials.setVisible(true);
-        }*/
+        }
     }
 
     /**
@@ -88,6 +88,7 @@ public class LogInScreenController {
         }
 
         try{
+/**
             Parent root = FXMLLoader.load(getClass().getResource("../FXML/" + filename + ".fxml"));
             Scene scene = new Scene(root);
             Stage managerWindow = new Stage();
@@ -95,10 +96,25 @@ public class LogInScreenController {
             managerWindow.setScene(scene);
             managerWindow.setMaximized(true);
             managerWindow.show();
+*/
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/" + filename + ".fxml"));
+            Parent root = loader.load();
+            ManagerSystemController controller = loader.getController();
+            controller.setEmployee(activeAccount);
+            Scene scene = new Scene(root);
+            Stage managerWindow = new Stage();
+            managerWindow.setTitle("Wheely Good Bikes");
+            managerWindow.setScene(scene);
+            managerWindow.setMaximized(true);
+            managerWindow.show();
+
+
 
             closeLoginScreen();
-        }catch (IOException e){
-            System.out.println(e);
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+            e.printStackTrace();
             System.exit(2);
         }
     }

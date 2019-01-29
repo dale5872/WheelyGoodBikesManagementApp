@@ -37,4 +37,10 @@ public class EmployeeAccount extends Account {
     public void setLocation(Location loc) {
         this.loc = loc;
     }
+
+    public void close() {
+        this.employeeID = 0;
+        this.employeeType = null;
+        this.loc = null;
+    }
 }
