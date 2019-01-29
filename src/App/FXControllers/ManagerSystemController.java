@@ -24,7 +24,6 @@ public class ManagerSystemController {
     @FXML private ToggleButton orangeTabButton; //Gets the green tab button object
     @FXML private ToggleButton brownTabButton; //Gets the yellow tab button object
     @FXML private ToggleButton purpleTabButton; //Gets the blue tab button object
-    @FXML private ToggleButton logoutButton;
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private Pane pinkTab; //Gets the red tab object
@@ -34,6 +33,7 @@ public class ManagerSystemController {
     private List<Pane> tabs; //List to store all tabs;
 
     @FXML private ToggleButton userButton;
+    @FXML private ToggleButton logoutButton;
 
     private static EmployeeAccount employee;
 
@@ -95,6 +95,7 @@ public class ManagerSystemController {
         }catch (IOException ex){
             System.out.print(ex.getMessage());
             ex.printStackTrace();
-            System.exit(2);        }
+            System.exit(2);
+        }
     }
 }

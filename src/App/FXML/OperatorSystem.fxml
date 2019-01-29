@@ -72,6 +72,24 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
+                              <ToggleButton fx:id="userButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="150.0" text="user" textOverrun="CLIP">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="nav-bar-tab" />
+                                    <String fx:value="nav-bar-tab-inactive" />
+                                 </styleClass>
+                              </ToggleButton>
+                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="80.0" prefWidth="150.0" text="Logout" textOverrun="CLIP">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="nav-bar-tab" />
+                                    <String fx:value="nav-bar-tab-inactive" />
+                                 </styleClass>
+                              </ToggleButton>
                            </children>
                         </HBox>
                      </children>

@@ -100,8 +100,13 @@ public class LogInScreenController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/" + filename + ".fxml"));
             Parent root = loader.load();
-            ManagerSystemController controller = loader.getController();
-            controller.setEmployee(activeAccount);
+            if(filename.equals("ManagerSystem")) {
+                ManagerSystemController controller = loader.getController();
+                controller.setEmployee(activeAccount);
+            } else if(filename.equals("OperatorSystem")) {
+                OperatorSystemController controller = loader.getController();
+                controller.setEmployee(activeAccount);
+            }
             Scene scene = new Scene(root);
             Stage managerWindow = new Stage();
             managerWindow.setTitle("Wheely Good Bikes");
