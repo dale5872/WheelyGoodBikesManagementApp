@@ -19,27 +19,24 @@ import java.util.List;
  * This class contains methods for all event handling on the operator system
  */
 public class OperatorSystemController {
-    @FXML private ToggleButton redTabButton; //Gets the red tab button object
-    @FXML private ToggleButton greenTabButton; //Gets the green tab button object
-    @FXML private ToggleButton yellowTabButton; //Gets the yellow tab button object
-    @FXML private ToggleButton blueTabButton; //Gets the blue tab button object
+    @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
+    @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
+    @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
+    @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
+    @FXML private ToggleButton userTabButton; //Gets the user's account tab button
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
-    @FXML private Pane redTab; //Gets the red tab object
-    @FXML private Pane greenTab; //Gets the green tab object
-    @FXML private Pane yellowTab; //Gets the yellow tab object
-    @FXML private Pane blueTab; //Gets the blue tab object
+    @FXML private Pane accountsTab; //Gets the accounts tab object
+    @FXML private Pane bikesTab; //Gets the bikes tab object
+    @FXML private Pane locationsTab; //Gets the locations tab object
+    @FXML private Pane rentalsTab; //Gets the rentals tab object
+    @FXML private Pane userTab; //Gets the user's account tab object
     private List<Pane> tabs; //List to store all tabs;
-
-    @FXML private ToggleButton userButton;
-    @FXML private ToggleButton logoutButton;
 
     private static EmployeeAccount employee;
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
-        /* set up welcome message */
-        userButton.setText(employee.getName());
     }
 
     /**
@@ -49,17 +46,19 @@ public class OperatorSystemController {
     public void initialize(){
         /* Initialise the tabButtons list and add all tab buttons to it */
         tabButtons = new ArrayList<>();
-        tabButtons.add(redTabButton);
-        tabButtons.add(greenTabButton);
-        tabButtons.add(yellowTabButton);
-        tabButtons.add(blueTabButton);
+        tabButtons.add(accountsTabButton);
+        tabButtons.add(bikesTabButton);
+        tabButtons.add(locationsTabButton);
+        tabButtons.add(rentalsTabButton);
+        tabButtons.add(userTabButton);
 
         /* Initialise the tabs list and add all tabs to it */
         tabs = new ArrayList<>();
-        tabs.add(redTab);
-        tabs.add(greenTab);
-        tabs.add(yellowTab);
-        tabs.add(blueTab);
+        tabs.add(accountsTab);
+        tabs.add(bikesTab);
+        tabs.add(locationsTab);
+        tabs.add(rentalsTab);
+        tabs.add(userTab);
     }
 
     /**
@@ -75,6 +74,7 @@ public class OperatorSystemController {
     /**
      * Logs the user out
      */
+    @SuppressWarnings("Duplicates")
     @FXML
     protected void logout(ActionEvent e) {
         this.employee = null;
@@ -87,7 +87,7 @@ public class OperatorSystemController {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            Stage thisScreen = (Stage) userButton.getScene().getWindow();
+            Stage thisScreen = (Stage) userTabButton.getScene().getWindow();
             thisScreen.close();
 
         }catch (IOException ex){

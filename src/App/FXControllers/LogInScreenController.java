@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 
 /**
@@ -34,21 +33,20 @@ public class LogInScreenController {
         String password = passwordField.getText();
 
         /* To test UI */
+        EmployeeAccount activeAccount = new EmployeeAccount();
+        activeAccount.setAccType(username);
 
-        /*EmployeeAccount activeAccount = new EmployeeAccount();
-        activeAccount.setAccType("Operator");
-
-        if(username.equals("") && password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
+        if(password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
             incorrectCredentials.setVisible(false);
             createAndShowMainWindow(activeAccount);
         }else { //If credentials cannot be authenticated
             incorrectCredentials.setVisible(true);
-        }*/
+        }
 
 
 
         /* To test UI with DATABASE */
-        try {
+        /*try {
             EmployeeAccount activeAccount = Authenticate.authenticate(username, password);
 
             if (activeAccount == null) {
@@ -60,7 +58,7 @@ public class LogInScreenController {
         } catch (NotManagerException e) {
             incorrectCredentials.setText(e.getMessage());
             incorrectCredentials.setVisible(true);
-        }
+        }*/
     }
 
     /**
@@ -114,10 +112,8 @@ public class LogInScreenController {
             managerWindow.setMaximized(true);
             managerWindow.show();
 
-
-
             closeLoginScreen();
-        }catch (Exception e){
+        }catch(Exception e){
             System.out.print(e.getMessage());
             e.printStackTrace();
             System.exit(2);

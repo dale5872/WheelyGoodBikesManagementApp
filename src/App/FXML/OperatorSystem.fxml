@@ -12,7 +12,7 @@
          <top>
             <AnchorPane prefHeight="60.0" prefWidth="200.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane alignment="CENTER" layoutY="5.0" prefHeight="100.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane alignment="TOP_RIGHT" layoutY="5.0" prefHeight="60.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,7 +33,7 @@
                         </VBox>
                         <HBox alignment="BOTTOM_CENTER" prefHeight="800.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <ToggleButton fx:id="redTabButton" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="Red Tab" textOverrun="CLIP">
+                              <ToggleButton fx:id="accountsTabButton" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Accounts" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -45,7 +45,7 @@
                                     <String fx:value="nav-bar-tab-active" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="greenTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="Green Tab" textOverrun="CLIP">
+                              <ToggleButton fx:id="bikesTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Bikes" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -54,7 +54,7 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="yellowTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="Yellow Tab" textOverrun="CLIP">
+                              <ToggleButton fx:id="locationsTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Locations" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -63,7 +63,7 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="blueTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="80.0" prefWidth="150.0" text="Blue Tab" textOverrun="CLIP">
+                              <ToggleButton fx:id="rentalsTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Rentals" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -72,16 +72,27 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="userButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="150.0" text="user" textOverrun="CLIP">
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+                           <children>
+                              <ToggleButton fx:id="userTabButton" maxHeight="60.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="60.0" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                                  <styleClass>
                                     <String fx:value="nav-bar-tab" />
                                     <String fx:value="nav-bar-tab-inactive" />
+                                    <String fx:value="account-button-inactive" />
                                  </styleClass>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="-4.0" left="-4.0" right="-4.0" top="-4.0" />
+                                 </padding>
                               </ToggleButton>
-                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="80.0" prefWidth="150.0" text="Logout" textOverrun="CLIP">
+                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -89,6 +100,9 @@
                                     <String fx:value="nav-bar-tab" />
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
                               </ToggleButton>
                            </children>
                         </HBox>
@@ -100,10 +114,11 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="redTab" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" />
-                  <Pane fx:id="greenTab" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: green;" visible="false" />
-                  <Pane fx:id="yellowTab" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;" visible="false" />
-                  <Pane fx:id="blueTab" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: blue;" visible="false" />
+                  <Pane fx:id="accountsTab" prefHeight="200.0" prefWidth="200.0" />
+                  <Pane fx:id="bikesTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                  <Pane fx:id="locationsTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                  <Pane fx:id="rentalsTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                  <Pane fx:id="userTab" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </StackPane>
          </center>

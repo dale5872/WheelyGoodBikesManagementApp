@@ -30,6 +30,11 @@ public class TabSwitcher {
                 btn.getStyleClass().remove("nav-bar-tab-inactive");
                 btn.getStyleClass().add("nav-bar-tab-active");
 
+                if(btn.getId().equals("userTabButton")){
+                    btn.getStyleClass().remove("account-button-inactive");
+                    btn.getStyleClass().add("account-button-active");
+                }
+
                 btn.setDisable(true);
 
                 tabs.get(i).setVisible(true);
@@ -41,6 +46,11 @@ public class TabSwitcher {
                  */
                 btn.getStyleClass().remove("nav-bar-tab-active");
                 btn.getStyleClass().add("nav-bar-tab-inactive");
+
+                if(btn.getId().equals("userTabButton")){
+                    btn.getStyleClass().remove("account-button-active");
+                    btn.getStyleClass().add("account-button-inactive");
+                }
 
                 btn.setDisable(false);
 

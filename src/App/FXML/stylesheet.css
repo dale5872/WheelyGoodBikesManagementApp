@@ -48,4 +48,16 @@
 	-fx-opacity: 1;
 }
 
+.account-button-inactive{
+	/*-fx-graphic: url("Profile_Man_White_Round_Small.png");*/
+	/*-fx-graphic: url("Profile_Man_White_Square_Small.png");*/
+	-fx-graphic: url("Profile_Round_White_Small.png");
+}
+
+.account-button-inactive:hover, .account-button-inactive:pressed, .account-button-active{
+	/*-fx-graphic: url("Profile_Man_Black_Round_Small.png");*/
+	/*-fx-graphic: url("Profile_Man_Black_Square_Small.png");*/
+	-fx-graphic: url("Profile_Round_Black_Small.png");
+}
+
 

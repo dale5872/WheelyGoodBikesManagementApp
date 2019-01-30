@@ -41,7 +41,7 @@
                         <Insets bottom="20.0" left="100.0" right="100.0" />
                     </VBox.margin>
                 </PasswordField>
-                <Button mnemonicParsing="false" onAction="#login" prefWidth="150.0" styleClass="green-button" text="Log In">
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#login" prefWidth="150.0" styleClass="green-button" text="Log In">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>

@@ -6,8 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 /**
  * Main class for starting the management app with JavaFX interfaces
  */
@@ -18,15 +16,16 @@ public class MainFX extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        try {
+        try{
             /* Create and show the log in window */
             Parent root = FXMLLoader.load(getClass().getResource("FXML/LogIn.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setTitle("Wheely Good Bikes");
             primaryStage.setScene(scene);
             primaryStage.show();
-        }catch (IOException e){
-            System.out.println(e);
+        }catch(Exception e){
+            System.out.print(e.getMessage());
+            e.printStackTrace();
             System.exit(2);
         }
     }
