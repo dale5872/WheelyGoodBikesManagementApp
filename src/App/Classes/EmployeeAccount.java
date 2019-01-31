@@ -11,8 +11,8 @@ public class EmployeeAccount extends Account {
         super();
     }
 
-    public EmployeeAccount(int employeeID, String employeeType, int userID, String username, String name, String email, String phoneNumber, Location loc, String accType) {
-        super(userID, username, name, email, phoneNumber, accType);
+    public EmployeeAccount(int employeeID, String employeeType, int userID, String username, String firstName, String lastName, String email, String phoneNumber, Location loc, String accType) {
+        super(userID, username, firstName, lastName, email, phoneNumber, accType);
         this.employeeID = employeeID;
         this.employeeType = employeeType;
         this.loc = loc;
@@ -37,6 +37,11 @@ public class EmployeeAccount extends Account {
     public void setLocation(Location loc) {
         this.loc = loc;
     }
+
+    public String getLocationName() {
+        return this.loc.getName();
+    }
+
 
     public void close() {
         this.employeeID = 0;

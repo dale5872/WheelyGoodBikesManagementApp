@@ -12,7 +12,7 @@
          <top>
             <AnchorPane prefHeight="60.0" prefWidth="200.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane alignment="TOP_RIGHT" layoutY="5.0" prefHeight="60.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane alignment="TOP_RIGHT" layoutY="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -130,15 +130,16 @@
                            <children>
                               <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <TableView fx:id="accountsTable" maxHeight="-Infinity" prefHeight="850.0" styleClass="table">
+                                    <TableView fx:id="accountsTable" editable="true" maxHeight="-Infinity" prefHeight="850.0" styleClass="table">
                                       <columns>
-                                        <TableColumn editable="false" prefWidth="75.0" text="ID" />
-                                        <TableColumn editable="false" prefWidth="250.0" text="Username" />
-                                          <TableColumn editable="false" prefWidth="250.0" text="Name" />
-                                          <TableColumn editable="false" prefWidth="250.0" text="Email" />
-                                          <TableColumn editable="false" prefWidth="150.0" text="Phone Number" />
-                                          <TableColumn editable="false" prefWidth="150.0" text="Account Type" />
-                                          <TableColumn editable="false" prefWidth="150.0" text="Location" />
+                                        <TableColumn id="tableID" fx:id="tableID" prefWidth="75.0" text="ID" />
+                                        <TableColumn id="tableUsername" fx:id="tableUsername" prefWidth="250.0" text="Username" />
+                                          <TableColumn id="tableFirstName" fx:id="tableFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
+                                          <TableColumn id="tableLastName" fx:id="tableLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
+                                          <TableColumn id="tableEmail" fx:id="tableEmail" prefWidth="200.0" text="Email" />
+                                          <TableColumn id="tablePhoneNumber" fx:id="tablePhoneNumber" prefWidth="150.0" text="Phone Number" />
+                                          <TableColumn id="tableAccountType" fx:id="tableAccountType" prefWidth="150.0" text="Account Type" />
+                                          <TableColumn id="tableLocation" fx:id="tableLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
                                       </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -149,6 +150,48 @@
                                           <Insets left="20.0" />
                                        </padding>
                                        <children>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <RadioButton fx:id="managersRadio" mnemonicParsing="false" text="Managers">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="operatorsRadio" mnemonicParsing="false" text="Operators">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="allRadio" mnemonicParsing="false" text="All">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button fx:id="loadData" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets bottom="25.0" />
+                                             </VBox.margin>
+                                          </AnchorPane>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                                              <children>
                                                 <VBox layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

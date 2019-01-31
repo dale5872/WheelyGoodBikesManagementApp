@@ -69,7 +69,8 @@ public class Authenticate {
             acc.setUsername((String) results.getElement(0, 1));
             acc.setEmployeeID((int) results.getElement(0, 2));
             acc.setLocation(new Location((int) results.getElement(0, 3), (String) results.getElement(0, 4)));
-            acc.setName((String) results.getElement(0, 5) + (String) results.getElement(0, 6));
+            acc.setFirstName((String) results.getElement(0, 5));
+            acc.setLastName((String) results.getElement(0, 6));
             acc.setEmail((String) results.getElement(0, 7));
             acc.setPhoneNumber((String) results.getElement(0, 8));
             acc.setAccType((String) results.getElement(0, 9));

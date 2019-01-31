@@ -5,15 +5,17 @@ package App.Classes;
 public class Account {
     private int userID;
     private String username;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phoneNumber;
     private String accType;
 
-    public Account(int userID, String username, String name, String email, String phoneNumber, String accType) {
+    public Account(int userID, String username, String firstName, String lastName, String email, String phoneNumber, String accType) {
         this.userID = userID;
         this.username = username;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
@@ -28,9 +30,11 @@ public class Account {
         return this.username;
     }
 
-    public String getName() {
-        return this.name;
+    public String getFirstName() {
+        return this.firstName;
     }
+
+    public String getLastName() { return this.lastName; }
 
     public String getEmail () {
         return this.email;
@@ -52,9 +56,11 @@ public class Account {
         this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
+
+    public void setLastName(String lastName) {this.lastName = lastName; }
 
     public void setEmail(String email) {
         this.email = email;

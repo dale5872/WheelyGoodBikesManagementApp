@@ -28,11 +28,12 @@ public class LogInScreenController {
      */
     @FXML
     protected void login(){
+
         incorrectCredentials.setVisible(false);
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        /* To test UI */
+        /* To test UI
         EmployeeAccount activeAccount = new EmployeeAccount();
         activeAccount.setAccType(username);
 
@@ -43,10 +44,10 @@ public class LogInScreenController {
             incorrectCredentials.setVisible(true);
         }
 
-
+        */
 
         /* To test UI with DATABASE */
-        /*try {
+        try {
             EmployeeAccount activeAccount = Authenticate.authenticate(username, password);
 
             if (activeAccount == null) {
@@ -58,7 +59,7 @@ public class LogInScreenController {
         } catch (NotManagerException e) {
             incorrectCredentials.setText(e.getMessage());
             incorrectCredentials.setVisible(true);
-        }*/
+        }
     }
 
     /**
