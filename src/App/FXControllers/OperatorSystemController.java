@@ -3,13 +3,10 @@
 
 package App.FXControllers;
 
-import App.Classes.Account;
 import App.Classes.EmployeeAccount;
+import App.Classes.Equipment;
 import App.Classes.Location;
-import DatabaseConnector.Query;
-import DatabaseConnector.Results;
 import javafx.beans.Observable;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,21 +46,51 @@ public class OperatorSystemController {
 
     private static EmployeeAccount employee;
 
+    /** ACCOUNTS TAB */
     //Table
-    @FXML private TableColumn tableID;
-    @FXML private TableColumn tableUsername;
-    @FXML private TableColumn tableFirstName;
-    @FXML private TableColumn tableLastName;
-    @FXML private TableColumn tableEmail;
-    @FXML private TableColumn tablePhoneNumber;
-    @FXML private TableColumn tableAccountType;
-    @FXML private TableColumn tableLocation;
+    @FXML private TableColumn accountsID;
+    @FXML private TableColumn accountsUsername;
+    @FXML private TableColumn accountsFirstName;
+    @FXML private TableColumn accountsLastName;
+    @FXML private TableColumn accountsEmail;
+    @FXML private TableColumn accountsPhoneNumber;
+    @FXML private TableColumn accountsAccountType;
+    @FXML private TableColumn accountsLocation;
     @FXML private TableView accountsTable;
 
     //Search Properties
     @FXML private RadioButton managersRadio;
     @FXML private RadioButton operatorsRadio;
     @FXML private RadioButton allRadio;
+
+    /** Equipment Tab **/
+    //Table
+    @FXML private TableColumn equipmentID;
+    @FXML private TableColumn equipmentName;
+    @FXML private TableColumn equipmentLocation;
+    @FXML private TableColumn equipmentType;
+    @FXML private TableColumn equipmentPrice;
+    @FXML private TableColumn equipmentStatus;
+    @FXML private TableView equipmentTable;
+
+    /** Locations Tab **/
+    //Table
+    @FXML private TableColumn locationsID;
+    @FXML private TableColumn locationsName;
+    @FXML private TableView locationsTable;
+
+    /** Rentals Tab **/
+    //Table
+    @FXML private TableColumn rentalsID;
+    @FXML private TableColumn rentalsEquipmentID;
+    @FXML private TableColumn rentalsEquipmentName;
+    @FXML private TableColumn rentalsEquipmentPrice;
+    @FXML private TableColumn rentalsStartTime;
+    @FXML private TableColumn rentalsReturnTime;
+    @FXML private TableColumn rentalsTotalPrice;
+    @FXML private TableColumn rentalsLocation;
+    @FXML private TableColumn rentalsStatus;
+    @FXML private TableView rentalsTable;
 
 
     public void setEmployee(EmployeeAccount e) {
@@ -103,32 +130,6 @@ public class OperatorSystemController {
     }
 
     /**
-     * Logs the user out
-     */
-    @SuppressWarnings("Duplicates")
-    @FXML
-    protected void logout(ActionEvent e) {
-        this.employee = null;
-        try {
-            /* Create and show the log in window */
-            Parent root = FXMLLoader.load(getClass().getResource("../FXML/LogIn.fxml"));
-            Scene scene = new Scene(root);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Wheely Good Bikes");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            Stage thisScreen = (Stage) userTabButton.getScene().getWindow();
-            thisScreen.close();
-
-        }catch (IOException ex){
-            System.out.print(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
-        }
-    }
-
-    /**
      * Finds the parameters selected by the user and loads the data
      * based on those parameters. Parameters are selected through
      * Radio Buttons
@@ -155,30 +156,30 @@ public class OperatorSystemController {
             throw new InvalidParametersException("One parameter must be selected!");
         }
 
-        ObservableList<EmployeeAccount> accounts = fetchAccounts(queryString);
+        ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(queryString);
 
-        tableID.setCellValueFactory(
+        accountsID.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("employeeID")
         );
-        tableUsername.setCellValueFactory(
+        accountsUsername.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("username")
         );
-        tableFirstName.setCellValueFactory(
+        accountsFirstName.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("firstName")
         );
-        tableLastName.setCellValueFactory(
+        accountsLastName.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("lastName")
         );
-        tableEmail.setCellValueFactory(
+        accountsEmail.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("email")
         );
-        tablePhoneNumber.setCellValueFactory(
+        accountsPhoneNumber.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
         );
-        tableAccountType.setCellValueFactory(
+        accountsAccountType.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("accType")
         );
-        tableLocation.setCellValueFactory(
+        accountsLocation.setCellValueFactory(
                 new PropertyValueFactory<EmployeeAccount, String>("LocationName")
         );
 
@@ -187,44 +188,81 @@ public class OperatorSystemController {
     }
 
     /**
-     * Uses the query string to fetch the data from the SQL server and
-     * creates many Account / EmployeeAccount objects and parses the data
-     * into these objects. Then returns the list of these objects for
-     * display into the table
-     * @param queryString Query to execute on the SQL Server
-     * @return A list of Accounts filled with the data in each account
+     * Loads data from the SQL database into the equipment table
+     * @param e
      */
-    private ObservableList<EmployeeAccount> fetchAccounts(String queryString) {
-        ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
+    @FXML
+    protected void loadEquipment(ActionEvent e) {
+        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_stock.location, location.name,\n" +
+                "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
+                "FROM equipment_stock\n" +
+                "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
+                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentType;";
 
-        Query q = new Query();
-        q.updateQuery(queryString);
-        Results res = q.executeQuery();
+        ObservableList<Equipment> equipment = DataFetcher.equipment(queryString);
 
-        //check we have results
-        if(!res.isEmpty()) {
-            //add data
-            /*
-            TABLE STRUCTURE:
-            (employeeID, username, firstName, lastName, email, phone, accountType, location)
-             */
-            for(int r = 0; r < res.getRows(); r++) {
-                EmployeeAccount acc = new EmployeeAccount();
+        equipmentID.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("ID")
+        );
+        equipmentName.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Type")
+        );
+        equipmentLocation.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("")
+        );
+        equipmentType.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("")
+        );
+        equipmentPrice.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Price")
+        );
+        equipmentStatus.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Status")
+        );
 
-                acc.setEmployeeID((int)res.getElement(r,0));
-                acc.setUsername((String)res.getElement(r,1));
-                acc.setFirstName((String)res.getElement(r,2));
-                acc.setLastName((String)res.getElement(r,3));
-                acc.setEmail((String)res.getElement(r,4));
-                acc.setPhoneNumber((String)res.getElement(r,5));
-                acc.setAccType((String)res.getElement(r,6));
-                Location loc = new Location((int)res.getElement(r,7), (String)res.getElement(r,8));
-                acc.setLocation(loc);
-
-                accounts.add(acc);
-            }
-        }
-
-        return accounts;
+        equipmentTable.setItems(equipment);
     }
+
+    @FXML
+    protected void loadLocations(ActionEvent e) {
+        String queryString = "";
+
+        ObservableList<Location> locations = DataFetcher.locations(queryString);
+
+        locationsID.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("locationID")
+        );
+        locationsName.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Name")
+        );
+
+        locationsTable.setItems(locations);
+    }
+    /**
+     * Logs the user out
+     */
+    @SuppressWarnings("Duplicates")
+    @FXML
+    protected void logout(ActionEvent e) {
+        this.employee = null;
+        try {
+            /* Create and show the log in window */
+            Parent root = FXMLLoader.load(getClass().getResource("../FXML/LogIn.fxml"));
+            Scene scene = new Scene(root);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Wheely Good Bikes");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+            Stage thisScreen = (Stage) userTabButton.getScene().getWindow();
+            thisScreen.close();
+
+        }catch (IOException ex){
+            System.out.print(ex.getMessage());
+            ex.printStackTrace();
+            System.exit(2);
+        }
+    }
+
+
 }

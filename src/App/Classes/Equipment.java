@@ -25,6 +25,8 @@ public class Equipment {
         this.image = (String)row[4];
     }
 
+    public Equipment() {}
+
     public int getID() {
         return this.id;
     }
@@ -43,6 +45,26 @@ public class Equipment {
 
     public String getImage() {
         return this.image;
+    }
+
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 

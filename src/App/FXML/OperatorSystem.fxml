@@ -132,14 +132,14 @@
                                  <children>
                                     <TableView fx:id="accountsTable" editable="true" maxHeight="-Infinity" prefHeight="850.0" styleClass="table">
                                       <columns>
-                                        <TableColumn id="tableID" fx:id="tableID" prefWidth="75.0" text="ID" />
-                                        <TableColumn id="tableUsername" fx:id="tableUsername" prefWidth="250.0" text="Username" />
-                                          <TableColumn id="tableFirstName" fx:id="tableFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
-                                          <TableColumn id="tableLastName" fx:id="tableLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
-                                          <TableColumn id="tableEmail" fx:id="tableEmail" prefWidth="200.0" text="Email" />
-                                          <TableColumn id="tablePhoneNumber" fx:id="tablePhoneNumber" prefWidth="150.0" text="Phone Number" />
-                                          <TableColumn id="tableAccountType" fx:id="tableAccountType" prefWidth="150.0" text="Account Type" />
-                                          <TableColumn id="tableLocation" fx:id="tableLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
+                                        <TableColumn id="tableID" fx:id="accountsID" prefWidth="75.0" text="ID" />
+                                        <TableColumn id="tableUsername" fx:id="accountsUsername" prefWidth="250.0" text="Username" />
+                                          <TableColumn id="tableFirstName" fx:id="accountsFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
+                                          <TableColumn id="tableLastName" fx:id="accountsLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
+                                          <TableColumn id="tableEmail" fx:id="accountsEmail" prefWidth="200.0" text="Email" />
+                                          <TableColumn id="tablePhoneNumber" fx:id="accountsPhoneNumber" prefWidth="150.0" text="Phone Number" />
+                                          <TableColumn id="tableAccountType" fx:id="accountsAccountType" prefWidth="150.0" text="Account Type" />
+                                          <TableColumn id="tableLocation" fx:id="accountsLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
                                       </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -362,12 +362,12 @@
                                  <children>
                                     <TableView fx:id="equipmentTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
-                                          <TableColumn editable="false" prefWidth="75.0" text="ID" />
-                                          <TableColumn editable="false" prefWidth="250.0" text="Name" />
-                                          <TableColumn prefWidth="150.0" text="Location" />
-                                          <TableColumn editable="false" prefWidth="100.0" text="Type" />
-                                          <TableColumn editable="false" prefWidth="100.0" text="Price" />
-                                          <TableColumn editable="false" prefWidth="150.0" text="Status" />
+                                          <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
+                                          <TableColumn fx:id="equipmentName" editable="false" prefWidth="250.0" text="Name" />
+                                          <TableColumn fx:id="equipmentLocation" prefWidth="150.0" text="Location" />
+                                          <TableColumn fx:id="equipmentType" editable="false" prefWidth="100.0" text="Type" />
+                                          <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="100.0" text="Price" />
+                                          <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="150.0" text="Status" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -552,8 +552,8 @@
                                  <children>
                                     <TableView fx:id="locationTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
-                                          <TableColumn editable="false" prefWidth="75.0" text="ID" />
-                                          <TableColumn editable="false" prefWidth="500.0" text="Name" />
+                                          <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
+                                          <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -661,15 +661,15 @@
                                  <children>
                                     <TableView fx:id="locationTable1" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
-                                          <TableColumn editable="false" prefWidth="100.0" text="Rental ID" />
-                                          <TableColumn editable="false" prefWidth="120.0" text="Equipment ID" />
-                                          <TableColumn prefWidth="300.0" text="Equipment Name" />
-                                          <TableColumn prefWidth="150.0" text="Equipment Price" />
-                                          <TableColumn prefWidth="120.0" text="Start Time" />
-                                          <TableColumn prefWidth="120.0" text="Return Time" />
-                                          <TableColumn prefWidth="100.0" text="Total Price" />
-                                          <TableColumn prefWidth="250.0" text="Location" />
-                                          <TableColumn prefWidth="150.0" text="Status" />
+                                          <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
+                                          <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
+                                          <TableColumn fx:id="rentalsEquipmentName" prefWidth="300.0" text="Equipment Name" />
+                                          <TableColumn fx:id="rentalsEquipmentPrice" prefWidth="150.0" text="Equipment Price" />
+                                          <TableColumn fx:id="rentalsStartTime" prefWidth="120.0" text="Start Time" />
+                                          <TableColumn fx:id="rentalsReturnTime" prefWidth="120.0" text="Return Time" />
+                                          <TableColumn fx:id="rentalsTotalPrice" prefWidth="100.0" text="Total Price" />
+                                          <TableColumn fx:id="rentalsLocation" prefWidth="250.0" text="Location" />
+                                          <TableColumn fx:id="rentalsStatus" prefWidth="150.0" text="Status" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets />
