@@ -7,9 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +24,11 @@ public class ManagerSystemController {
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button object
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
-    @FXML private Pane bikesTab; //Gets the bikes tab object
-    @FXML private Pane penaltiesTab; //Gets the penalties tab object
-    @FXML private Pane reportsTab; //Gets the reports tab object
-    @FXML private Pane userTab; //Gets the user tab object
-    private List<Pane> tabs; //List to store all tabs;
+    @FXML private AnchorPane bikesTab; //Gets the bikes tab object
+    @FXML private AnchorPane penaltiesTab; //Gets the penalties tab object
+    @FXML private AnchorPane reportsTab; //Gets the reports tab object
+    @FXML private AnchorPane userTab; //Gets the user tab object
+    private List<AnchorPane> tabs; //List to store all tabs;
 
     private static EmployeeAccount employee;
 

@@ -8,6 +8,8 @@
 
 .green-button{
 	-fx-background-color: #9AF445;
+	-fx-font-weight: bold;
+	-fx-font-size: 18px;
 }
 
 .green-button:hover{
@@ -60,4 +62,6 @@
 	-fx-graphic: url("Profile_Round_Black_Small.png");
 }
 
-
+.table{
+	-fx-font-size: 16px;
+}

@@ -1,7 +1,7 @@
 package App.FXControllers;
 
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class TabSwitcher {
      * @param tabs A list of all tabs
      * @param clickedButton The tab button that has been clicked
      */
-    public static void switchTab(List<ToggleButton> tabButtons, List<Pane> tabs, ToggleButton clickedButton){
+    public static void switchTab(List<ToggleButton> tabButtons, List<AnchorPane> tabs, ToggleButton clickedButton){
         for(int i = 0; i < tabButtons.size(); i++){
             ToggleButton btn = tabButtons.get(i);
 

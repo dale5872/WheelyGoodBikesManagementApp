@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
@@ -26,12 +26,12 @@ public class OperatorSystemController {
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
-    @FXML private Pane accountsTab; //Gets the accounts tab object
-    @FXML private Pane bikesTab; //Gets the bikes tab object
-    @FXML private Pane locationsTab; //Gets the locations tab object
-    @FXML private Pane rentalsTab; //Gets the rentals tab object
-    @FXML private Pane userTab; //Gets the user's account tab object
-    private List<Pane> tabs; //List to store all tabs;
+    @FXML private AnchorPane accountsTab; //Gets the accounts tab object
+    @FXML private AnchorPane bikesTab; //Gets the bikes tab object
+    @FXML private AnchorPane locationsTab; //Gets the locations tab object
+    @FXML private AnchorPane rentalsTab; //Gets the rentals tab object
+    @FXML private AnchorPane userTab; //Gets the user's account tab object
+    private List<AnchorPane> tabs; //List to store all tabs;
 
     private static EmployeeAccount employee;
 

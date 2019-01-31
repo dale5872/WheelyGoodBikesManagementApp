@@ -102,10 +102,10 @@
             <center>
                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Pane fx:id="bikesTab" prefHeight="200.0" prefWidth="200.0" />
-                        <Pane fx:id="penaltiesTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
-                        <Pane fx:id="reportsTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
-                        <Pane fx:id="userTab" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                  <AnchorPane fx:id="bikesTab" />
+                  <AnchorPane fx:id="penaltiesTab" visible="false" />
+                  <AnchorPane fx:id="reportsTab" visible="false" />
+                  <AnchorPane fx:id="userTab"  visible="false" />
                     </children>
                 </StackPane>
             </center>
