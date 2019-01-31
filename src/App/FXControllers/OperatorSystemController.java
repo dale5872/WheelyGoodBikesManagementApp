@@ -7,23 +7,20 @@ import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 import App.Classes.Location;
 import javafx.beans.Observable;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Controller for the operator system
@@ -44,8 +41,6 @@ public class OperatorSystemController {
     @FXML private AnchorPane userTab; //Gets the user's account tab object
     private List<AnchorPane> tabs; //List to store all tabs;
 
-    private static EmployeeAccount employee;
-
     /** ACCOUNTS TAB */
     //Table
     @FXML private TableColumn accountsID;
@@ -62,6 +57,18 @@ public class OperatorSystemController {
     @FXML private RadioButton managersRadio;
     @FXML private RadioButton operatorsRadio;
     @FXML private RadioButton allRadio;
+
+    //Add Account Properties
+    @FXML private TextField accountsNewAccountUsername;
+    @FXML private TextField accountsNewAccountPassword;
+    @FXML private TextField accountsNewAccountFirstName;
+    @FXML private TextField accountsNewAccountLastName;
+    @FXML private TextField accountsNewAccountEmail;
+    @FXML private TextField accountsNewAccountPhone;
+    @FXML private ComboBox accountsNewAccountType;
+    @FXML private ComboBox accountsNewAccountLocation;
+
+    //Edit Account Properties
 
     /** Equipment Tab **/
     //Table
@@ -92,6 +99,10 @@ public class OperatorSystemController {
     @FXML private TableColumn rentalsStatus;
     @FXML private TableView rentalsTable;
 
+    //fields
+    private static EmployeeAccount employee;
+    private static HashMap<String, String> accounts;
+    private static HashMap<String, String> locations;
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
@@ -117,16 +128,20 @@ public class OperatorSystemController {
         tabs.add(locationsTab);
         tabs.add(rentalsTab);
         tabs.add(userTab);
-    }
 
-    /**
-     * Handles switching between tabs
-     * @param e the ActionEvent from the button click
-     */
-    @FXML
-    protected void switchTab(ActionEvent e){
-        ToggleButton clickedButton = (ToggleButton) e.getSource();
-        TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
+        //Load in data for adding / editing accounts
+        try {
+            loadAccounts(null);
+        } catch (InvalidParametersException e) {
+            //Some real issue here...
+            //TODO: MessageBox. FATAL ERROR AND CLOSES.
+        }
+
+        //Load in account types and location dropdown boxes
+        accounts = DataFetcher.getDropdownValues("accountTypes");
+        locations = DataFetcher.getDropdownValues("locations");
+        setValues();
+
     }
 
     /**
@@ -187,6 +202,22 @@ public class OperatorSystemController {
 
     }
 
+    @FXML
+    protected void addAccount(ActionEvent e) {
+        int key = Integer.parseInt(accounts.get(accountsNewAccountType.getValue()));
+        int accountType = Integer.parseInt(accounts.get(key));
+
+        String queryString = "INSERT INTO users VALUES `null`, `"
+                + accountType
+                + "`, `"
+                + accountsNewAccountUsername.getText()
+                + "`, `"
+                + accountsNewAccountPassword.getText()
+                + "`";
+
+        queryString = "INSERT INTO user_info VALUES ";
+    }
+
     /**
      * Loads data from the SQL database into the equipment table
      * @param e
@@ -238,6 +269,45 @@ public class OperatorSystemController {
 
         locationsTable.setItems(locations);
     }
+
+    /**
+     * Sets the values for the drop down menus
+     */
+    private void setValues() {
+        //set accountTypes
+        Set s = accounts.keySet();
+        Iterator it = s.iterator();
+        ObservableList<String> options = FXCollections.observableArrayList();
+
+        while(it.hasNext()) {
+            options.add((String)it.next());
+        }
+
+        accountsNewAccountType.setItems(options);
+        //TODO: Add for editing account dropdown menus
+
+        //set location
+        s = locations.keySet();
+        it = s.iterator();
+        options = FXCollections.observableArrayList();
+
+        while(it.hasNext()) {
+            options.add((String)it.next());
+        }
+
+        accountsNewAccountLocation.setItems(options);
+    }
+
+    /**
+     * Handles switching between tabs
+     * @param e the ActionEvent from the button click
+     */
+    @FXML
+    protected void switchTab(ActionEvent e){
+        ToggleButton clickedButton = (ToggleButton) e.getSource();
+        TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
+    }
+
     /**
      * Logs the user out
      */

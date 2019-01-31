@@ -12,6 +12,8 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.HashMap;
+
 public class DataFetcher {
 
     /**
@@ -115,8 +117,47 @@ public class DataFetcher {
         return rentals;
     }
 
+    /**
+     * Returns a HashMap of the values needed for the dropdown values in the
+     * add / edit forms
+     * @param dropdown "accountTypes" or "locations" are acceptable inputs
+     * @return HashMap of the names of each dropdown values and their corresponding
+     * ID numbers in the database (ID, Name)
+     */
+    protected static HashMap<String, String> getDropdownValues(String dropdown) {
+        HashMap<String, String> accountTypes = new HashMap<>();
+
+        Query q = new Query();
+        if(dropdown.equals("accountTypes")) {
+            q.updateQuery("SELECT accountTypeID, type\n" +
+                    "FROM account_types;");
+        } else if(dropdown.equals("locations")) {
+            q.updateQuery("SELECT locationID, name\n" +
+                    "FROM location;");
+        } else {
+            return null;
+        }
+
+        Results res = q.executeQuery();
+
+        //check if we have results
+        if(!res.isEmpty()) {
+            for(int r = 0; r < res.getRows(); r++) {
+                accountTypes.put((String)res.getElement(r, 1), Integer.toString((int)res.getElement(r, 0)));
+            }
+        }
+
+        return accountTypes;
+
+    }
+
     private static Results query(String queryString) {
         Query q = new Query(queryString);
         return q.executeQuery();
+    }
+
+    private boolean executeQuery(String queryString) {
+        Query q = new Query(queryString);
+        return q.insertQuery();
     }
 }

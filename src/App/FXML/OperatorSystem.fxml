@@ -162,17 +162,17 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </Label>
+                                                      <RadioButton fx:id="allRadio" mnemonicParsing="false" selected="true" text="All">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
                                                       <RadioButton fx:id="managersRadio" mnemonicParsing="false" text="Managers">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" />
                                                          </VBox.margin>
                                                       </RadioButton>
                                                       <RadioButton fx:id="operatorsRadio" mnemonicParsing="false" text="Operators">
-                                                         <VBox.margin>
-                                                            <Insets bottom="5.0" />
-                                                         </VBox.margin>
-                                                      </RadioButton>
-                                                      <RadioButton fx:id="allRadio" mnemonicParsing="false" text="All">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" />
                                                          </VBox.margin>
@@ -204,7 +204,7 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </Label>
-                                                      <TextField fx:id="newAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" prefWidth="406.0" promptText="Username...">
+                                                      <TextField fx:id="accountsNewAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" prefWidth="406.0" promptText="Username...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -212,7 +212,32 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </TextField>
-                                                      <TextField fx:id="newAccountName" layoutX="14.0" layoutY="69.0" prefHeight="25.0" prefWidth="406.0" promptText="Name....">
+                                                      <TextField fx:id="accountsNewAccountPassword" prefHeight="25.0" prefWidth="406.0" promptText="Password...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextField fx:id="accountsNewAccountFirstName" prefHeight="25.0" prefWidth="406.0" promptText="First Name....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                            <TextField fx:id="accountsNewAccountLastName" prefHeight="25.0" prefWidth="406.0" promptText="Surname...">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <TextField fx:id="accountsNewAccountEmail" prefHeight="25.0" prefWidth="406.0" promptText="Email...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -220,15 +245,7 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </TextField>
-                                                      <TextField fx:id="newAccountEmail" prefHeight="25.0" prefWidth="406.0" promptText="Email...">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </TextField>
-                                                      <TextField fx:id="newAccountPhone" prefHeight="25.0" prefWidth="406.0" promptText="Phone Number...">
+                                                      <TextField fx:id="accountsNewAccountPhone" prefHeight="25.0" prefWidth="406.0" promptText="Phone Number...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -238,12 +255,12 @@
                                                       </TextField>
                                                       <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" style="-fx-font-size: 14px;">
                                                          <children>
-                                                            <ComboBox fx:id="newAccType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
+                                                            <ComboBox fx:id="accountsNewAccountType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
                                                                <HBox.margin>
                                                                   <Insets />
                                                                </HBox.margin>
                                                             </ComboBox>
-                                                            <ComboBox fx:id="newAccountLocation" disable="true" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
+                                                            <ComboBox fx:id="accountsNewAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
                                                                <HBox.margin>
                                                                   <Insets left="10.0" />
                                                                </HBox.margin>
@@ -255,7 +272,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_RIGHT">
                                                          <children>
-                                                            <Button fx:id="addAccount" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                            <Button fx:id="accountsAddAccount" mnemonicParsing="false" onAction="#addAccount" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
                                                          </children>
                                                       </HBox>
                                                    </children>
@@ -375,6 +392,33 @@
                                     </TableView>
                                     <VBox prefHeight="918.0" prefWidth="454.0">
                                        <children>
+                                          <AnchorPane prefHeight="185.0" prefWidth="434.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="238.0">
+                                                         <children>
+                                                            <Button fx:id="addEquip1" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets bottom="25.0" />
+                                             </VBox.margin>
+                                          </AnchorPane>
                                           <AnchorPane prefHeight="185.0" prefWidth="434.0" style="-fx-background-color: white;">
                                              <children>
                                                 <VBox layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -550,7 +594,7 @@
                            <children>
                               <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <TableView fx:id="locationTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
+                                    <TableView fx:id="locationsTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
                                           <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
                                           <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
@@ -659,7 +703,7 @@
                            <children>
                               <VBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <TableView fx:id="locationTable1" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
+                                    <TableView fx:id="rentalTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
                                           <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
                                           <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
