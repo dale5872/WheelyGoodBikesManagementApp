@@ -17,7 +17,7 @@ public class SQLConnector {
      * @return boolean - if the SQL connection has been established
      */
     public boolean connect() {
-        lgr.log(Level.INFO, "Connecting to database with predefined credentials...");
+       // lgr.log(Level.INFO, "Connecting to database with predefined credentials...");
         //Set up SSH Tunnel
        // SSHTunnel tunnel = new SSHTunnel();
         //tunnel.connect();
@@ -36,7 +36,7 @@ public class SQLConnector {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(query);
             if(rs.next()) {
-                lgr.log(Level.INFO, "Connection to database established");
+               // lgr.log(Level.INFO, "Connection to database established");
             }
             return true;
         } catch (SQLException e) {

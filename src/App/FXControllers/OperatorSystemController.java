@@ -6,7 +6,7 @@ package App.FXControllers;
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 import App.Classes.Location;
-import javafx.beans.Observable;
+import DatabaseConnector.InsertFailedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,8 +15,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -69,6 +71,14 @@ public class OperatorSystemController {
     @FXML private ComboBox accountsNewAccountLocation;
 
     //Edit Account Properties
+    @FXML private VBox editAccountVBox;
+    @FXML private TextField accountsEditAccountUsername;
+    @FXML private TextField accountsEditAccountFirstName;
+    @FXML private TextField accountsEditAccountLastName;
+    @FXML private TextField accountsEditAccountEmail;
+    @FXML private TextField accountsEditAccountPhone;
+    @FXML private ComboBox accountsEditAccountType;
+    @FXML private ComboBox accountsEditAccountLocation;
 
     /** Equipment Tab **/
     //Table
@@ -153,7 +163,7 @@ public class OperatorSystemController {
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
         String queryString = "SELECT employees.employeeID, user.username,  employee_info.firstName, employee_info.lastName, \n" +
-                "       employee_info.workEmail, employee_info.workTel, account_types.type, location.locationID, location.name AS 'location'\n" +
+                "       employee_info.workEmail, employee_info.workTel, account_types.type, location.locationID, location.name AS 'location', user.userID\n" +
                 "FROM user\n" +
                 "INNER JOIN employees ON user.userID = employees.userID\n" +
                 "INNER JOIN employee_info ON employees.employeeID = employee_info.employeeID\n" +
@@ -202,25 +212,104 @@ public class OperatorSystemController {
 
     }
 
+    /**
+     * Method for adding a new account with the data specified by the user
+     * @param e ActionEvent object
+     */
     @FXML
     protected void addAccount(ActionEvent e) {
-        int key = Integer.parseInt(accounts.get(accountsNewAccountType.getValue()));
-        int accountType = Integer.parseInt(accounts.get(key));
+        String value = (String)accountsNewAccountType.getValue();
+        int accountType = Integer.parseInt(accounts.get(value));
 
-        String queryString = "INSERT INTO users VALUES `null`, `"
-                + accountType
-                + "`, `"
-                + accountsNewAccountUsername.getText()
-                + "`, `"
-                + accountsNewAccountPassword.getText()
-                + "`";
+        EmployeeAccount acc = new EmployeeAccount();
+        acc.setUsername(accountsNewAccountUsername.getText());
+        acc.setFirstName(accountsNewAccountFirstName.getText());
+        acc.setLastName(accountsNewAccountLastName.getText());
+        acc.setEmail(accountsNewAccountEmail.getText());
+        acc.setPhoneNumber(accountsNewAccountPhone.getText());
+        acc.setAccType((String)accountsNewAccountType.getValue());
+        acc.setLocation((String)accountsNewAccountLocation.getValue());
 
-        queryString = "INSERT INTO user_info VALUES ";
+        try {
+            DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
+        } catch (InsertFailedException ex) {
+            //TODO: MessageBox
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            //TODO: Exception handling
+            System.out.println(ex.getMessage());
+        }
+
+        //update table
+        accountsTable.getItems().add(acc);
+    }
+
+    /**
+     * Updates the account selected in the table with the information
+     * specified by the user in the input form
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void updateAccount(ActionEvent e) {
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<EmployeeAccount> row = accountsTable.getItems();
+        EmployeeAccount oldAccount = row.get(rowIndex);
+
+        //get new account value
+        EmployeeAccount newAccount = new EmployeeAccount();
+        newAccount.setUserID(oldAccount.getUserID());
+        newAccount.setEmployeeID(oldAccount.getEmployeeID());
+        newAccount.setUsername(accountsEditAccountUsername.getText());
+        newAccount.setFirstName(accountsEditAccountFirstName.getText());
+        newAccount.setLastName(accountsEditAccountLastName.getText());
+        newAccount.setEmail(accountsEditAccountEmail.getText());
+        newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
+        newAccount.setAccType((String)accountsEditAccountType.getValue());
+        Location loc = new Location((String)accountsEditAccountLocation.getValue());
+        newAccount.setLocation(loc);
+
+
+        String accountValue = (String)accountsEditAccountType.getValue();
+        int accountType = Integer.parseInt(accounts.get(accountValue));
+
+        try {
+            DataFetcher.updateAccount(oldAccount, newAccount, accountType);
+        } catch (InsertFailedException ex) {
+            //TODO: MessageBox
+            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            //TODO: TOTAL FAILURE MESSAGE BOX
+            System.out.println(ex.getMessage());
+        }
+
+        //update table
+        accountsTable.getItems().remove(rowIndex);
+        accountsTable.getItems().add(rowIndex, newAccount);
+    }
+
+    /**
+     * Deletes the selected account from the table
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void deleteAccount(ActionEvent e) {
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<EmployeeAccount> row = accountsTable.getItems();
+        EmployeeAccount account = row.get(rowIndex);
+
+        try {
+            DataFetcher.deleteAccount(account.getUserID(), ((EmployeeAccount) account).getEmployeeID());
+        } catch (InsertFailedException ex) {
+            //TODO: EXCEPTION
+        }
+
+        //remove from table
+        accountsTable.getItems().remove(rowIndex);
     }
 
     /**
      * Loads data from the SQL database into the equipment table
-     * @param e
+     * @param e ActionEvent object
      */
     @FXML
     protected void loadEquipment(ActionEvent e) {
@@ -254,6 +343,10 @@ public class OperatorSystemController {
         equipmentTable.setItems(equipment);
     }
 
+    /**
+     * Loads data from the SQL database into the Locations table
+     * @param e ActionEvent object
+     */
     @FXML
     protected void loadLocations(ActionEvent e) {
         String queryString = "";
@@ -271,6 +364,31 @@ public class OperatorSystemController {
     }
 
     /**
+     * When a user clicks on a row in the table, the data is automatically
+     * entered into the Edit Account section
+     * @param e MouseEvent object
+     */
+    @FXML
+    protected void updateEditBox(MouseEvent e) {
+        //enable the box
+        editAccountVBox.setDisable(false);
+
+        //fill the data
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<EmployeeAccount> row = accountsTable.getItems();
+        EmployeeAccount tmp = row.get(rowIndex);
+
+        accountsEditAccountUsername.setText(tmp.getUsername());
+        accountsEditAccountFirstName.setText(tmp.getFirstName());
+        //accountsEditAccountLastName.setText(tmp.getLastName());
+        accountsEditAccountEmail.setText(tmp.getEmail());
+        accountsEditAccountPhone.setText(tmp.getPhoneNumber());
+        accountsEditAccountType.setValue(tmp.getAccType());
+        accountsEditAccountLocation.setValue(tmp.getLocationName());
+
+    }
+
+    /**
      * Sets the values for the drop down menus
      */
     private void setValues() {
@@ -284,7 +402,7 @@ public class OperatorSystemController {
         }
 
         accountsNewAccountType.setItems(options);
-        //TODO: Add for editing account dropdown menus
+        accountsEditAccountType.setItems(options);
 
         //set location
         s = locations.keySet();
@@ -296,6 +414,7 @@ public class OperatorSystemController {
         }
 
         accountsNewAccountLocation.setItems(options);
+        accountsEditAccountLocation.setItems(options);
     }
 
     /**

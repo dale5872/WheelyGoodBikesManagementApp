@@ -29,6 +29,14 @@ public class Location {
         this.damagedBikes = 0;
     }
 
+    public Location(String name) {
+        this.name = name;
+        Query q = new Query("SELECT location.locationID FROM location WHERE location.name = '" + this.name + "';");
+        Results res = q.executeQuery();
+        this.locationID = (int)res.getElement(0,0);
+        //TODO: null result checking
+    }
+
     public int getLocationID() {
         return this.locationID;
     }

@@ -130,7 +130,7 @@
                            <children>
                               <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <TableView fx:id="accountsTable" editable="true" maxHeight="-Infinity" prefHeight="850.0" styleClass="table">
+                                    <TableView fx:id="accountsTable" editable="true" maxHeight="-Infinity" onMouseClicked="#updateEditBox" prefHeight="850.0" styleClass="table">
                                       <columns>
                                         <TableColumn id="tableID" fx:id="accountsID" prefWidth="75.0" text="ID" />
                                         <TableColumn id="tableUsername" fx:id="accountsUsername" prefWidth="250.0" text="Username" />
@@ -287,7 +287,7 @@
                                           </AnchorPane>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                                              <children>
-                                                <VBox disable="true" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <VBox fx:id="editAccountVBox" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
                                                       <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Account:">
                                                          <font>
@@ -297,7 +297,7 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </Label>
-                                                      <TextField fx:id="editAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" prefWidth="406.0" promptText="Username...">
+                                                      <TextField fx:id="accountsEditAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" prefWidth="406.0" promptText="Username...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -305,7 +305,24 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </TextField>
-                                                      <TextField fx:id="editAccountName" layoutX="14.0" layoutY="69.0" prefHeight="25.0" prefWidth="406.0" promptText="Name....">
+                                                      <HBox prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextField fx:id="accountsEditAccountFirstName" prefHeight="25.0" prefWidth="406.0" promptText="First Name....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                            <TextField fx:id="accountsEditAccountLastName" prefHeight="25.0" prefWidth="406.0" promptText="Surname....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <TextField fx:id="accountsEditAccountEmail" prefHeight="25.0" prefWidth="406.0" promptText="Email...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -313,15 +330,7 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </TextField>
-                                                      <TextField fx:id="editAccountEmail" prefHeight="25.0" prefWidth="406.0" promptText="Email...">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </TextField>
-                                                      <TextField fx:id="editAccountPhone" prefHeight="25.0" prefWidth="406.0" promptText="Phone Number...">
+                                                      <TextField fx:id="accountsEditAccountPhone" prefHeight="25.0" prefWidth="406.0" promptText="Phone Number...">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -331,12 +340,12 @@
                                                       </TextField>
                                                       <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" style="-fx-font-size: 14px;">
                                                          <children>
-                                                            <ComboBox fx:id="editAccType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
+                                                            <ComboBox fx:id="accountsEditAccountType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
                                                                <HBox.margin>
                                                                   <Insets />
                                                                </HBox.margin>
                                                             </ComboBox>
-                                                            <ComboBox fx:id="editAccountLocation" disable="true" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
+                                                            <ComboBox fx:id="accountsEditAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
                                                                <HBox.margin>
                                                                   <Insets left="10.0" />
                                                                </HBox.margin>
@@ -348,12 +357,12 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_RIGHT">
                                                          <children>
-                                                            <Button fx:id="editAccount" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Edit" textOverrun="CLIP" />
-                                                            <Button fx:id="deleteAccount" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
+                                                            <Button fx:id="accountsDeleteAccount" mnemonicParsing="false" onAction="#deleteAccount" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
                                                                <HBox.margin>
                                                                   <Insets left="10.0" />
                                                                </HBox.margin>
                                                             </Button>
+                                                            <Button fx:id="accountsEditAccount" mnemonicParsing="false" onAction="#updateAccount" prefWidth="100.0" styleClass="green-button" text="Modify" textOverrun="CLIP" />
                                                          </children>
                                                       </HBox>
                                                    </children>
