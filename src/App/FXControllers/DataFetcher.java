@@ -214,11 +214,18 @@ public class DataFetcher {
 
     /**
      * Return all the equipment data from the database with the given query
-     * @param queryString the query to execute
      * @return list of Equipment objects
      */
-    protected static ObservableList<Equipment> equipment(String queryString) {
+    protected static ObservableList<Equipment> equipment() {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
+
+        //TODO: Change Query String, returning empty set
+        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_stock.location, location.name,\n" +
+                "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
+                "FROM equipment_stock\n" +
+                "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
+                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentType;";
+
 
         Results res = query(queryString);
 
@@ -231,26 +238,61 @@ public class DataFetcher {
                 Equipment e = new Equipment();
                 e.setID((int) res.getElement(r, 0));
                 e.setType((String)res.getElement(r,1));
+                e.setLocation(getSingleLocation((int)res.getElement(r,2)));
                 e.setStatus((String)res.getElement(r,4));
                 e.setPrice((float)res.getElement(r, 5));
-
                 equipment.add(e);
             }
         } else {
-            //throw an exception
+            //TODO: throw empty data set exception
         }
 
         return equipment;
     }
 
+    protected static void addEquipment(Equipment eq) throws InsertFailedException {
+        String queryString = "INSERT INTO equipment_stock VALUES" +
+                " (null," +
+                " '" + eq.getType() + "'," +
+                " '" + eq.getLocationID() + "'," +
+                " '" + eq.getStatus() + "');";
+        Query q = new Query(queryString);
+
+        if(q.insertQuery()) {
+            //success
+        } else {
+            throw new InsertFailedException("Failed to add new equipment of type " + eq.getType());
+        }
+
+    }
+
+    private static Location getSingleLocation(int id) {
+
+        String queryString = "SELECT location.locationID, location.name " +
+                "FROM location " +
+                "WHERE location.locationID = " +id;
+        Results res = query(queryString);
+
+        if(!res.isEmpty()) {
+            Location tmp = new Location();
+            tmp.setLocationID((int)res.getElement(0,0));
+            tmp.setName((String)res.getElement(0,1));
+            return tmp;
+        }
+
+        ///TODO: Throw a empty data set exception
+        return null;
+    }
+
     /**
      * Return all of the locations and its data that is in the database
-     * @param queryString the query to be executed
      * @return the list of Location objects
      */
-    protected static ObservableList<Location> locations(String queryString) {
+    protected static ObservableList<Location> locations() {
         ObservableList<Location> locations = FXCollections.observableArrayList();
 
+        String queryString = "SELECT location.locationID, location.name " +
+                "FROM location";
         Results res = query(queryString);
 
         //check we have results
@@ -264,6 +306,72 @@ public class DataFetcher {
 
         return locations;
     }
+
+    /**
+     * Adds a new location to the database
+     * @param locationName name of the new location
+     * @return true if succeed, false if failed
+     * @throws InsertFailedException if failure and shows message to user
+     */
+    protected static boolean addLocation(String locationName) throws InsertFailedException {
+        String queryString = "INSERT INTO location VALUES (null, '" + locationName + "');";
+        Query q = new Query(queryString);
+
+        if(q.insertQuery()) {
+            return true;
+        } else {
+            throw new InsertFailedException("Failed to insert the new location " + locationName);
+        }
+    }
+
+    /**
+     * Updates the data in the database with the new name
+     * @param newLoc location object containing the new name of the location
+     * @return true if succeed, false if failed
+     * @throws InsertFailedException if failure and shows message to user
+     */
+    protected static boolean editLocation(Location newLoc) throws InsertFailedException {
+        String queryString = "UPDATE location SET location.name = '" + newLoc.getName() + "'" +
+                "WHERE location.locationID = " + newLoc.getLocationID() + ";";
+        Query q = new Query(queryString);
+
+        if(q.insertQuery()) {
+            return true;
+        } else {
+            throw new InsertFailedException("Failed to change location name to " + newLoc.getName());
+        }
+    }
+
+    /**
+     * Deletes the location from the database
+     * @param loc Location object of location to be deleted
+     * @return true if succeed
+     * @throws InsertFailedException when failed, gives user a message
+     */
+    protected static boolean deleteLocation(Location loc) throws InsertFailedException {
+        String queryString = "DELETE FROM location WHERE locationID = '" + loc.getLocationID() + "';";
+        Query q = new Query(queryString);
+
+        if(q.insertQuery()) {
+            //succeeded
+            return true;
+        } else {
+            throw new InsertFailedException("Deleting location " + loc.getName() + " failed." +
+                    "\n" +
+                    "Hints: Employees are still registered as working in " + loc.getName() + "" +
+                    "\n" +
+                    "There are active rentals at " + loc.getName() + "" +
+                    "\nCannot remove until solved.");
+        }
+    }
+
+
+
+
+
+
+
+
 
     protected static ObservableList<Rental> rentals(String queryString) {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
@@ -292,14 +400,26 @@ public class DataFetcher {
         HashMap<String, String> accountTypes = new HashMap<>();
 
         Query q = new Query();
-        if(dropdown.equals("accountTypes")) {
-            q.updateQuery("SELECT accountTypeID, type\n" +
-                    "FROM account_types;");
-        } else if(dropdown.equals("locations")) {
-            q.updateQuery("SELECT locationID, name\n" +
-                    "FROM location;");
-        } else {
-            return null;
+
+        switch (dropdown) {
+            case "accountTypes":
+                q.updateQuery("SELECT accountTypeID, type\n" +
+                        "FROM account_types;");
+                break;
+            case "locations":
+                q.updateQuery("SELECT locationID, name\n" +
+                        "FROM location;");
+                break;
+            case "equipmentTypes":
+                q.updateQuery("SELECT equipmentTypeID, equipmentType\n" +
+                        "FROM equipment_type");
+                break;
+            case "bikeTypes":
+                q.updateQuery("SELECT bikeTypeID, bikeType\n" +
+                        "FROM bike_type");
+                break;
+            default:
+                return null;
         }
 
         Results res = q.executeQuery();

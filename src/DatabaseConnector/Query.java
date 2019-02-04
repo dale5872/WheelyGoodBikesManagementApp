@@ -1,3 +1,4 @@
+//TODO: Replace JDBC with PHP
 package DatabaseConnector;
 
 import java.sql.*;

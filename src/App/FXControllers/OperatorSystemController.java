@@ -1,5 +1,6 @@
 //TODO: Refactor to allow EmployeeAccount and Accounts
 //TODO: Refactor to avoid duplicate code for inputting data into tables on different views
+//TODO: CHANGE ER DIAGRAMS FOR BIKES AND EQUIPMENT TABLES & DATA DICTIONARIES
 
 package App.FXControllers;
 
@@ -21,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.accessibility.AccessibleValue;
 import java.io.IOException;
 import java.util.*;
 
@@ -90,11 +92,33 @@ public class OperatorSystemController {
     @FXML private TableColumn equipmentStatus;
     @FXML private TableView equipmentTable;
 
+    //Add equipment
+    @FXML private TextField newEquipName;
+    @FXML private ComboBox newEquipLocation;
+    @FXML private ComboBox newEquipType;
+    @FXML private TextField newEquipPrice;
+    @FXML private TextField newEquipImage;
+    
+    //Edit equipment
+    @FXML private TextField editEquipName;
+    @FXML private ComboBox editEquipLocation;
+    @FXML private ComboBox editEquipType;
+    @FXML private ComboBox editEquipStatus;
+    @FXML private TextField editEquipPrice;
+    @FXML private TextField editEquipImage;
+
     /** Locations Tab **/
     //Table
     @FXML private TableColumn locationsID;
     @FXML private TableColumn locationsName;
     @FXML private TableView locationsTable;
+
+    //Add Location
+    @FXML private TextField newLocationName;
+
+    //Edit Location
+    @FXML private VBox editLocationVBox;
+    @FXML private TextField editLocationName;
 
     /** Rentals Tab **/
     //Table
@@ -113,6 +137,8 @@ public class OperatorSystemController {
     private static EmployeeAccount employee;
     private static HashMap<String, String> accounts;
     private static HashMap<String, String> locations;
+    private static HashMap<String, String> equipment_type;
+    private static HashMap<String, String> bike_type;
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
@@ -142,6 +168,8 @@ public class OperatorSystemController {
         //Load in data for adding / editing accounts
         try {
             loadAccounts(null);
+            loadEquipment(null);
+            loadLocations(null);
         } catch (InvalidParametersException e) {
             //Some real issue here...
             //TODO: MessageBox. FATAL ERROR AND CLOSES.
@@ -150,6 +178,9 @@ public class OperatorSystemController {
         //Load in account types and location dropdown boxes
         accounts = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("locations");
+        equipment_type = DataFetcher.getDropdownValues("equipmentTypes");
+     //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
+
         setValues();
 
     }
@@ -275,10 +306,9 @@ public class OperatorSystemController {
         try {
             DataFetcher.updateAccount(oldAccount, newAccount, accountType);
         } catch (InsertFailedException ex) {
-            //TODO: MessageBox
-            System.out.println(ex.getMessage());
+            return;
         } catch (Exception ex) {
-            //TODO: TOTAL FAILURE MESSAGE BOX
+            //TODO: Display to user
             System.out.println(ex.getMessage());
         }
 
@@ -300,7 +330,7 @@ public class OperatorSystemController {
         try {
             DataFetcher.deleteAccount(account.getUserID(), ((EmployeeAccount) account).getEmployeeID());
         } catch (InsertFailedException ex) {
-            //TODO: EXCEPTION
+            return;
         }
 
         //remove from table
@@ -313,25 +343,16 @@ public class OperatorSystemController {
      */
     @FXML
     protected void loadEquipment(ActionEvent e) {
-        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_stock.location, location.name,\n" +
-                "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
-                "FROM equipment_stock\n" +
-                "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
-                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentType;";
-
-        ObservableList<Equipment> equipment = DataFetcher.equipment(queryString);
+        ObservableList<Equipment> equipment = DataFetcher.equipment();
 
         equipmentID.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("ID")
         );
-        equipmentName.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Type")
-        );
         equipmentLocation.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("")
+                new PropertyValueFactory<Equipment, String>("LocationName")
         );
         equipmentType.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("")
+                new PropertyValueFactory<Equipment, String>("Type")
         );
         equipmentPrice.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("Price")
@@ -344,14 +365,37 @@ public class OperatorSystemController {
     }
 
     /**
+     * Adds a new piece of equipment to the database
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void addEquipment(ActionEvent e) {
+        Equipment eq = new Equipment();
+
+        Location loc = new Location((String)newEquipLocation.getValue());
+
+        eq.setLocation(loc);
+        eq.setType(equipment_type.get((String)newEquipType.getValue()));
+        eq.setPrice(Float.parseFloat(newEquipPrice.getText()));
+        eq.setStatus("Available");
+        eq.setImage((String)newEquipImage.getText());
+
+        try {
+            DataFetcher.addEquipment(eq);
+        } catch (InsertFailedException exc) {
+            return;
+        }
+    }
+
+
+    /**
      * Loads data from the SQL database into the Locations table
      * @param e ActionEvent object
      */
     @FXML
     protected void loadLocations(ActionEvent e) {
-        String queryString = "";
 
-        ObservableList<Location> locations = DataFetcher.locations(queryString);
+        ObservableList<Location> locations = DataFetcher.locations();
 
         locationsID.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("locationID")
@@ -361,6 +405,81 @@ public class OperatorSystemController {
         );
 
         locationsTable.setItems(locations);
+    }
+
+    /**
+     * Adds a new location to the database and reloads the table
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void addLocation(ActionEvent e) {
+        String locationName = newLocationName.getText();
+
+        try {
+            DataFetcher.addLocation(locationName);
+        } catch (InsertFailedException exc) {
+            //message box already shows...
+            return;
+        }
+
+        //reload locations as only a few so wont take long to execute
+        loadLocations(null);
+
+    }
+
+    /**
+     * Edits the selected locations name
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void editLocation(ActionEvent e) {
+        Location tmp = getSelectedLocation();
+        tmp.setName(editLocationName.getText());
+        try {
+            DataFetcher.editLocation(tmp);
+        } catch (InsertFailedException exc) {
+            return;
+        }
+
+        //update table
+        loadLocations(null);
+    }
+
+    /**
+     *
+     * @param e MouseEvent object
+     */
+    @FXML
+    protected void updateLocationsEditBox(MouseEvent e) {
+        //enable the edit box
+        editLocationVBox.setDisable(false);
+        Location tmp = getSelectedLocation();
+        editLocationName.setText(tmp.getName());
+    }
+
+    /**
+     * Returns the selected location object in the table
+     * @return
+     */
+    private Location getSelectedLocation() {
+        int rowIndex = locationsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Location> row = locationsTable.getItems();
+        return row.get(rowIndex);
+    }
+
+    /**
+     * Deletes the selected location and reloads the locations
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void deleteLocation(ActionEvent e) {
+        try {
+            DataFetcher.deleteLocation(getSelectedLocation());
+        } catch (InsertFailedException exc) {
+            return;
+        }
+
+        loadLocations(null);
     }
 
     /**
@@ -380,7 +499,7 @@ public class OperatorSystemController {
 
         accountsEditAccountUsername.setText(tmp.getUsername());
         accountsEditAccountFirstName.setText(tmp.getFirstName());
-        //accountsEditAccountLastName.setText(tmp.getLastName());
+        accountsEditAccountLastName.setText(tmp.getLastName());
         accountsEditAccountEmail.setText(tmp.getEmail());
         accountsEditAccountPhone.setText(tmp.getPhoneNumber());
         accountsEditAccountType.setValue(tmp.getAccType());
@@ -415,6 +534,21 @@ public class OperatorSystemController {
 
         accountsNewAccountLocation.setItems(options);
         accountsEditAccountLocation.setItems(options);
+        newEquipLocation.setItems(options);
+        editEquipLocation.setItems(options);
+
+        //Set equipment Types
+        s = equipment_type.keySet();
+        it = s.iterator();
+        options = FXCollections.observableArrayList();
+
+        while(it.hasNext()) {
+            options.add((String)it.next());
+        }
+
+        newEquipType.setItems(options);
+        editEquipType.setItems(options);
+
     }
 
     /**

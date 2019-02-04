@@ -8,13 +8,15 @@ public class Equipment {
     private String status;
     private float price;
     private String image;
+    private Location location;
 
-    public Equipment(int id, String type, String status, float price, String image) {
+    public Equipment(int id, String type, String status, float price, String image, Location location) {
         this.id = id;
         this.type = type;
         this.status = status;
         this.price = price;
         this.image = image;
+        this.location = location;
     }
 
     public Equipment(Object[] row) {
@@ -23,6 +25,7 @@ public class Equipment {
         this.status = (String)row[2];
         this.price = (float)row[3];
         this.image = (String)row[4];
+        //TODO: get location
     }
 
     public Equipment() {}
@@ -66,5 +69,22 @@ public class Equipment {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return this.location;
+    }
+
+    public String getLocationName() {
+        return this.location.getName();
+    }
+
+    public int getLocationID() {
+        return this.location.getLocationID();
+    }
+
 }
 

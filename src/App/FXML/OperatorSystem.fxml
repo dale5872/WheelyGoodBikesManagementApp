@@ -389,9 +389,8 @@
                                     <TableView fx:id="equipmentTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
                                           <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
-                                          <TableColumn fx:id="equipmentName" editable="false" prefWidth="250.0" text="Name" />
-                                          <TableColumn fx:id="equipmentLocation" prefWidth="150.0" text="Location" />
                                           <TableColumn fx:id="equipmentType" editable="false" prefWidth="100.0" text="Type" />
+                                          <TableColumn fx:id="equipmentLocation" prefWidth="150.0" text="Location" />
                                           <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="100.0" text="Price" />
                                           <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="150.0" text="Status" />
                                        </columns>
@@ -484,9 +483,14 @@
                                                             <Insets bottom="10.0" />
                                                          </VBox.margin>
                                                       </HBox>
+                                                      <TextField fx:id="newEquipImage" prefHeight="25.0" prefWidth="415.0" promptText="Image URL...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                       <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="238.0">
                                                          <children>
-                                                            <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                            <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#addEquipment" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
                                                          </children>
                                                       </HBox>
                                                    </children>
@@ -603,7 +607,7 @@
                            <children>
                               <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <TableView fx:id="locationsTable" maxHeight="-Infinity" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
+                                    <TableView fx:id="locationsTable" maxHeight="-Infinity" onMouseClicked="#updateLocationsEditBox" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
                                           <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
                                           <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
@@ -636,7 +640,7 @@
                                                       </TextField>
                                                       <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="238.0">
                                                          <children>
-                                                            <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                            <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#addLocation" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
                                                          </children>
                                                       </HBox>
                                                    </children>
@@ -651,7 +655,7 @@
                                           </AnchorPane>
                                           <AnchorPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: white;">
                                              <children>
-                                                <VBox disable="true" maxHeight="-Infinity" prefHeight="135.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <VBox fx:id="editLocationVBox" disable="true" maxHeight="-Infinity" prefHeight="135.0" prefWidth="434.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
                                                       <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Location:">
                                                          <font>
@@ -671,12 +675,12 @@
                                                       </TextField>
                                                       <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="238.0">
                                                          <children>
-                                                            <Button fx:id="editLocation" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Edit" textOverrun="CLIP" />
-                                                            <Button fx:id="deleteLocation" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
+                                                            <Button fx:id="deleteLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
                                                                <HBox.margin>
                                                                   <Insets left="10.0" />
                                                                </HBox.margin>
                                                             </Button>
+                                                            <Button fx:id="editLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#editLocation" prefWidth="100.0" styleClass="green-button" text="Edit" textOverrun="CLIP" />
                                                          </children>
                                                       </HBox>
                                                    </children>
