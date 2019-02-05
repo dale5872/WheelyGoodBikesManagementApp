@@ -19,43 +19,73 @@ public class TabSwitcher {
      */
     public static void switchTab(List<ToggleButton> tabButtons, List<AnchorPane> tabs, ToggleButton clickedButton){
         for(int i = 0; i < tabButtons.size(); i++){
-            ToggleButton btn = tabButtons.get(i);
-
-            if(btn == clickedButton){
-                /* For the clicked button:
-                    - remove the "inactive" CSS style from the button and replace with the "active" CSS style
-                    - disable the button for that tab
-                    - make the associated tab visible
-                 */
-                btn.getStyleClass().remove("nav-bar-tab-inactive");
-                btn.getStyleClass().add("nav-bar-tab-active");
-
-                if(btn.getId().equals("userTabButton")){
-                    btn.getStyleClass().remove("account-button-inactive");
-                    btn.getStyleClass().add("account-button-active");
-                }
-
-                btn.setDisable(true);
-
-                tabs.get(i).setVisible(true);
+            if(tabButtons.get(i) == clickedButton){
+                activateTab(tabButtons.get(i), tabs.get(i));
             }else{
-                /* For all other buttons:
-                    - remove the "active" CSS style from the button (if present) and replace with the "inactive" CSS style
-                    - enabled the button for that tab
-                    - make the associated tab invisible
-                 */
-                btn.getStyleClass().remove("nav-bar-tab-active");
-                btn.getStyleClass().add("nav-bar-tab-inactive");
-
-                if(btn.getId().equals("userTabButton")){
-                    btn.getStyleClass().remove("account-button-active");
-                    btn.getStyleClass().add("account-button-inactive");
-                }
-
-                btn.setDisable(false);
-
-                tabs.get(i).setVisible(false);
+                deactivateTab(tabButtons.get(i), tabs.get(i));
             }
         }
+    }
+
+    /**
+     * Switches to the first tab
+     * @param tabButtons A list of all tab buttons
+     * @param tabs A list of all tabs
+     */
+    public static void setToFirstTab(List<ToggleButton> tabButtons, List<AnchorPane> tabs){
+        ToggleButton firstButton = tabButtons.get(0);
+        AnchorPane firstTab = tabs.get(0);
+
+        for(int i = 0; i < tabButtons.size(); i++){
+            deactivateTab(tabButtons.get(i), tabs.get(i));
+        }
+
+        activateTab(firstButton, firstTab);
+    }
+
+    /**
+     * Activates a tab
+     * The "inactive " CSS style is removed from the button and replaced with the "active" CSS style
+     * The tab button is set to selected and disabled
+     * The associated tab is made visible
+     * @param btn
+     * @param tab
+     */
+    private static void activateTab(ToggleButton btn, AnchorPane tab){
+        btn.getStyleClass().remove("nav-bar-tab-inactive");
+        btn.getStyleClass().add("nav-bar-tab-active");
+
+        if(btn.getId().equals("userTabButton")){
+            btn.getStyleClass().remove("account-button-inactive");
+            btn.getStyleClass().add("account-button-active");
+        }
+
+        btn.setSelected(true);
+        btn.setDisable(true);
+
+        tab.setVisible(true);
+    }
+
+    /**
+     * Deactivates a tab
+     * The "active " CSS style is removed from the button and replaced with the "inactive" CSS style
+     * The tab button is set to not selected and is enabled
+     * The associated tab is made invisible
+     * @param btn
+     * @param tab
+     */
+    private static void deactivateTab(ToggleButton btn, AnchorPane tab){
+        btn.getStyleClass().remove("nav-bar-tab-active");
+        btn.getStyleClass().add("nav-bar-tab-inactive");
+
+        if(btn.getId().equals("userTabButton")){
+            btn.getStyleClass().remove("account-button-active");
+            btn.getStyleClass().add("account-button-inactive");
+        }
+
+        btn.setSelected(false);
+        btn.setDisable(false);
+
+        tab.setVisible(false);
     }
 }

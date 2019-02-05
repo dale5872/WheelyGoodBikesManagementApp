@@ -175,6 +175,9 @@ public class OperatorSystemController {
         tabs.add(rentalsTab);
         tabs.add(userTab);
 
+        //Set the first tab as active
+        TabSwitcher.setToFirstTab(tabButtons, tabs);
+
         //Load in data for adding / editing accounts
         try {
             loadAccounts(null);

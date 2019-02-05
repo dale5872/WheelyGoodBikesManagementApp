@@ -61,3 +61,7 @@
 .table{
 	-fx-font-size: 16px;
 }
+
+.contactBox{
+	-fx-border-color: white;
+}

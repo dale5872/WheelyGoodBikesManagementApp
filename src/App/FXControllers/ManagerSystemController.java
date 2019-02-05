@@ -55,6 +55,8 @@ public class ManagerSystemController {
         tabs.add(reportsTab);
         tabs.add(userTab);
 
+        //Set the first tab as active
+        TabSwitcher.setToFirstTab(tabButtons, tabs);
     }
 
     /**
