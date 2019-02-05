@@ -33,8 +33,8 @@ public class LogInScreenController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        /* To test UI
-        EmployeeAccount activeAccount = new EmployeeAccount();
+        /* To test UI */
+        /*EmployeeAccount activeAccount = new EmployeeAccount();
         activeAccount.setAccType(username);
 
         if(password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
@@ -42,9 +42,9 @@ public class LogInScreenController {
             createAndShowMainWindow(activeAccount);
         }else { //If credentials cannot be authenticated
             incorrectCredentials.setVisible(true);
-        }
+        }*/
 
-        */
+
 
         /* To test UI with DATABASE */
         try {

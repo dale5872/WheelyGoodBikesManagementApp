@@ -7,17 +7,17 @@
 }
 
 .green-button{
-	-fx-background-color: #9AF445;
+	-fx-background-color: #2AD1BB;
 	-fx-font-weight: bold;
 	-fx-font-size: 18px;
 }
 
 .green-button:hover{
-	-fx-background-color: #88D33D;
+	-fx-background-color: #25B29F;
 }
 
 .green-button:pressed{
-	-fx-background-color: #71AF33;
+	-fx-background-color: #1A7F70;
 }
 
 .nav-bar-tab{
@@ -32,17 +32,17 @@
 }
 
 .nav-bar-tab-active{
-	-fx-background-color: #9AF445;
+	-fx-background-color: #2AD1BB;
 	-fx-text-fill: black;
 }
 
 .nav-bar-tab:hover{
-	-fx-background-color: #9AF445;
+	-fx-background-color: #2AD1BB;
 	-fx-text-fill: black;
 }
 
 .nav-bar-tab:pressed{
-	-fx-background-color: #88D33D;
+	-fx-background-color: #25B29F;
 	-fx-text-fill: black;
 }
 
@@ -51,14 +51,10 @@
 }
 
 .account-button-inactive{
-	/*-fx-graphic: url("Profile_Man_White_Round_Small.png");*/
-	/*-fx-graphic: url("Profile_Man_White_Square_Small.png");*/
 	-fx-graphic: url("Profile_Round_White_Small.png");
 }
 
 .account-button-inactive:hover, .account-button-inactive:pressed, .account-button-active{
-	/*-fx-graphic: url("Profile_Man_Black_Round_Small.png");*/
-	/*-fx-graphic: url("Profile_Man_Black_Square_Small.png");*/
 	-fx-graphic: url("Profile_Round_Black_Small.png");
 }
 
