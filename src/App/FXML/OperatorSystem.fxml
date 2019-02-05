@@ -115,7 +115,7 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="accountsTab" visible="false">
+                  <AnchorPane fx:id="accountsTab">
                      <children>
                         <GridPane prefHeight="1020.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
@@ -390,10 +390,10 @@
                                     <TableView fx:id="equipmentTable" maxHeight="-Infinity" onMouseClicked="#updateEquipmentEditBox" prefHeight="850.0" prefWidth="1275.0" styleClass="table">
                                        <columns>
                                           <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
-                                          <TableColumn fx:id="equipmentType" editable="false" prefWidth="100.0" text="Type" />
-                                          <TableColumn fx:id="equipmentLocation" prefWidth="150.0" text="Location" />
-                                          <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="100.0" text="Price" />
-                                          <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="150.0" text="Status" />
+                                          <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
+                                          <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
+                                          <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" text="Price" />
+                                          <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -685,7 +685,7 @@
                            </rowConstraints>
                         </GridPane>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="userTab">
+                  <AnchorPane fx:id="userTab" visible="false">
                      <children>
                         <GridPane layoutX="331.0" layoutY="164.0" prefHeight="1020.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
