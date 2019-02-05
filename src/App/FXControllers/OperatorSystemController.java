@@ -124,6 +124,16 @@ public class OperatorSystemController {
     @FXML private TableColumn rentalsStatus;
     @FXML private TableView rentalsTable;
 
+    /** Account Tab **/
+    @FXML private Label userAccountID;
+    @FXML private Label userAccountUsername;
+    @FXML private Label userAccountName;
+    @FXML private Label userAccountEmail;
+    @FXML private Label userAccountPhone;
+    @FXML private Label userAccountType;
+    @FXML private Label userAccountLocation;
+
+
     //fields
     private static EmployeeAccount employee;
     private static HashMap<String, String> accounts;
@@ -133,6 +143,15 @@ public class OperatorSystemController {
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
+
+        //set account labels
+        userAccountID.setText("Employee ID: " + employee.getEmployeeID());
+        userAccountUsername.setText("Username: " + employee.getUsername());
+        userAccountName.setText("Name: " + employee.getFirstName() + " " + employee.getLastName());
+        userAccountEmail.setText("Email: " + employee.getEmail());
+        userAccountPhone.setText("Phone: " + employee.getPhoneNumber());
+        userAccountType.setText("Account Type: " + employee.getAccType());
+        userAccountLocation.setText("Location: " + employee.getLocationName());
     }
 
     /**
@@ -175,7 +194,6 @@ public class OperatorSystemController {
      //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
         setValues();
-
     }
 
     /**
@@ -434,7 +452,7 @@ public class OperatorSystemController {
         Location loc = new Location((String)editEquipLocation.getValue());
         tmp.setLocation(loc);
         tmp.setStatus((String)editEquipStatus.getValue());
-        tmp.setTypeName(equipment_type.get((String)editEquipType.getValue()));
+        tmp.setTypeID(Integer.parseInt(equipment_type.get(editEquipType.getValue())));
 
         try {
             DataFetcher.updateEquipment(tmp);
@@ -454,6 +472,7 @@ public class OperatorSystemController {
         Equipment tmp = getSelectedEquipment();
         try {
             DataFetcher.deleteEquipment(tmp);
+            loadEquipment(null);
         } catch (InsertFailedException exc) {
             return;
         }

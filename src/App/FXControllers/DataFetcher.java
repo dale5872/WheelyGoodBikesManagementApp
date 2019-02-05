@@ -279,13 +279,42 @@ public class DataFetcher {
 
     }
 
-
+    /**
+     * Updates the equipment in the database
+     * @param e Equipment class to update in the database
+     * @throws InsertFailedException if failed to update
+     */
     protected static void updateEquipment(Equipment e) throws InsertFailedException {
+        String queryString = "UPDATE equipment_stock " +
+                "SET equipment_stock.equipmentType = '" + e.getTypeID() + "',\n" +
+                "equipment_stock.location =" + e.getLocationID() + ",\n" +
+                "equipment_stock.equipmentStatus = '" + e.getStatus() + "'\n" +
+                "WHERE equipment_stock.equipmentID = " + e.getID() + ";";
+        Query q = new Query(queryString);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to change equipment " + e.getID());
+        }
 
     }
 
+    /**
+     * Deletes the selected equipment from the database
+     * @param e Equipment object to delete
+     * @throws InsertFailedException if failed to delete
+     */
     protected static void deleteEquipment(Equipment e) throws InsertFailedException {
+        String queryString = "DELETE FROM equipment_stock \n" +
+                "WHERE equipmentID = '" + e.getID() + "';";
+        Query q = new Query(queryString);
 
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Deleting equipment " + e.getID() + " failed." +
+                    "\n" +
+                    "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
+                    "\nWait for rental to complete, or mark rental as complete." +
+                    "\nCannot remove until solved.");
+        }
     }
 
     /**
