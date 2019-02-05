@@ -1,12 +1,15 @@
 //TODO: Implement fetching rentals
 //TODO: Catch SQL Exceptions for constraint violations and duplicate entries
 //TODO: String Sanitization to prevent SQL Injection
+//TODO: Make memory more efficient, dont store a NEW location object per field.
+// Pass in location objects
 package App.FXControllers;
 
 import App.Classes.*;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.Query;
 import DatabaseConnector.Results;
+import com.google.protobuf.Empty;
 import com.mysql.cj.x.protobuf.MysqlxCrud;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -216,15 +219,16 @@ public class DataFetcher {
      * Return all the equipment data from the database with the given query
      * @return list of Equipment objects
      */
-    protected static ObservableList<Equipment> equipment() {
+    protected static ObservableList<Equipment> equipment() throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         //TODO: Change Query String, returning empty set
-        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_stock.location, location.name,\n" +
+        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_type.equipmentType,\n" +
+                "       equipment_stock.location, location.name,\n" +
                 "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
                 "FROM equipment_stock\n" +
                 "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
-                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentType;";
+                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentTypeID;";
 
 
         Results res = query(queryString);
@@ -232,28 +236,38 @@ public class DataFetcher {
         //check we have results
         if(!res.isEmpty()) {
            /* TABLE STRUCTURE
-           (EquipmentID, EquipmentName, LocationID, LocationName, EquipmentStatus, Price)
+           (EquipmentID, EquipmentTypeID, EquipmentName,
+            LocationID, LocationName,
+             EquipmentStatus, Price)
             */
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
                 e.setID((int) res.getElement(r, 0));
-                e.setType((String)res.getElement(r,1));
-                e.setLocation(getSingleLocation((int)res.getElement(r,2)));
-                e.setStatus((String)res.getElement(r,4));
-                e.setPrice((float)res.getElement(r, 5));
+                e.setTypeID((int)res.getElement(r,1));
+                e.setTypeName((String)res.getElement(r,2));
+                Location loc = new Location((int)res.getElement(r,3), (String)res.getElement(r,4));
+                e.setLocation(loc);
+                e.setStatus((String)res.getElement(r,5));
+                e.setPrice((float)res.getElement(r, 6));
                 equipment.add(e);
             }
         } else {
-            //TODO: throw empty data set exception
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.");
         }
 
         return equipment;
     }
 
-    protected static void addEquipment(Equipment eq) throws InsertFailedException {
+
+    /**
+     * Adds a new piece of equipment to the selected location
+     * @param eq Equipment object to be added
+     * @throws InsertFailedException if failed to be added to the database
+     */
+    protected static void addEquipment(Equipment eq) throws InsertFailedException, EmptyDatasetException {
         String queryString = "INSERT INTO equipment_stock VALUES" +
                 " (null," +
-                " '" + eq.getType() + "'," +
+                " '" + eq.getTypeID() + "'," +
                 " '" + eq.getLocationID() + "'," +
                 " '" + eq.getStatus() + "');";
         Query q = new Query(queryString);
@@ -261,34 +275,25 @@ public class DataFetcher {
         if(q.insertQuery()) {
             //success
         } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + eq.getType());
+            throw new InsertFailedException("Failed to add new equipment of type " + eq.getTypeName());
         }
 
     }
 
-    private static Location getSingleLocation(int id) {
 
-        String queryString = "SELECT location.locationID, location.name " +
-                "FROM location " +
-                "WHERE location.locationID = " +id;
-        Results res = query(queryString);
+    protected static void updateEquipment(Equipment e) throws InsertFailedException {
 
-        if(!res.isEmpty()) {
-            Location tmp = new Location();
-            tmp.setLocationID((int)res.getElement(0,0));
-            tmp.setName((String)res.getElement(0,1));
-            return tmp;
-        }
+    }
 
-        ///TODO: Throw a empty data set exception
-        return null;
+    protected static void deleteEquipment(Equipment e) throws InsertFailedException {
+
     }
 
     /**
      * Return all of the locations and its data that is in the database
      * @return the list of Location objects
      */
-    protected static ObservableList<Location> locations() {
+    protected static ObservableList<Location> locations() throws EmptyDatasetException{
         ObservableList<Location> locations = FXCollections.observableArrayList();
 
         String queryString = "SELECT location.locationID, location.name " +
@@ -301,7 +306,7 @@ public class DataFetcher {
                 locations.add(new Location((int)res.getElement(r, 0), (String)res.getElement(r,1)));
             }
         } else {
-            //throw an exception
+            throw new EmptyDatasetException("Empty Dataset: Could not list of locations");
         }
 
         return locations;
@@ -373,7 +378,7 @@ public class DataFetcher {
 
 
 
-    protected static ObservableList<Rental> rentals(String queryString) {
+    protected static ObservableList<Rental> rentals(String queryString) throws EmptyDatasetException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
         Results res = query(queryString);
@@ -384,7 +389,7 @@ public class DataFetcher {
                 //implement rentals
             }
         } else {
-            //throw exception
+            throw new EmptyDatasetException("Empty Dataset: Could not retrieve list of rentals");
         }
         return rentals;
     }

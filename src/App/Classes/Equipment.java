@@ -4,15 +4,17 @@ package App.Classes;
 public class Equipment {
 
     private int id;
-    private String type;
+    private int typeID;
+    private String typeName;
     private String status;
     private float price;
     private String image;
     private Location location;
 
-    public Equipment(int id, String type, String status, float price, String image, Location location) {
+    public Equipment(int id, int typeID, String typeName, String status, float price, String image, Location location) {
         this.id = id;
-        this.type = type;
+        this.typeID = typeID;
+        this.typeName = typeName;
         this.status = status;
         this.price = price;
         this.image = image;
@@ -21,10 +23,11 @@ public class Equipment {
 
     public Equipment(Object[] row) {
         this.id = (int)row[0];
-        this.type = (String)row[1];
-        this.status = (String)row[2];
-        this.price = (float)row[3];
-        this.image = (String)row[4];
+        this.typeID = (int)row[1];
+        this.typeName = (String)row[2];
+        this.status = (String)row[3];
+        this.price = (float)row[4];
+        this.image = (String)row[5];
         //TODO: get location
     }
 
@@ -34,9 +37,11 @@ public class Equipment {
         return this.id;
     }
 
-    public String getType() {
-        return this.type;
+    public String getTypeName() {
+        return this.typeName;
     }
+
+    public int getTypeID() { return this.typeID; }
 
     public String getStatus() {
         return this.status;
@@ -54,9 +59,11 @@ public class Equipment {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeName(String type) {
+        this.typeName = type;
     }
+
+    public void setTypeID(int id) { this.typeID = id; }
 
     public void setStatus(String status) {
         this.status = status;

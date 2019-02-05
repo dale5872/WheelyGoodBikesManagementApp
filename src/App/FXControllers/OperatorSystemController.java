@@ -21,8 +21,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import javax.accessibility.AccessibleValue;
 import java.io.IOException;
 import java.util.*;
 
@@ -85,7 +83,6 @@ public class OperatorSystemController {
     /** Equipment Tab **/
     //Table
     @FXML private TableColumn equipmentID;
-    @FXML private TableColumn equipmentName;
     @FXML private TableColumn equipmentLocation;
     @FXML private TableColumn equipmentType;
     @FXML private TableColumn equipmentPrice;
@@ -93,19 +90,14 @@ public class OperatorSystemController {
     @FXML private TableView equipmentTable;
 
     //Add equipment
-    @FXML private TextField newEquipName;
     @FXML private ComboBox newEquipLocation;
     @FXML private ComboBox newEquipType;
-    @FXML private TextField newEquipPrice;
-    @FXML private TextField newEquipImage;
-    
+
     //Edit equipment
-    @FXML private TextField editEquipName;
+    @FXML private VBox editEquipmentVBox;
     @FXML private ComboBox editEquipLocation;
     @FXML private ComboBox editEquipType;
     @FXML private ComboBox editEquipStatus;
-    @FXML private TextField editEquipPrice;
-    @FXML private TextField editEquipImage;
 
     /** Locations Tab **/
     //Table
@@ -343,16 +335,17 @@ public class OperatorSystemController {
      */
     @FXML
     protected void loadEquipment(ActionEvent e) {
+        try {
         ObservableList<Equipment> equipment = DataFetcher.equipment();
 
         equipmentID.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("ID")
         );
+        equipmentType.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("TypeName")
+        );
         equipmentLocation.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("LocationName")
-        );
-        equipmentType.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Type")
         );
         equipmentPrice.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("Price")
@@ -362,6 +355,9 @@ public class OperatorSystemController {
         );
 
         equipmentTable.setItems(equipment);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
     }
 
     /**
@@ -370,18 +366,82 @@ public class OperatorSystemController {
      */
     @FXML
     protected void addEquipment(ActionEvent e) {
+        //TODO: Check for empty inputs and return catch exception
         Equipment eq = new Equipment();
-
         Location loc = new Location((String)newEquipLocation.getValue());
 
         eq.setLocation(loc);
-        eq.setType(equipment_type.get((String)newEquipType.getValue()));
-        eq.setPrice(Float.parseFloat(newEquipPrice.getText()));
+        eq.setTypeName((String)newEquipType.getValue());
+        eq.setTypeID(Integer.parseInt(equipment_type.get((String)newEquipType.getValue())));
         eq.setStatus("Available");
-        eq.setImage((String)newEquipImage.getText());
 
         try {
             DataFetcher.addEquipment(eq);
+        } catch (InsertFailedException exc) {
+            return;
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+
+        //inefficent but necessary to reload data
+        loadEquipment(null);
+    }
+
+    /**
+     * Adds the information to the edit box for editing equipment
+     * @param e MouseEvent object
+     */
+    @FXML
+    protected void updateEquipmentEditBox(MouseEvent e) {
+        //enable the box
+        editEquipmentVBox.setDisable(false);
+
+        //fil the data
+        Equipment tmp = getSelectedEquipment();
+
+        editEquipLocation.setValue(tmp.getLocationName());
+        editEquipType.setValue(tmp.getTypeName());
+        editEquipStatus.setValue(tmp.getStatus());
+    }
+
+    private Equipment getSelectedEquipment() {
+        int rowIndex = equipmentTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Equipment> row = equipmentTable.getItems();
+        return row.get(rowIndex);
+    }
+
+    /**
+     * Update the selected equipment with the selected parameters
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void updateEquipment(ActionEvent e) {
+        Equipment tmp = getSelectedEquipment();
+
+
+        Location loc = new Location((String)editEquipLocation.getValue());
+        tmp.setLocation(loc);
+        tmp.setStatus((String)editEquipStatus.getValue());
+        tmp.setTypeName(equipment_type.get((String)editEquipType.getValue()));
+
+        try {
+            DataFetcher.updateEquipment(tmp);
+        } catch (InsertFailedException exc) {
+            return;
+        }
+
+        loadEquipment(null);
+    }
+
+    /**
+     * Delete the selected Equipment object
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void deleteEquipment(ActionEvent e) {
+        Equipment tmp = getSelectedEquipment();
+        try {
+            DataFetcher.deleteEquipment(tmp);
         } catch (InsertFailedException exc) {
             return;
         }
@@ -395,16 +455,20 @@ public class OperatorSystemController {
     @FXML
     protected void loadLocations(ActionEvent e) {
 
-        ObservableList<Location> locations = DataFetcher.locations();
+        try {
+            ObservableList<Location> locations = DataFetcher.locations();
 
-        locationsID.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("locationID")
-        );
-        locationsName.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Name")
-        );
+            locationsID.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("locationID")
+            );
+            locationsName.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("Name")
+            );
 
-        locationsTable.setItems(locations);
+            locationsTable.setItems(locations);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
     }
 
     /**
@@ -507,6 +571,7 @@ public class OperatorSystemController {
 
     }
 
+
     /**
      * Sets the values for the drop down menus
      */
@@ -548,6 +613,11 @@ public class OperatorSystemController {
 
         newEquipType.setItems(options);
         editEquipType.setItems(options);
+
+        //set status box
+        editEquipStatus.getItems().add(0, "Available");
+        editEquipStatus.getItems().add(1, "Booked");
+        editEquipStatus.getItems().add(2, "Damaged");
 
     }
 
