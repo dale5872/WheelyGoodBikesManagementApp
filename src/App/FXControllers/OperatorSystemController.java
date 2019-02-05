@@ -1,6 +1,5 @@
 //TODO: Refactor to allow EmployeeAccount and Accounts
 //TODO: Refactor to avoid duplicate code for inputting data into tables on different views
-//TODO: CHANGE ER DIAGRAMS FOR BIKES AND EQUIPMENT TABLES & DATA DICTIONARIES
 
 package App.FXControllers;
 
@@ -164,7 +163,9 @@ public class OperatorSystemController {
             loadLocations(null);
         } catch (InvalidParametersException e) {
             //Some real issue here...
-            //TODO: MessageBox. FATAL ERROR AND CLOSES.
+            ShowMessageBox messageBox = new ShowMessageBox();
+            messageBox.show("FATAL ERROR HAS OCCURED. ERROR CODE: OSC01");
+            System.exit(100);
         }
 
         //Load in account types and location dropdown boxes
@@ -181,7 +182,8 @@ public class OperatorSystemController {
      * Finds the parameters selected by the user and loads the data
      * based on those parameters. Parameters are selected through
      * Radio Buttons
-     * @param e
+     * @param e ActionEvent object
+     * @throws InvalidParametersException if no accounts to load
      */
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
@@ -204,35 +206,38 @@ public class OperatorSystemController {
             throw new InvalidParametersException("One parameter must be selected!");
         }
 
-        ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(queryString);
+        try {
+            ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(queryString);
 
-        accountsID.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("employeeID")
-        );
-        accountsUsername.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("username")
-        );
-        accountsFirstName.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("firstName")
-        );
-        accountsLastName.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("lastName")
-        );
-        accountsEmail.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("email")
-        );
-        accountsPhoneNumber.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
-        );
-        accountsAccountType.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("accType")
-        );
-        accountsLocation.setCellValueFactory(
-                new PropertyValueFactory<EmployeeAccount, String>("LocationName")
-        );
+            accountsID.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("employeeID")
+            );
+            accountsUsername.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("username")
+            );
+            accountsFirstName.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("firstName")
+            );
+            accountsLastName.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("lastName")
+            );
+            accountsEmail.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("email")
+            );
+            accountsPhoneNumber.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
+            );
+            accountsAccountType.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("accType")
+            );
+            accountsLocation.setCellValueFactory(
+                    new PropertyValueFactory<EmployeeAccount, String>("LocationName")
+            );
 
-        accountsTable.setItems(accounts);
-
+            accountsTable.setItems(accounts);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
     }
 
     /**
@@ -256,11 +261,15 @@ public class OperatorSystemController {
         try {
             DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
         } catch (InsertFailedException ex) {
-            //TODO: MessageBox
-            System.out.println(ex.getMessage());
+            //failed
+            return;
         } catch (Exception ex) {
-            //TODO: Exception handling
-            System.out.println(ex.getMessage());
+            //Something else has happened, print to stderr and show error
+            //Show error to the user
+            ShowMessageBox messageBox = new ShowMessageBox();
+            messageBox.show("An unknown error has occured adding this account.");
+            ex.printStackTrace();
+            return;
         }
 
         //update table
@@ -300,8 +309,12 @@ public class OperatorSystemController {
         } catch (InsertFailedException ex) {
             return;
         } catch (Exception ex) {
-            //TODO: Display to user
-            System.out.println(ex.getMessage());
+            //Something else has happened, print to stderr and show error
+            //Show error to the user
+            ShowMessageBox messageBox = new ShowMessageBox();
+            messageBox.show("An unknown error has occured adding this account.");
+            ex.printStackTrace();
+            return;
         }
 
         //update table
@@ -366,7 +379,6 @@ public class OperatorSystemController {
      */
     @FXML
     protected void addEquipment(ActionEvent e) {
-        //TODO: Check for empty inputs and return catch exception
         Equipment eq = new Equipment();
         Location loc = new Location((String)newEquipLocation.getValue());
 

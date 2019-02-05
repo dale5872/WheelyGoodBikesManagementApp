@@ -28,7 +28,7 @@ public class DataFetcher {
      * @param queryString Query to execute on the SQL Server
      * @return A list of Accounts filled with the data in each account
      */
-    protected static ObservableList<EmployeeAccount> accounts(String queryString) {
+    protected static ObservableList<EmployeeAccount> accounts(String queryString) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
         Results res = query(queryString);
@@ -58,7 +58,7 @@ public class DataFetcher {
             }
         } else {
             //throw an exception
-            //TODO: Empty Set Exception
+            throw new EmptyDatasetException("No accounts to retrieve");
         }
 
         return accounts;
@@ -222,7 +222,6 @@ public class DataFetcher {
     protected static ObservableList<Equipment> equipment() throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
-        //TODO: Change Query String, returning empty set
         String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_type.equipmentType,\n" +
                 "       equipment_stock.location, location.name,\n" +
                 "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
@@ -369,13 +368,6 @@ public class DataFetcher {
                     "\nCannot remove until solved.");
         }
     }
-
-
-
-
-
-
-
 
 
     protected static ObservableList<Rental> rentals(String queryString) throws EmptyDatasetException {
