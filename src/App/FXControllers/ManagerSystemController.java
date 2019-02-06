@@ -1,13 +1,17 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +33,10 @@ public class ManagerSystemController {
     @FXML private AnchorPane reportsTab; //Gets the reports tab object
     @FXML private AnchorPane userTab; //Gets the user tab object
     private List<AnchorPane> tabs; //List to store all tabs;
+
+    @FXML private ComboBox penaltiesViewOption;
+    @FXML private FlowPane unsolvedPenalties;
+    @FXML private FlowPane solvedPenalties;
 
     private static EmployeeAccount employee;
 
@@ -57,6 +65,11 @@ public class ManagerSystemController {
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
+
+        //TEMP? Add options to penalties view drop down
+        ObservableList<String> options = FXCollections.observableArrayList("Unsolved Penalties", "Solved Penalties");
+        penaltiesViewOption.setItems(options);
+        penaltiesViewOption.getSelectionModel().selectFirst();
     }
 
     /**
@@ -67,6 +80,17 @@ public class ManagerSystemController {
     protected void switchTab(ActionEvent e){
         ToggleButton clickedButton = (ToggleButton) e.getSource();
         TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
+    }
+
+    @FXML
+    protected void switchPenaltiesView(){
+        if(penaltiesViewOption.getSelectionModel().getSelectedIndex() == 0){
+            unsolvedPenalties.setVisible(true);
+            solvedPenalties.setVisible(false);
+        }else{
+            unsolvedPenalties.setVisible(false);
+            solvedPenalties.setVisible(true);
+        }
     }
 
     /**

@@ -538,7 +538,8 @@
                               <RowConstraints minHeight="0.0" percentHeight="5.0" prefHeight="0.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                         </GridPane>
-                     </children></AnchorPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="locationsTab" visible="false">
                      <children>
                         <GridPane prefHeight="1020.0" prefWidth="1920.0">
