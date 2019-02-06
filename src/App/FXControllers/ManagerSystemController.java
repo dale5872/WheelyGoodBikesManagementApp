@@ -1,6 +1,7 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+import App.Classes.Equipment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,8 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -38,10 +39,39 @@ public class ManagerSystemController {
     @FXML private FlowPane unsolvedPenalties;
     @FXML private FlowPane solvedPenalties;
 
+    /** Equipment Table **/
+    @FXML private TableView equipmentTable;
+    @FXML private TableColumn equipmentID;
+    @FXML private TableColumn equipmentType;
+    @FXML private TableColumn equipmentLocation;
+    @FXML private TableColumn equipmentPrice;
+    @FXML private TableColumn equipmentStatus;
+
+    /** Account Tab **/
+    @FXML private Label userAccountID;
+    @FXML private Label userAccountUsername;
+    @FXML private Label userAccountName;
+    @FXML private Label userAccountEmail;
+    @FXML private Label userAccountPhone;
+    @FXML private Label userAccountType;
+    @FXML private Label userAccountLocation;
+
     private static EmployeeAccount employee;
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
+
+        //set account labels
+        userAccountID.setText("" + employee.getEmployeeID());
+        userAccountUsername.setText(employee.getUsername());
+        userAccountName.setText("Name: " + employee.getFirstName() + " " + employee.getLastName());
+        userAccountEmail.setText(employee.getEmail());
+        userAccountPhone.setText(employee.getPhoneNumber());
+        userAccountType.setText("Account Type: " + employee.getAccType());
+        userAccountLocation.setText("Location: " + employee.getLocationName());
+
+        /** Run these after employee set **/
+        loadEquipment(null);
     }
 
     /**
@@ -71,6 +101,40 @@ public class ManagerSystemController {
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
     }
+
+    /**
+     * Loads in all the equipment in the current managers location
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void loadEquipment(ActionEvent e) {
+
+        try {
+            ObservableList<Equipment> equipment = DataFetcher.equipment(this.employee.getLocation());
+
+            equipmentID.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("ID")
+            );
+            equipmentType.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("TypeName")
+            );
+            equipmentLocation.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("LocationName")
+            );
+            equipmentPrice.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("Price")
+            );
+            equipmentStatus.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("Status")
+            );
+
+            equipmentTable.setItems(equipment);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+
+    }
+
 
     /**
      * Handles switching between tabs

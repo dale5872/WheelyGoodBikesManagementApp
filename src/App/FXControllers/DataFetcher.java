@@ -217,18 +217,23 @@ public class DataFetcher {
 
     /**
      * Return all the equipment data from the database with the given query
+     * @param managerLoc returns the dataset based on the managers location, null if operator requesting
      * @return list of Equipment objects
      */
-    protected static ObservableList<Equipment> equipment() throws EmptyDatasetException {
+    protected static ObservableList<Equipment> equipment(Location managerLoc) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
-
         String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_type.equipmentType,\n" +
-                "       equipment_stock.location, location.name,\n" +
-                "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
-                "FROM equipment_stock\n" +
-                "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
-                "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentTypeID;";
-
+                    "       equipment_stock.location, location.name,\n" +
+                    "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
+                    "FROM equipment_stock\n" +
+                    "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
+                    "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentTypeID";
+        if(managerLoc == null) {
+            queryString += ";";
+        } else {
+            //get query based on location
+            queryString += "\nWHERE location.locationID = " + managerLoc.getLocationID() + ";";
+        }
 
         Results res = query(queryString);
 

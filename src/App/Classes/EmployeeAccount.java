@@ -41,6 +41,8 @@ public class EmployeeAccount extends Account {
         return this.loc.getLocationID();
     }
 
+    public Location getLocation() { return this.loc; }
+
 
     public void close() {
         this.employeeID = 0;

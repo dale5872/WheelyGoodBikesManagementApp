@@ -381,7 +381,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="bikesTab" visible="false">
+                  <AnchorPane fx:id="bikesTab">
                      <children>
                         <GridPane prefHeight="1020.0" prefWidth="1920.0">
                            <children>
@@ -686,7 +686,7 @@
                            </rowConstraints>
                         </GridPane>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="userTab">
+                  <AnchorPane fx:id="userTab" visible="false">
                      <children>
                         <GridPane layoutX="331.0" layoutY="164.0" prefHeight="1020.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>

@@ -145,11 +145,11 @@ public class OperatorSystemController {
         this.employee = e;
 
         //set account labels
-        userAccountID.setText("Employee ID: " + employee.getEmployeeID());
-        userAccountUsername.setText("Username: " + employee.getUsername());
+        userAccountID.setText("" + employee.getEmployeeID());
+        userAccountUsername.setText(employee.getUsername());
         userAccountName.setText("Name: " + employee.getFirstName() + " " + employee.getLastName());
-        userAccountEmail.setText("Email: " + employee.getEmail());
-        userAccountPhone.setText("Phone: " + employee.getPhoneNumber());
+        userAccountEmail.setText(employee.getEmail());
+        userAccountPhone.setText(employee.getPhoneNumber());
         userAccountType.setText("Account Type: " + employee.getAccType());
         userAccountLocation.setText("Location: " + employee.getLocationName());
     }
@@ -370,7 +370,7 @@ public class OperatorSystemController {
     @FXML
     protected void loadEquipment(ActionEvent e) {
         try {
-        ObservableList<Equipment> equipment = DataFetcher.equipment();
+        ObservableList<Equipment> equipment = DataFetcher.equipment(null);
 
         equipmentID.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("ID")

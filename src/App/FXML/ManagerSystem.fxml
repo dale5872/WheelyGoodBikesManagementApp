@@ -105,7 +105,7 @@
             <center>
                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane fx:id="bikesTab" visible="false">
+                        <AnchorPane fx:id="bikesTab">
                             <children>
                                 <GridPane prefHeight="1020.0" prefWidth="1920.0">
                                     <children>
@@ -173,7 +173,7 @@
                                 </GridPane>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="penaltiesTab">
+                        <AnchorPane fx:id="penaltiesTab" visible="false">
                             <children>
                                 <GridPane layoutX="-14.0" layoutY="14.0" prefHeight="1020.0" prefWidth="1920.0" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="-14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                     <columnConstraints>
