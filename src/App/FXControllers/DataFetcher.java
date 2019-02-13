@@ -1,7 +1,6 @@
-//TODO: Implement fetching rentals
-//TODO: Make memory more efficient, dont store a NEW location object per field.
-// Pass in location objects
-//TODO: Merge to PHP
+/** TODO: Implement fetching rentals */
+/** TODO: Make memory more efficient, dont store a NEW location object per field. */
+/** TODO: Merge to PHP */
 package App.FXControllers;
 
 import App.Classes.*;
@@ -131,7 +130,7 @@ public class DataFetcher {
             }
         } else if(acc instanceof Account) {
             //standard user account
-            //TODO: Implement adding a standard user account
+            /** TODO: Implement adding a standard user account */
         }
     }
 
@@ -185,7 +184,7 @@ public class DataFetcher {
 
         } else if(newAcc instanceof Account) {
             //standard user account
-            //TODO: Implement standard user account
+            /** TODO: Implement standard user account */
 
         }
     }
