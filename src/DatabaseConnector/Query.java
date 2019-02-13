@@ -1,4 +1,3 @@
-//TODO: Replace JDBC with PHP
 package DatabaseConnector;
 
 import java.sql.*;
@@ -24,10 +23,17 @@ public class Query {
      * @return - the ResultSet object containing the results from the executed Query
      * Uses Connection object from SQLConnector to connect to adn execute the
      * Query on the database
+     *
+     * TODO Replace JDBC with PHP
+     * BODY Switching to PHP DB connectivity and removing JDBC, results will be parsed in JSON
      */
     public Results executeQuery() {
         Connection con = connectToDB();
 
+        /**
+         * TODO Implement a JSON Parser
+         * BODY PHP output will be parsed in JSON, thus we need a JSON parser to import the data into Results object
+         */
         try{
             //Create SQL Statement, create ResultSet object and fill that object
             Statement st = con.createStatement();

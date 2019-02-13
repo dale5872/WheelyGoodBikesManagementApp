@@ -15,10 +15,13 @@ public class Location {
 
     public Location(String name) {
         this.name = name;
+        /**
+         * TODO: Replace with PHP equivalent
+         */
         Query q = new Query("SELECT location.locationID FROM location WHERE location.name = '" + this.name + "';");
         Results res = q.executeQuery();
         this.locationID = (int)res.getElement(0,0);
-        //TODO: null result checking
+        /** TODO: null result checking */
     }
 
     public Location () {}

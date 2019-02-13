@@ -81,8 +81,11 @@ public class LogInScreenController {
                 filename = "OperatorSystem";
                 break;
             default: //Account is not a manager or operator - reject  log in
-                filename = "";
-                //TODO: reject log in
+                /**
+                 * TODO reject log in
+                 * BODY As the user's account is not a manager or operator, reject the login with an error message
+                 */
+                    filename = "";
                 break;
         }
 

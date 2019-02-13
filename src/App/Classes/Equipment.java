@@ -21,6 +21,10 @@ public class Equipment {
         this.location = location;
     }
 
+    /**
+     * TODO get equipment location
+     * @param row
+     */
     public Equipment(Object[] row) {
         this.id = (int)row[0];
         this.typeID = (int)row[1];
@@ -28,7 +32,6 @@ public class Equipment {
         this.status = (String)row[3];
         this.price = (float)row[4];
         this.image = (String)row[5];
-        //TODO: get location
     }
 
     public Equipment() {}

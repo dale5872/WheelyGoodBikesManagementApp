@@ -1,8 +1,7 @@
 //TODO: Implement fetching rentals
-//TODO: Catch SQL Exceptions for constraint violations and duplicate entries
-//TODO: String Sanitization to prevent SQL Injection
 //TODO: Make memory more efficient, dont store a NEW location object per field.
 // Pass in location objects
+//TODO: Merge to PHP
 package App.FXControllers;
 
 import App.Classes.*;

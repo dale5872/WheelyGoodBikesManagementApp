@@ -1,4 +1,7 @@
-//TODO: Get SSH Tunnel to SQL server working
+/**
+ * TODO: Remove this class and dependencies as will not be used
+ * BODY: Moving to PHP connectivity so this class will not be used
+ */
 package DatabaseConnector;
 
 import com.jcraft.jsch.JSch;

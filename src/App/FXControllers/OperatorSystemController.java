@@ -1,6 +1,3 @@
-//TODO: Refactor to allow EmployeeAccount and Accounts
-//TODO: Refactor to avoid duplicate code for inputting data into tables on different views
-
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
@@ -205,6 +202,9 @@ public class OperatorSystemController {
      * Radio Buttons
      * @param e ActionEvent object
      * @throws InvalidParametersException if no accounts to load
+     *
+     * TODO: Refactor to allow EmployeeAccount and Accounts
+     * BODY: 'Accounts' tab can be used for both Employees and searching user accounts
      */
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
