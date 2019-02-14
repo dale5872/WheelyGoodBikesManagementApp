@@ -2,7 +2,7 @@ package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
 import DatabaseConnector.Authenticate;
-import DatabaseConnector.NotManagerException;
+import DatabaseConnector.LoginFailedException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,31 +33,11 @@ public class LogInScreenController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        /* To test UI */
-        /*EmployeeAccount activeAccount = new EmployeeAccount();
-        activeAccount.setAccType(username);
-
-        if(password.equals("")){ //TEST CASE: DELETE BEFORE COMPILING
-            incorrectCredentials.setVisible(false);
-            createAndShowMainWindow(activeAccount);
-        }else { //If credentials cannot be authenticated
-            incorrectCredentials.setVisible(true);
-        }*/
-
-
-
         /* To test UI with DATABASE */
         try {
-            EmployeeAccount activeAccount = Authenticate.authenticate(username, password);
-
-            if (activeAccount == null) {
-                incorrectCredentials.setVisible(true);
-            } else if (activeAccount.getEmployeeID() != 0) { //Credentials are correct
-                incorrectCredentials.setVisible(false);
-                createAndShowMainWindow(activeAccount);
-            }
-        } catch (NotManagerException e) {
-            incorrectCredentials.setText(e.getMessage());
+            EmployeeAccount activeAccount = Authenticate.authorize(username, password);
+            createAndShowMainWindow(activeAccount);
+        } catch (LoginFailedException e) {
             incorrectCredentials.setVisible(true);
         }
     }

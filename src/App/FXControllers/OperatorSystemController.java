@@ -175,6 +175,12 @@ public class OperatorSystemController {
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
+        /**
+         * TODO Move automatic loading over to the PHP scripts
+         * BODY All automatic data loading needs to be moved to the PHP scripts from JDBC, nothing shall load as defualt
+         */
+
+        /**
         //Load in data for adding / editing accounts
         try {
             loadAccounts(null);
@@ -194,6 +200,8 @@ public class OperatorSystemController {
      //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
         setValues();
+
+         **/
     }
 
     /**

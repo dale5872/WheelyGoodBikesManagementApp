@@ -5,23 +5,20 @@ import App.FXControllers.ShowMessageBox;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class NotManagerException extends Exception {
+public class LoginFailedException extends Exception {
 
     /**
      * Class just extends Exception, used to determine which type
      * of exception is thrown
      */
-    public NotManagerException() {
+    public LoginFailedException() {
         super();
     }
 
-    public NotManagerException(String message) {
+    public LoginFailedException(String message) {
         super(message);
         Logger lgr = Logger.getLogger(this.getClass().getName());
         lgr.log(Level.SEVERE, message);
-        //show to user
-        ShowMessageBox messageBox = new ShowMessageBox();
-        messageBox.show(message);
     }
 
 

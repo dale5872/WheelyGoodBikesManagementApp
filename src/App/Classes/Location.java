@@ -18,7 +18,7 @@ public class Location {
         /**
          * TODO: Replace with PHP equivalent
          */
-        Query q = new Query("SELECT location.locationID FROM location WHERE location.name = '" + this.name + "';");
+        Query q = new Query("read", "fetchSingleLocation", "location_name=" + name);
         Results res = q.executeQuery();
         this.locationID = (int)res.getElement(0,0);
         /** TODO: null result checking */

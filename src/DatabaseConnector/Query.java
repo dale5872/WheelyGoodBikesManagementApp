@@ -7,41 +7,83 @@ import java.net.HttpURLConnection;
 
 public class Query {
 
-    private String query;
+    private String type;
+    private String scriptName;
+    private String args;
     private Logger lgr = Logger.getLogger(Query.class.getName());
-    private SQLConnector sqlCon;
 
     /**
-     * @param query - SQL Query to be executed
+     * @param type type of SQL query to execute (read, update, create, delete)
+     * @param scriptName the name of the PHP script (without the .php extension)
+     * @param args any POST args in the form of "arg1=value1&arg2=value2"
      */
-    public Query(String query) {
-        this.query = query;
+    public Query(String type, String scriptName, String args) {
+        this.type = type;
+        this.scriptName = scriptName;
+        this.args = args;
     }
 
     public Query() {}
 
     /**
-     * @param query - the PHP query filename to execute
+     * @param  - the PHP query filename to execute
      * @param args - the arguments to send IN ORDER AS THEY APPEAR IN THE PHP SCRIPT
      * @return - the ResultSet object containing the results from the executed Query
      * Uses Connection object from SQLConnector to connect to and execute the
      * Query on the database
-     *
-     * TODO Replace JDBC with PHP
-     * BODY Switching to PHP DB connectivity and removing JDBC, results will be parsed in JSON
      */
     public Results executeQuery(String type, String scriptName, String args) {
-        String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/" + type + "/" + scriptName + ".php";
-        HTTPConnection con = new HTTPConnection();
+        this.type = type;
+        this.scriptName = scriptName;
+        this.args = args;
+        return executeQuery();
+    }
 
+    public Results executeQuery() {
         try {
-            String response = con.getResponse(url, args);
+            //Set HTTP POST data
+            String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/" + this.type + "/" + this.scriptName + ".php";
+            HTTPConnection con = new HTTPConnection();
 
-            System.out.println(response); //TEST
+            //Get response
+            String response = con.getResponse(url, this.args);
+
+            //Parse the data into the Results object and return
+            Results res = JSONData.getResults(JSONData.parseData(response));
+            return res;
             /**
-             * TODO Parse response
-             * BODY Parse the JSON response and input data into the Results Object
+             * TODO Catch Exceptions
+             * BODY Catch exceptions, log them and display to user. Find out why IOException is thrown
              */
+        } catch (IOException exc) {
+            lgr.log(Level.SEVERE, "IOException Occured");
+            exc.printStackTrace();
+        } catch (HTTPErrorException exc) {
+            //prints error
+        } catch (JSONErrorException exc) {
+            //prints error
+        }
+        return null;
+    }
+
+    public boolean insertQuery(String type, String scriptName, String args) {
+        this.type = type;
+        this.scriptName = scriptName;
+        this.args = args;
+        return insertQuery();
+    }
+
+    public boolean insertQuery() {
+        try {
+            //Set HTTP POST data
+            String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/" + this.type + "/" + this.scriptName + ".php";
+            HTTPConnection con = new HTTPConnection();
+
+            //Get response
+            String response = con.getResponse(url, this.args);
+
+            //Parse JSON to get success / fail
+            return JSONData.checkSucceeded(JSONData.getJSONObject(response));
 
             /**
              * TODO Catch Exceptions
@@ -52,44 +94,21 @@ public class Query {
             exc.printStackTrace();
         } catch (HTTPErrorException exc) {
             //prints error
+        } catch (JSONErrorException exc) {
+            //prints error
         }
-        return null;
-    }
 
-    public Results executeQuery() { return null; }
-    /**
-     * @param query - new Query to be executed
-     * @return ResultSet from the database
-     * Saves updating the Query and then executing
-     */
-    public Results executeQuery(String query) {
-        this.query = query;
-        return executeQuery();
-    }
-
-    public boolean insertQuery(String query) {
-        this.query = query;
-        return insertQuery();
-    }
-
-    public boolean insertQuery() {
+        //if we get here, we can be sure that it failed
         return false;
-    }
 
+    }
     /**
-     * @param query - Query to be updated
+     *
      */
-    public void updateQuery(String query) {
-        this.query = query;
+    public void updateQuery(String type, String scriptName, String args) {
+        this.type = type;
+        this.scriptName = scriptName;
+        this.args = args;
     }
 
-    public Logger returnLogger() {
-        return lgr;
-    }
-
-    private void disconnectDB () {
-        //Disconnect and log
-        sqlCon.disconnect();
-        lgr.log(Level.INFO, ("Query executed, SQL Connection closed."));
-    }
 }

@@ -70,8 +70,13 @@ public class ManagerSystemController {
         userAccountType.setText("Account Type: " + employee.getAccType());
         userAccountLocation.setText("Location: " + employee.getLocationName());
 
-        /** Run these after employee set **/
+        /**
+         * TODO Manager Automatic Loading
+         * BODY Implement the automatic loading for Manager view with PHP script
+         */
+        /** Run these after employee set
         loadEquipment(null);
+         */
     }
 
     /**

@@ -25,7 +25,8 @@ public class DataFetcher {
     protected static ObservableList<EmployeeAccount> accounts(String queryString) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
-        Results res = query(queryString);
+        Query q = new Query("read", "fetchEmployeeAccounts", "");
+        Results res = q.executeQuery();
 
         //check we have results
         if(!res.isEmpty()) {
@@ -67,63 +68,17 @@ public class DataFetcher {
      * @throws InsertFailedException Error Codes DF01-DF04
      */
     protected static void addAccount(Account acc, String password, int accountType) throws InsertFailedException{
-        int userID = -1;
-        String queryString = "INSERT INTO user VALUES" +
-                " (null," +
-                " '" + accountType + "'," +
-                " '" + acc.getUsername() + "'," +
-                " '" + password +"');";
-        Query q = new Query(queryString);
-
-        //check it executed properly
-        if(q.insertQuery()) {
-            //get the user id
-            queryString = "SELECT user.userID FROM user WHERE" +
-                    " username='" + acc.getUsername() + "' AND password='" + password + "';";
-            q.updateQuery(queryString);
-            Results res = q.executeQuery();
-            //will be an integer result
-            userID = (int)res.getElement(0,0);
-
-            if(userID <= 0 ) {
-                throw new InsertFailedException("Could not create user " + acc.getUsername() + "."
-                        + " Error Code: DF01");
-            }
-
-            acc.setUserID(userID);
-        } else {
-            throw new InsertFailedException("Could not create user " + acc.getUsername() + "."
-                    + " Error Code: DF02");
-        }
-
         if(acc instanceof EmployeeAccount) {
-            //we have an EmployeeAccount object
-            queryString = "INSERT INTO employees VALUES" +
-                    " (null," +
-                    " '" + acc.getUserID() + "'," +
-                    " '" + ((EmployeeAccount) acc).getLocationID() + "');";
-            q.updateQuery(queryString);
-            if(!q.insertQuery()) {
-                throw new InsertFailedException("Could not create user " + acc.getUsername() + "."
-                        + " Error Code: DF03");
-            }
+            String params = "username=" + acc.getUsername()
+                    + "&password=" + password
+                    + "&account_type=" + accountType
+                    + "&location_id=" + ((EmployeeAccount) acc).getLocationID()
+                    + "&first_name=" + acc.getFirstName()
+                    + "&last_name=" + acc.getLastName()
+                    + "&email=" + acc.getEmail()
+                    + "&phone=" + acc.getPhoneNumber();
+            Query q = new Query("create", "addEmployeeAccount", params);
 
-            queryString = "SELECT employees.employeeID FROM employees WHERE employees.userID = '" + acc.getUserID() + "';";
-            Results res = q.executeQuery(queryString);
-            ((EmployeeAccount) acc).setEmployeeID((int)res.getElement(0,0));
-
-            queryString = "INSERT INTO employee_info VALUES" +
-                    " ('" + ((EmployeeAccount) acc).getEmployeeID() + "'," +
-                    " '" + acc.getFirstName() + "'," +
-                    " '" + acc.getLastName() + "'," +
-                    " '" + acc.getEmail() + "'," +
-                    " '" + acc.getPhoneNumber() + "');";
-
-            q.updateQuery(queryString);
-            if(!q.insertQuery()) {
-                throw new InsertFailedException("Could not create user " + acc.getUsername() + "."
-                        + " Error Code: DF04");
-            }
         } else if(acc instanceof Account) {
             //standard user account
             /** TODO: Implement adding a standard user account */
@@ -141,43 +96,20 @@ public class DataFetcher {
         //check if account info is the same
         //update user table for any account
         int userID = oldAcc.getUserID();
-        Query q = new Query();
-
-        String queryString = "UPDATE user " +
-                "SET accountTypeID='" + accountType + "', " +
-                "username='" + newAcc.getUsername() + "' " +
-                "WHERE user.userID='" + userID + "';";
-
-        q.updateQuery(queryString);
-        if(!q.insertQuery()) {
-            throw new InsertFailedException("Could not update user " + oldAcc.getUsername() + ". Error Code: DF07");
-        }
-
         //check if accounts are employee accounts
         if(newAcc instanceof EmployeeAccount) {
             //we have an employee account object
             //update employees
-            queryString = "UPDATE employees SET " +
-                    "location='" + ((EmployeeAccount)newAcc).getLocationID() + "' " +
-                    "WHERE userID='" + newAcc.getUserID() + "';";
-
-            q.updateQuery(queryString);
-            if(!q.insertQuery()) {
-                throw new InsertFailedException("Could not update user " + oldAcc.getUsername() + ". Error Code: DF08");
-            }
-
-            //update employee_info
-            queryString = "UPDATE employee_info SET " +
-                    "firstName='" + newAcc.getFirstName() + "', " +
-                    "lastName='" + newAcc.getLastName() + "', " +
-                    "workEmail='" + newAcc.getEmail() + "', " +
-                    "workTel='" + newAcc.getPhoneNumber() + "' " +
-                    "WHERE employeeID='" + ((EmployeeAccount) newAcc).getEmployeeID() + "';";
-            q.updateQuery(queryString);
-            if(!q.insertQuery()) {
-                throw new InsertFailedException("Could not update user " + oldAcc.getUsername() + ". Error Code: DF09");
-            }
-
+            String params = "username=" + newAcc.getUsername()
+                    + "&account_type=" + accountType
+                    + "&location_id=" + ((EmployeeAccount) newAcc).getLocationID()
+                    + "&first_name=" + newAcc.getFirstName()
+                    + "&last_name=" + newAcc.getLastName()
+                    + "&email=" + newAcc.getEmail()
+                    + "&phone=" + newAcc.getPhoneNumber()
+                    + "&employee_id=" + ((EmployeeAccount)oldAcc).getEmployeeID()
+                    + "&user_id=" + oldAcc.getUserID();
+            Query q = new Query("create", "addEmployeeAccount", params);
         } else if(newAcc instanceof Account) {
             //standard user account
             /** TODO: Implement standard user account */
@@ -194,19 +126,10 @@ public class DataFetcher {
     protected static void deleteAccount(int userID, int employeeID) throws InsertFailedException {
         String queryString = "DELETE FROM employee_info WHERE employeeID = '" + employeeID + "';";
 
-        Query q = new Query(queryString);
+        Query q = new Query("delete", "deleteEmployeeAccount", "user_id=" + userID + "&employee_id=" + employeeID);
         if(!q.insertQuery()) {
             throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF10");
         }
-        queryString = "DELETE FROM employees WHERE employeeID = '" + employeeID + "' AND userID = '" + userID + "';";
-        if(!q.insertQuery(queryString)) {
-            throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF11");
-        }
-        queryString = "DELETE FROM user WHERE userID = '" + userID + "';";
-        if(!q.insertQuery(queryString)) {
-            throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF12");
-        }
-
     }
 
     /**
@@ -216,20 +139,17 @@ public class DataFetcher {
      */
     protected static ObservableList<Equipment> equipment(Location managerLoc) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
-        String queryString = "SELECT equipment_stock.equipmentID, equipment_stock.equipmentType, equipment_type.equipmentType,\n" +
-                    "       equipment_stock.location, location.name,\n" +
-                    "       equipment_stock.equipmentStatus, equipment_type.pricePerHour\n" +
-                    "FROM equipment_stock\n" +
-                    "INNER JOIN location ON equipment_stock.location = location.locationID\n" +
-                    "INNER JOIN equipment_type ON equipment_stock.equipmentType = equipment_type.equipmentTypeID";
+
+        Query q = new Query();
+
         if(managerLoc == null) {
-            queryString += ";";
+            q.updateQuery("read", "fetchEquipment", "");
         } else {
             //get query based on location
-            queryString += "\nWHERE location.locationID = " + managerLoc.getLocationID() + ";";
+            q.updateQuery("read", "fetchEquipment", "location_id=" + managerLoc.getLocationID());
         }
 
-        Results res = query(queryString);
+        Results res = q.executeQuery();
 
         //check we have results
         if(!res.isEmpty()) {
@@ -259,21 +179,18 @@ public class DataFetcher {
 
     /**
      * Adds a new piece of equipment to the selected location
-     * @param eq Equipment object to be added
+     * @param e Equipment object to be added
      * @throws InsertFailedException if failed to be added to the database
      */
-    protected static void addEquipment(Equipment eq) throws InsertFailedException, EmptyDatasetException {
-        String queryString = "INSERT INTO equipment_stock VALUES" +
-                " (null," +
-                " '" + eq.getTypeID() + "'," +
-                " '" + eq.getLocationID() + "'," +
-                " '" + eq.getStatus() + "');";
-        Query q = new Query(queryString);
+    protected static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
+        Query q = new Query("create", "addEquipment", "equipment_type=" + e.getTypeID() +
+                "&location_id=" + e.getLocationID() +
+                "&status=" + e.getStatus());
 
         if(q.insertQuery()) {
             //success
         } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + eq.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
         }
 
     }
@@ -284,12 +201,9 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to update
      */
     protected static void updateEquipment(Equipment e) throws InsertFailedException {
-        String queryString = "UPDATE equipment_stock " +
-                "SET equipment_stock.equipmentType = '" + e.getTypeID() + "',\n" +
-                "equipment_stock.location =" + e.getLocationID() + ",\n" +
-                "equipment_stock.equipmentStatus = '" + e.getStatus() + "'\n" +
-                "WHERE equipment_stock.equipmentID = " + e.getID() + ";";
-        Query q = new Query(queryString);
+        Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
+                "&location_id=" + e.getLocationID() +
+                "&status=" + e.getStatus());
 
         if(!q.insertQuery()) {
             throw new InsertFailedException("Failed to change equipment " + e.getID());
@@ -303,9 +217,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to delete
      */
     protected static void deleteEquipment(Equipment e) throws InsertFailedException {
-        String queryString = "DELETE FROM equipment_stock \n" +
-                "WHERE equipmentID = '" + e.getID() + "';";
-        Query q = new Query(queryString);
+        Query q = new Query("delete", "deleteEquipment", "equipment_id=" + e.getID());
 
         if(!q.insertQuery()) {
             throw new InsertFailedException("Deleting equipment " + e.getID() + " failed." +
@@ -323,9 +235,9 @@ public class DataFetcher {
     protected static ObservableList<Location> locations() throws EmptyDatasetException{
         ObservableList<Location> locations = FXCollections.observableArrayList();
 
-        String queryString = "SELECT location.locationID, location.name " +
-                "FROM location";
-        Results res = query(queryString);
+
+        Query q = new Query("read", "fetchLocations", "");
+        Results res = q.executeQuery();
 
         //check we have results
         if(!res.isEmpty()) {
@@ -346,8 +258,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failure and shows message to user
      */
     protected static boolean addLocation(String locationName) throws InsertFailedException {
-        String queryString = "INSERT INTO location VALUES (null, '" + locationName + "');";
-        Query q = new Query(queryString);
+        Query q = new Query("create", "addLocation", "location_name=" + locationName);
 
         if(q.insertQuery()) {
             return true;
@@ -363,9 +274,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failure and shows message to user
      */
     protected static boolean editLocation(Location newLoc) throws InsertFailedException {
-        String queryString = "UPDATE location SET location.name = '" + newLoc.getName() + "'" +
-                "WHERE location.locationID = " + newLoc.getLocationID() + ";";
-        Query q = new Query(queryString);
+        Query q = new Query("update", "updateLocation", "location_name=" + newLoc.getName() + "&location_id=" + newLoc.getLocationID());
 
         if(q.insertQuery()) {
             return true;
@@ -381,8 +290,7 @@ public class DataFetcher {
      * @throws InsertFailedException when failed, gives user a message
      */
     protected static boolean deleteLocation(Location loc) throws InsertFailedException {
-        String queryString = "DELETE FROM location WHERE locationID = '" + loc.getLocationID() + "';";
-        Query q = new Query(queryString);
+        Query q = new Query("delete", "deleteLocation", "location_id=" + loc.getLocationID());
 
         if(q.insertQuery()) {
             //succeeded
@@ -398,20 +306,12 @@ public class DataFetcher {
     }
 
 
-    protected static ObservableList<Rental> rentals(String queryString) throws EmptyDatasetException {
-        ObservableList<Rental> rentals = FXCollections.observableArrayList();
-
-        Results res = query(queryString);
-
-        //check we have results
-        if(!res.isEmpty()) {
-            for(int r = 0; r < res.getRows(); r++) {
-                //implement rentals
-            }
-        } else {
-            throw new EmptyDatasetException("Empty Dataset: Could not retrieve list of rentals");
-        }
-        return rentals;
+    /**
+     *
+     * TODO Implement retrieving rentals
+     */
+    protected static ObservableList<Rental> rentals() {
+        return null;
     }
 
     /**
@@ -420,8 +320,13 @@ public class DataFetcher {
      * @param dropdown "accountTypes" or "locations" are acceptable inputs
      * @return HashMap of the names of each dropdown values and their corresponding
      * ID numbers in the database (ID, Name)
+     *
+     * TODO Needs merging to PHP
+     * BODY Getting the different dropdown items needs scripts created in PHP
      */
     protected static HashMap<String, String> getDropdownValues(String dropdown) {
+
+        /**
         HashMap<String, String> accountTypes = new HashMap<>();
 
         Query q = new Query();
@@ -457,16 +362,7 @@ public class DataFetcher {
         }
 
         return accountTypes;
-
-    }
-
-    private static Results query(String queryString) {
-        Query q = new Query(queryString);
-        return q.executeQuery();
-    }
-
-    private boolean executeQuery(String queryString) {
-        Query q = new Query(queryString);
-        return q.insertQuery();
+    **/
+        return null;
     }
 }

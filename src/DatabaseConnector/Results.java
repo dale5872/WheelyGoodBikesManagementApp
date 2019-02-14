@@ -108,4 +108,15 @@ public class Results {
         return this.table[row][col];
     }
 
+
+    public Object getElement(int row, String col) {
+        //find column name
+        for(int i = 0; i < this.cols; i++) {
+            if(columnHeaders[i].equals(col)) {
+                return this.table[row][i];
+            }
+        }
+        return null;
+    }
+
 }
