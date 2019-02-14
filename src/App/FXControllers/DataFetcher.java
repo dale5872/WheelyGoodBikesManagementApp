@@ -7,14 +7,10 @@ import App.Classes.*;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.Query;
 import DatabaseConnector.Results;
-import com.google.protobuf.Empty;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 public class DataFetcher {
 

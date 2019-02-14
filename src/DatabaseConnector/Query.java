@@ -1,8 +1,9 @@
 package DatabaseConnector;
 
-import java.sql.*;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.HttpURLConnection;
 
 public class Query {
 
@@ -20,65 +21,42 @@ public class Query {
     public Query() {}
 
     /**
+     * @param query - the PHP query filename to execute
+     * @param args - the arguments to send IN ORDER AS THEY APPEAR IN THE PHP SCRIPT
      * @return - the ResultSet object containing the results from the executed Query
-     * Uses Connection object from SQLConnector to connect to adn execute the
+     * Uses Connection object from SQLConnector to connect to and execute the
      * Query on the database
      *
      * TODO Replace JDBC with PHP
      * BODY Switching to PHP DB connectivity and removing JDBC, results will be parsed in JSON
      */
-    public Results executeQuery() {
-        Connection con = connectToDB();
+    public Results executeQuery(String type, String scriptName, String args) {
+        String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/" + type + "/" + scriptName + ".php";
+        HTTPConnection con = new HTTPConnection();
 
-        /**
-         * TODO Implement a JSON Parser
-         * BODY PHP output will be parsed in JSON, thus we need a JSON parser to import the data into Results object
-         */
-        try{
-            //Create SQL Statement, create ResultSet object and fill that object
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(this.query);
-            ResultSetMetaData rsma = rs.getMetaData();
+        try {
+            String response = con.getResponse(url, args);
 
-            int cols = rsma.getColumnCount();
-            int rows = 0;
-            //find the number of rows by iterating through the ResultSet
-            while(rs.next()) {
-                rows++;
-            }
-            rs.beforeFirst();
+            System.out.println(response); //TEST
+            /**
+             * TODO Parse response
+             * BODY Parse the JSON response and input data into the Results Object
+             */
 
-            //Get column names
-            String[] columnNames = new String[cols];
-
-            for(int i = 1; i < cols; i++) {
-                columnNames[i] = rsma.getColumnName(i);
-            }
-
-            //As any ResultSet object is destroyed when used outside of statement,
-            //data must be moved to a Results object
-            Results results = new Results(rows, cols);
-            results.setColumn(columnNames);
-
-            //Import the data
-            int r = 0;
-            while(rs.next()) {
-                for(int c = 1; c < cols+1; c++) {
-                    results.setElement(r, c-1, rs.getObject(c));
-                }
-                r++;
-            }
-
-            return results;
-
-        } catch (SQLException e) {
-            lgr.log(Level.SEVERE, e.getMessage(), e);
-            sqlCon.disconnect();
-            return null;
+            /**
+             * TODO Catch Exceptions
+             * BODY Catch exceptions, log them and display to user. Find out why IOException is thrown
+             */
+        } catch (IOException exc) {
+            lgr.log(Level.SEVERE, "IOException Occured");
+            exc.printStackTrace();
+        } catch (HTTPErrorException exc) {
+            //prints error
         }
-
+        return null;
     }
 
+    public Results executeQuery() { return null; }
     /**
      * @param query - new Query to be executed
      * @return ResultSet from the database
@@ -95,29 +73,7 @@ public class Query {
     }
 
     public boolean insertQuery() {
-        Connection con = connectToDB();
-        lgr.log(Level.INFO, "Executing insert query");
-
-        try {
-            Statement st = con.createStatement();
-            int rowsAffected = st.executeUpdate(this.query);
-            disconnectDB();
-
-            if(rowsAffected > 0) {
-                lgr.log(Level.INFO, "SQL INSERT statement executed successfully.");
-                return true;
-            } else {
-                lgr.log(Level.SEVERE, "SQL INSERT statement executed unsuccessfully.");
-                return false;
-            }
-
-
-        } catch (SQLException e) {
-            disconnectDB();
-            lgr.log(Level.SEVERE, e.getMessage(), e);
-            sqlCon.disconnect();
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -129,16 +85,6 @@ public class Query {
 
     public Logger returnLogger() {
         return lgr;
-    }
-
-    private Connection connectToDB() {
-        //Connect to the database and return the SQL Connection Object
-        sqlCon = new SQLConnector();
-        if(!sqlCon.connect()) {
-            lgr.log(Level.SEVERE, "Connection to the database failed, aborting query execution");
-            return null;
-        }
-        return sqlCon.getConnectionObject();
     }
 
     private void disconnectDB () {
