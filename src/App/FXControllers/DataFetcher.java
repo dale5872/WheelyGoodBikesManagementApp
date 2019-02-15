@@ -1,6 +1,5 @@
 /** TODO: Implement fetching rentals */
 /** TODO: Make memory more efficient, dont store a NEW location object per field. */
-/** TODO: Merge to PHP */
 package App.FXControllers;
 
 import App.Classes.*;
@@ -19,35 +18,31 @@ public class DataFetcher {
      * creates many Account / EmployeeAccount objects and parses the data
      * into these objects. Then returns the list of these objects for
      * display into the table
-     * @param queryString Query to execute on the SQL Server
+     * @param params The HTTP POST params to send
      * @return A list of Accounts filled with the data in each account
      */
-    protected static ObservableList<EmployeeAccount> accounts(String queryString) throws EmptyDatasetException{
+    protected static ObservableList<EmployeeAccount> accounts(String params) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
-        Query q = new Query("read", "fetchEmployeeAccounts", "");
+        Query q = new Query("read", "fetchEmployeeAccounts", params);
         Results res = q.executeQuery();
 
         //check we have results
         if(!res.isEmpty()) {
             //add data
-            /*
-            TABLE STRUCTURE:
-            (employeeID, username, firstName, lastName, email, phone, accountType, location)
-             */
             for(int r = 0; r < res.getRows(); r++) {
                 EmployeeAccount acc = new EmployeeAccount();
 
-                acc.setEmployeeID((int)res.getElement(r,0));
-                acc.setUsername((String)res.getElement(r,1));
-                acc.setFirstName((String)res.getElement(r,2));
-                acc.setLastName((String)res.getElement(r,3));
-                acc.setEmail((String)res.getElement(r,4));
-                acc.setPhoneNumber((String)res.getElement(r,5));
-                acc.setAccType((String)res.getElement(r,6));
-                Location loc = new Location((int)res.getElement(r,7), (String)res.getElement(r,8));
+                acc.setEmployeeID(Integer.parseInt((String)res.getElement(r,"employeeID")));
+                acc.setUsername((String)res.getElement(r,"username"));
+                acc.setFirstName((String)res.getElement(r,"firstName"));
+                acc.setLastName((String)res.getElement(r,"lastName"));
+                acc.setEmail((String)res.getElement(r,"workEmail"));
+                acc.setPhoneNumber((String)res.getElement(r,"workTel"));
+                acc.setAccType((String)res.getElement(r,"type"));
+                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"locationID")), (String)res.getElement(r,"location"));
                 acc.setLocation(loc);
-                acc.setUserID((int)res.getElement(r,9));
+                acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
 
                 accounts.add(acc);
             }
@@ -78,7 +73,9 @@ public class DataFetcher {
                     + "&email=" + acc.getEmail()
                     + "&phone=" + acc.getPhoneNumber();
             Query q = new Query("create", "addEmployeeAccount", params);
-
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Failed to add user: " + acc.getUsername());
+            }
         } else if(acc instanceof Account) {
             //standard user account
             /** TODO: Implement adding a standard user account */
@@ -110,6 +107,10 @@ public class DataFetcher {
                     + "&employee_id=" + ((EmployeeAccount)oldAcc).getEmployeeID()
                     + "&user_id=" + oldAcc.getUserID();
             Query q = new Query("create", "addEmployeeAccount", params);
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Failed to update user: " + newAcc.getUsername());
+            }
+
         } else if(newAcc instanceof Account) {
             //standard user account
             /** TODO: Implement standard user account */
@@ -153,20 +154,15 @@ public class DataFetcher {
 
         //check we have results
         if(!res.isEmpty()) {
-           /* TABLE STRUCTURE
-           (EquipmentID, EquipmentTypeID, EquipmentName,
-            LocationID, LocationName,
-             EquipmentStatus, Price)
-            */
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
-                e.setID((int) res.getElement(r, 0));
-                e.setTypeID((int)res.getElement(r,1));
-                e.setTypeName((String)res.getElement(r,2));
-                Location loc = new Location((int)res.getElement(r,3), (String)res.getElement(r,4));
+                e.setID(Integer.parseInt((String) res.getElement(r, "equipmentID")));
+                e.setTypeID(Integer.parseInt((String)res.getElement(r,"equipmentType")));
+                e.setTypeName((String)res.getElement(r,"equipmentName"));
+                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
                 e.setLocation(loc);
-                e.setStatus((String)res.getElement(r,5));
-                e.setPrice((float)res.getElement(r, 6));
+                e.setStatus((String)res.getElement(r,"equipmentStatus"));
+                e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 equipment.add(e);
             }
         } else {
@@ -242,7 +238,7 @@ public class DataFetcher {
         //check we have results
         if(!res.isEmpty()) {
             for(int r = 0; r < res.getRows(); r++) {
-                locations.add(new Location((int)res.getElement(r, 0), (String)res.getElement(r,1)));
+                locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
             }
         } else {
             throw new EmptyDatasetException("Empty Dataset: Could not list of locations");
@@ -320,49 +316,51 @@ public class DataFetcher {
      * @param dropdown "accountTypes" or "locations" are acceptable inputs
      * @return HashMap of the names of each dropdown values and their corresponding
      * ID numbers in the database (ID, Name)
-     *
-     * TODO Needs merging to PHP
-     * BODY Getting the different dropdown items needs scripts created in PHP
      */
     protected static HashMap<String, String> getDropdownValues(String dropdown) {
 
-        /**
+
         HashMap<String, String> accountTypes = new HashMap<>();
 
         Query q = new Query();
+        Results res;
+        String id;
+        String name;
 
         switch (dropdown) {
             case "accountTypes":
-                q.updateQuery("SELECT accountTypeID, type\n" +
-                        "FROM account_types;");
+                q.updateQuery("read", "fetchAccountTypes", "");
+                id = "accountTypeID";
+                name = "type";
                 break;
             case "locations":
-                q.updateQuery("SELECT locationID, name\n" +
-                        "FROM location;");
+                q.updateQuery("read", "fetchLocations", "");
+                id = "locationID";
+                name = "name";
                 break;
             case "equipmentTypes":
-                q.updateQuery("SELECT equipmentTypeID, equipmentType\n" +
-                        "FROM equipment_type");
+                q.updateQuery("read", "fetchEquipmentTypes", "");
+                id = "equipmentTypeID";
+                name = "equipmentType";
                 break;
             case "bikeTypes":
-                q.updateQuery("SELECT bikeTypeID, bikeType\n" +
-                        "FROM bike_type");
+                q.updateQuery("read", "fetchBikeTypes", "");
+                id = "bikeTypeID";
+                name = "bikeType";
                 break;
             default:
                 return null;
         }
 
-        Results res = q.executeQuery();
+        res = q.executeQuery();
 
         //check if we have results
         if(!res.isEmpty()) {
             for(int r = 0; r < res.getRows(); r++) {
-                accountTypes.put((String)res.getElement(r, 1), Integer.toString((int)res.getElement(r, 0)));
+                accountTypes.put((String)res.getElement(r, name), (String)res.getElement(r, id));
             }
         }
 
         return accountTypes;
-    **/
-        return null;
     }
 }

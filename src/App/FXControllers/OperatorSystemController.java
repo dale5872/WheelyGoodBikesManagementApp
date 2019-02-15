@@ -175,12 +175,6 @@ public class OperatorSystemController {
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        /**
-         * TODO Move automatic loading over to the PHP scripts
-         * BODY All automatic data loading needs to be moved to the PHP scripts from JDBC, nothing shall load as defualt
-         */
-
-        /**
         //Load in data for adding / editing accounts
         try {
             loadAccounts(null);
@@ -200,8 +194,6 @@ public class OperatorSystemController {
      //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
         setValues();
-
-         **/
     }
 
     /**
@@ -216,19 +208,12 @@ public class OperatorSystemController {
      */
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
-        String queryString = "SELECT employees.employeeID, user.username,  employee_info.firstName, employee_info.lastName, \n" +
-                "       employee_info.workEmail, employee_info.workTel, account_types.type, location.locationID, location.name AS 'location', user.userID\n" +
-                "FROM user\n" +
-                "INNER JOIN employees ON user.userID = employees.userID\n" +
-                "INNER JOIN employee_info ON employees.employeeID = employee_info.employeeID\n" +
-                "INNER JOIN account_types ON user.accountTypeID = account_types.accountTypeID\n" +
-                "INNER JOIN location ON employees.location = location.locationID\n";
+        String params = "";
 
         if(managersRadio.isSelected()) {
-            queryString = queryString + "WHERE account_types.type = 'Manager';";
-            System.out.println(queryString);
+            params = "account_type=Manager";
         } else if(operatorsRadio.isSelected()) {
-            queryString = queryString + "WHERE account_types.type = 'Operator';";
+            params = "account_type=Operator";
         } else if(allRadio.isSelected()) {
             //Nothing
         } else {
@@ -236,7 +221,7 @@ public class OperatorSystemController {
         }
 
         try {
-            ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(queryString);
+            ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(params);
 
             accountsID.setCellValueFactory(
                     new PropertyValueFactory<EmployeeAccount, String>("employeeID")
