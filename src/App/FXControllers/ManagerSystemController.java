@@ -64,11 +64,11 @@ public class ManagerSystemController {
         //set account labels
         userAccountID.setText("" + employee.getEmployeeID());
         userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText("Name: " + employee.getFirstName() + " " + employee.getLastName());
+        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
         userAccountEmail.setText(employee.getEmail());
         userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountType.setText("Account Type: " + employee.getAccType());
-        userAccountLocation.setText("Location: " + employee.getLocationName());
+        userAccountType.setText(employee.getAccType());
+        userAccountLocation.setText(employee.getLocationName());
 
         /**
          * TODO Manager Automatic Loading
@@ -113,7 +113,6 @@ public class ManagerSystemController {
      */
     @FXML
     protected void loadEquipment(ActionEvent e) {
-
         try {
             ObservableList<Equipment> equipment = DataFetcher.equipment(this.employee.getLocation());
 

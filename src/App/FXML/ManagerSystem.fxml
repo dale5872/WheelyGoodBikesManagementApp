@@ -105,7 +105,7 @@
             <center>
                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane fx:id="bikesTab" visible="false">
+                        <AnchorPane fx:id="bikesTab">
                             <children>
                                   <HBox alignment="TOP_CENTER" layoutX="96.0" layoutY="51.0" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                       <children>
@@ -144,14 +144,11 @@
                                                         </padding>
                                                     </VBox>
                                                 </children>
-                                                <VBox.margin>
-                                                    <Insets bottom="25.0" />
-                                                </VBox.margin>
                                             </AnchorPane>
                                       </children>
-                           <padding>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                           </padding>
+                                      <padding>
+                                          <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                                      </padding>
                                   </HBox>
                             </children>
                         </AnchorPane>
@@ -874,7 +871,7 @@
                             </children>
                         </AnchorPane>
                         <AnchorPane fx:id="reportsTab" visible="false" />
-                        <AnchorPane fx:id="userTab">
+                        <AnchorPane fx:id="userTab" visible="false">
                             <children>
                                   <VBox alignment="TOP_CENTER" layoutX="96.0" layoutY="51.0" prefHeight="1020.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                       <children>

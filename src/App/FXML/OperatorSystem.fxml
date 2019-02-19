@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1920.0" styleClass="main-background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.OperatorSystemController">
+<AnchorPane prefHeight="900.0" prefWidth="1920.0" styleClass="main-background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.OperatorSystemController">
    <children>
       <BorderPane layoutX="290.0" layoutY="207.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -117,257 +117,279 @@
                <children>
                   <AnchorPane fx:id="accountsTab" visible="false">
                      <children>
-                        <HBox alignment="CENTER" layoutX="81.0" layoutY="-32.0" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TableView fx:id="accountsTable" editable="true" onMouseClicked="#updateEditBox" styleClass="table" HBox.hgrow="ALWAYS">
-                                <columns>
-                                  <TableColumn id="tableID" fx:id="accountsID" prefWidth="75.0" text="ID" />
-                                  <TableColumn id="tableUsername" fx:id="accountsUsername" prefWidth="250.0" text="Username" />
-                                    <TableColumn id="tableFirstName" fx:id="accountsFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
-                                    <TableColumn id="tableLastName" fx:id="accountsLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
-                                    <TableColumn id="tableEmail" fx:id="accountsEmail" prefWidth="200.0" text="Email" />
-                                    <TableColumn id="tablePhoneNumber" fx:id="accountsPhoneNumber" prefWidth="150.0" text="Phone Number" />
-                                    <TableColumn id="tableAccountType" fx:id="accountsAccountType" prefWidth="150.0" text="Account Type" />
-                                    <TableColumn id="tableLocation" fx:id="accountsLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
-                                </columns>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </TableView>
-                              <VBox layoutX="1277.0" layoutY="7.0" spacing="20.0">
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                       <children>
-                                          <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <RadioButton fx:id="allRadio" mnemonicParsing="false" selected="true" text="All">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </RadioButton>
-                                                <RadioButton fx:id="managersRadio" mnemonicParsing="false" text="Managers">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </RadioButton>
-                                                <RadioButton fx:id="operatorsRadio" mnemonicParsing="false" text="Operators">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </RadioButton>
-                                                <HBox alignment="CENTER_RIGHT">
-                                                   <children>
-                                                      <Button fx:id="loadData" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </AnchorPane>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                       <children>
-                                          <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Account:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="accountsNewAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Username...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <TextField fx:id="accountsNewAccountPassword" prefHeight="25.0" promptText="Password...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER" spacing="5.0">
-                                                   <children>
-                                                      <TextField fx:id="accountsNewAccountFirstName" prefHeight="25.0" prefWidth="200.0" promptText="First Name....">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </TextField>
-                                                      <TextField fx:id="accountsNewAccountLastName" prefHeight="25.0" prefWidth="200.0" promptText="Surname...">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </TextField>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <TextField fx:id="accountsNewAccountEmail" prefHeight="25.0" promptText="Email...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <TextField fx:id="accountsNewAccountPhone" prefHeight="25.0" promptText="Phone Number...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" spacing="5.0" style="-fx-font-size: 14px;">
-                                                   <children>
-                                                      <ComboBox fx:id="accountsNewAccountType" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </ComboBox>
-                                                      <ComboBox fx:id="accountsNewAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </ComboBox>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER_RIGHT">
-                                                   <children>
-                                                      <Button fx:id="accountsAddAccount" mnemonicParsing="false" onAction="#addAccount" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </AnchorPane>
-                                    <AnchorPane prefWidth="400.0" style="-fx-background-color: white;">
-                                       <children>
-                                          <VBox fx:id="editAccountVBox" disable="true" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Account:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="accountsEditAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Username...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER" spacing="5.0">
-                                                   <children>
-                                                      <TextField fx:id="accountsEditAccountFirstName" prefHeight="25.0" prefWidth="200.0" promptText="First Name....">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </TextField>
-                                                      <TextField fx:id="accountsEditAccountLastName" prefHeight="25.0" prefWidth="200.0" promptText="Surname....">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </TextField>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <TextField fx:id="accountsEditAccountEmail" prefHeight="25.0" promptText="Email...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <TextField fx:id="accountsEditAccountPhone" prefHeight="25.0" promptText="Phone Number...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER" spacing="5.0" style="-fx-font-size: 14px;">
-                                                   <children>
-                                                      <ComboBox fx:id="accountsEditAccountType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </ComboBox>
-                                                      <ComboBox fx:id="accountsEditAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </ComboBox>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER_RIGHT" spacing="10.0">
-                                                   <children>
-                                                      <Button fx:id="accountsDeleteAccount" mnemonicParsing="false" onAction="#deleteAccount" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
-                                                         <HBox.margin>
-                                                            <Insets left="10.0" />
-                                                         </HBox.margin>
-                                                      </Button>
-                                                      <Button fx:id="accountsEditAccount" mnemonicParsing="false" onAction="#updateAccount" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
+                                    <Label text="Show:" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="accountsFilter" onAction="#loadAccounts" prefHeight="30.0" prefWidth="200.0" />
                                  </children>
-                              </VBox>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="81.0" layoutY="-32.0" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TableView fx:id="accountsTable" editable="true" onMouseClicked="#updateEditBox" styleClass="table" HBox.hgrow="ALWAYS">
+                                      <columns>
+                                        <TableColumn id="tableID" fx:id="accountsID" prefWidth="75.0" text="ID" />
+                                        <TableColumn id="tableUsername" fx:id="accountsUsername" prefWidth="250.0" text="Username" />
+                                          <TableColumn id="tableFirstName" fx:id="accountsFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
+                                          <TableColumn id="tableLastName" fx:id="accountsLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
+                                          <TableColumn id="tableEmail" fx:id="accountsEmail" prefWidth="200.0" text="Email" />
+                                          <TableColumn id="tablePhoneNumber" fx:id="accountsPhoneNumber" prefWidth="150.0" text="Phone Number" />
+                                          <TableColumn id="tableAccountType" fx:id="accountsAccountType" prefWidth="150.0" text="Account Type" />
+                                          <TableColumn id="tableLocation" fx:id="accountsLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
+                                      </columns>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </TableView>
+                                    <VBox layoutX="1277.0" layoutY="7.0" spacing="20.0">
+                                       <children>
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <RadioButton fx:id="allRadio" mnemonicParsing="false" selected="true" text="All">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="managersRadio" mnemonicParsing="false" text="Managers">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="operatorsRadio" mnemonicParsing="false" text="Operators">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </RadioButton>
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button fx:id="loadData" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </AnchorPane>
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Account:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="accountsNewAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Username...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <TextField fx:id="accountsNewAccountPassword" prefHeight="25.0" promptText="Password...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER" spacing="5.0">
+                                                         <children>
+                                                            <TextField fx:id="accountsNewAccountFirstName" prefHeight="25.0" prefWidth="200.0" promptText="First Name....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </TextField>
+                                                            <TextField fx:id="accountsNewAccountLastName" prefHeight="25.0" prefWidth="200.0" promptText="Surname...">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <TextField fx:id="accountsNewAccountEmail" prefHeight="25.0" promptText="Email...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <TextField fx:id="accountsNewAccountPhone" prefHeight="25.0" promptText="Phone Number...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" spacing="5.0" style="-fx-font-size: 14px;">
+                                                         <children>
+                                                            <ComboBox fx:id="accountsNewAccountType" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </ComboBox>
+                                                            <ComboBox fx:id="accountsNewAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </ComboBox>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button fx:id="accountsAddAccount" mnemonicParsing="false" onAction="#addAccount" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </AnchorPane>
+                                          <AnchorPane prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox fx:id="editAccountVBox" disable="true" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Account:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="accountsEditAccountUsername" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Username...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER" spacing="5.0">
+                                                         <children>
+                                                            <TextField fx:id="accountsEditAccountFirstName" prefHeight="25.0" prefWidth="200.0" promptText="First Name....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                            <TextField fx:id="accountsEditAccountLastName" prefHeight="25.0" prefWidth="200.0" promptText="Surname....">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </TextField>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <TextField fx:id="accountsEditAccountEmail" prefHeight="25.0" promptText="Email...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <TextField fx:id="accountsEditAccountPhone" prefHeight="25.0" promptText="Phone Number...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER" spacing="5.0" style="-fx-font-size: 14px;">
+                                                         <children>
+                                                            <ComboBox fx:id="accountsEditAccountType" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Account type...">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </ComboBox>
+                                                            <ComboBox fx:id="accountsEditAccountLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Location....">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </ComboBox>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <CheckBox fx:id="accountsEditResetPassword" mnemonicParsing="false" text="Reset Password">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </CheckBox>
+                                                      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                                         <children>
+                                                            <Button fx:id="accountsDeleteAccount" mnemonicParsing="false" onAction="#deleteAccount" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="accountsEditAccount" mnemonicParsing="false" onAction="#updateAccount" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                            </children>
                            <padding>
                               <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                            </padding>
-                        </HBox>
+                        </VBox>
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="bikesTab" visible="false">
@@ -484,9 +506,9 @@
                                                 </ComboBox>
                                                 <HBox alignment="CENTER_RIGHT" prefWidth="380.0" spacing="10.0">
                                                    <children>
-                                                      <Button fx:id="deleteEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
+                                                      <Button fx:id="deleteEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
                                                          <HBox.margin>
-                                                            <Insets left="10.0" />
+                                                            <Insets />
                                                          </HBox.margin>
                                                       </Button>
                                                       <Button fx:id="editEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateEquipment" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />

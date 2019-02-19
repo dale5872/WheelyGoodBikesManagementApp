@@ -30,17 +30,40 @@
                         <Insets bottom="20.0" left="100.0" right="100.0" />
                     </VBox.margin>
                 </TextField>
-                <PasswordField fx:id="passwordField" promptText="Password">
-                    <padding>
-                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                    </padding>
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="20.0" left="100.0" right="100.0" />
-                    </VBox.margin>
-                </PasswordField>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <StackPane HBox.hgrow="ALWAYS">
+                     <children>
+                            <PasswordField fx:id="passwordFieldHidden" onKeyTyped="#passwordChanged" promptText="Password">
+                                <padding>
+                                    <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                                </padding>
+                                <font>
+                                    <Font size="16.0" />
+                                </font>
+                                <VBox.margin>
+                                    <Insets bottom="20.0" left="100.0" right="100.0" />
+                                </VBox.margin>
+                            </PasswordField>
+                        <TextField fx:id="passwordFieldVisible" onKeyTyped="#passwordChanged" promptText="Password" visible="false">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </StackPane>
+                  <Button fx:id="showHidePasswordButton" mnemonicParsing="false" onAction="#showHidePassword" prefHeight="45.0" prefWidth="75.0" styleClass="green-button" text="Show" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="100.0" right="100.0" />
+               </VBox.margin>
+            </HBox>
                 <Button defaultButton="true" mnemonicParsing="false" onAction="#login" prefWidth="150.0" styleClass="green-button" text="Log In">
                     <font>
                         <Font name="System Bold" size="18.0" />

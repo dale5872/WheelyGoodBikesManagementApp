@@ -3,13 +3,16 @@ package App.FXControllers;
 import App.Classes.EmployeeAccount;
 import DatabaseConnector.Authenticate;
 import DatabaseConnector.LoginFailedException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
@@ -18,8 +21,38 @@ import javafx.stage.Stage;
  */
 public class LogInScreenController {
     @FXML private TextField usernameField; //Get the username TextField object from the FXML
-    @FXML private PasswordField passwordField; //Get the PasswordField object from the FXML
+    @FXML private PasswordField passwordFieldHidden; //Get the PasswordField object from the FXML
+    @FXML private TextField passwordFieldVisible; //Get the visible password field object from the FXML
     @FXML private Label incorrectCredentials; //Get the incorrect credentials Label object from the FXML
+    @FXML private Button showHidePasswordButton; //Get the show/hide password button from the FXML
+
+    /**
+     * When the password is changed in either the hidden or visible field, this method changes the other field to match
+     */
+    @FXML
+    protected void passwordChanged(KeyEvent e){
+        if(e.getSource().equals(passwordFieldHidden)){
+            passwordFieldVisible.setText(passwordFieldHidden.getText());
+        }else{
+            passwordFieldHidden.setText(passwordFieldVisible.getText());
+        }
+    }
+
+    /**
+     * Shows or hides the password
+     */
+    @FXML
+    protected void showHidePassword(){
+        if(passwordFieldHidden.isVisible()){
+            passwordFieldHidden.setVisible(false);
+            passwordFieldVisible.setVisible(true);
+            showHidePasswordButton.setText("Hide");
+        }else{
+            passwordFieldHidden.setVisible(true);
+            passwordFieldVisible.setVisible(false);
+            showHidePasswordButton.setText("Show");
+        }
+    }
 
     /**
      * Handles the log in button being pressed
@@ -31,7 +64,7 @@ public class LogInScreenController {
 
         incorrectCredentials.setVisible(false);
         String username = usernameField.getText();
-        String password = passwordField.getText();
+        String password = passwordFieldHidden.getText();
 
         /* To test UI with DATABASE */
         try {

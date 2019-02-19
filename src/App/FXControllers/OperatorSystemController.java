@@ -55,6 +55,7 @@ public class OperatorSystemController {
     @FXML private RadioButton managersRadio;
     @FXML private RadioButton operatorsRadio;
     @FXML private RadioButton allRadio;
+    @FXML private ComboBox accountsFilter;
 
     //Add Account Properties
     @FXML private TextField accountsNewAccountUsername;
@@ -144,11 +145,11 @@ public class OperatorSystemController {
         //set account labels
         userAccountID.setText("" + employee.getEmployeeID());
         userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText("Name: " + employee.getFirstName() + " " + employee.getLastName());
+        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
         userAccountEmail.setText(employee.getEmail());
         userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountType.setText("Account Type: " + employee.getAccType());
-        userAccountLocation.setText("Location: " + employee.getLocationName());
+        userAccountType.setText(employee.getAccType());
+        userAccountLocation.setText(employee.getLocationName());
     }
 
     /**
@@ -174,6 +175,11 @@ public class OperatorSystemController {
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
+
+        //Set up accounts filter - maybe change to dynamically get account types from database?
+        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All", "Managers", "Operators");
+        accountsFilter.setItems(accountsFilterOptions);
+        accountsFilter.getSelectionModel().selectFirst();
 
         //Load in data for adding / editing accounts
         try {
@@ -209,6 +215,20 @@ public class OperatorSystemController {
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
         String params = "";
+
+        /* CODE FOR COMBO BOX - UNCOMMENT
+
+        switch((String) accountsFilter.getSelectionModel().getSelectedItem()){
+            case "Manager":
+                params = "account_type=Manager";
+                break;
+            case "Operator":
+                params = "account_type=Operator";
+                break;
+            default:
+                break;
+        }*/
+
 
         if(managersRadio.isSelected()) {
             params = "account_type=Manager";

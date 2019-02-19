@@ -20,6 +20,20 @@
 	-fx-background-color: #1A7F70;
 }
 
+.delete-button{
+	-fx-background-color: #FF3D3D;
+	-fx-font-weight: bold;
+	-fx-font-size: 18px;
+}
+
+.delete-button:hover{
+	-fx-background-color: #CC3030;
+}
+
+.delete-button:pressed{
+	-fx-background-color: #992424;
+}
+
 .nav-bar-tab{
 	-fx-font-size: 20px;
 	-fx-font-weight: bold;
