@@ -108,7 +108,16 @@ public class DataFetcher {
             }
         } else if(acc instanceof Account) {
             //standard user account
-            /** TODO: Implement adding a standard user account */
+            String params = "username=" + acc.getUsername()
+                    + "&password=" + password
+                    + "&first_name=" + acc.getFirstName()
+                    + "&last_name=" + acc.getLastName()
+                    + "&email=" + acc.getEmail()
+                    + "&phone=" + acc.getPhoneNumber();
+            Query q = new Query("create", "addUserAccount", params);
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Failed to add user: " + acc.getUsername());
+            }
         }
     }
 
@@ -143,6 +152,7 @@ public class DataFetcher {
 
         } else if(newAcc instanceof Account) {
             //standard user account
+
             /** TODO: Implement standard user account */
 
         }

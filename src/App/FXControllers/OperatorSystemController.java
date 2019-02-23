@@ -223,11 +223,21 @@ public class OperatorSystemController {
             String selectedItem = (String) accountsFilter.getSelectionModel().getSelectedItem();
             switch (selectedItem) {
                 case "All Employees":
+                    //set account controls
+                    accountsEditAccountType.setDisable(false);
+                    accountsEditAccountLocation.setDisable(false);
+                    accountsNewAccountType.setDisable(false);
+                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "search=" + searchField;
                     }
                     break;
                 case "Managers":
+                    //set account controls
+                    accountsEditAccountType.setDisable(false);
+                    accountsEditAccountLocation.setDisable(false);
+                    accountsNewAccountType.setDisable(false);
+                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "account_type=Manager&search=" + searchField;
                         break;
@@ -235,6 +245,11 @@ public class OperatorSystemController {
                     params = "account_type=Manager";
                     break;
                 case "Operators":
+                    //set account controls
+                    accountsEditAccountType.setDisable(false);
+                    accountsEditAccountLocation.setDisable(false);
+                    accountsNewAccountType.setDisable(false);
+                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "account_type=Operator&search=" + searchField;
                         break;
@@ -242,8 +257,16 @@ public class OperatorSystemController {
                     params = "account_type=Operator";
                     break;
                 case "Users":
-                    if(!searchField.equals(""))
-                    loadUserAccounts("search=" + searchField);
+                    if(!searchField.equals("")) {
+                        //set account controls
+                        accountsEditAccountType.setDisable(true);
+                        accountsEditAccountLocation.setDisable(true);
+                        accountsNewAccountType.setDisable(true);
+                        accountsNewAccountLocation.setDisable(true);
+                        accountsEditAccountType.getSelectionModel().select("Users");
+                        accountsNewAccountType.getSelectionModel().select("Users");
+                        loadUserAccounts("search=" + searchField);
+                    }
                     return;
                 default:
                     throw new InvalidParametersException("One parameter must be selected!");
@@ -331,21 +354,43 @@ public class OperatorSystemController {
      */
     @FXML
     protected void addAccount(ActionEvent e) {
+        //get account type
         String value = (String)accountsNewAccountType.getValue();
         int accountType = Integer.parseInt(accounts.get(value));
 
-        EmployeeAccount acc = new EmployeeAccount();
-        acc.setUsername(accountsNewAccountUsername.getText());
-        acc.setFirstName(accountsNewAccountFirstName.getText());
-        acc.setLastName(accountsNewAccountLastName.getText());
-        acc.setEmail(accountsNewAccountEmail.getText());
-        acc.setPhoneNumber(accountsNewAccountPhone.getText());
-        acc.setAccType((String)accountsNewAccountType.getValue());
-        String locationName = (String)accountsNewAccountLocation.getValue();
-        acc.setLocation(locationName, Integer.parseInt(this.locations.get(locationName)));
-
         try {
-            DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
+            if(accountType == 1) {
+                //user account
+                Account acc = new Account();
+                acc.setUsername(accountsNewAccountUsername.getText());
+                acc.setFirstName(accountsNewAccountFirstName.getText());
+                acc.setLastName(accountsNewAccountLastName.getText());
+                acc.setEmail(accountsNewAccountEmail.getText());
+                acc.setPhoneNumber(accountsNewAccountPhone.getText());
+
+                DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
+
+                //update table
+                accountsTable.getItems().add(acc);
+
+
+            } else {
+                EmployeeAccount acc = new EmployeeAccount();
+                acc.setUsername(accountsNewAccountUsername.getText());
+                acc.setFirstName(accountsNewAccountFirstName.getText());
+                acc.setLastName(accountsNewAccountLastName.getText());
+                acc.setEmail(accountsNewAccountEmail.getText());
+                acc.setPhoneNumber(accountsNewAccountPhone.getText());
+                acc.setAccType((String) accountsNewAccountType.getValue());
+                String locationName = (String) accountsNewAccountLocation.getValue();
+                acc.setLocation(locationName, Integer.parseInt(this.locations.get(locationName)));
+
+                DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
+
+                //update table
+                accountsTable.getItems().add(acc);
+            }
+
         } catch (InsertFailedException ex) {
             //failed
             return;
@@ -358,8 +403,6 @@ public class OperatorSystemController {
             return;
         }
 
-        //update table
-        accountsTable.getItems().add(acc);
     }
 
     /**
@@ -371,28 +414,53 @@ public class OperatorSystemController {
     protected void updateAccount(ActionEvent e) {
         int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
         ObservableList<EmployeeAccount> row = accountsTable.getItems();
-        EmployeeAccount oldAccount = row.get(rowIndex);
 
-        //get new account value
-        EmployeeAccount newAccount = new EmployeeAccount();
-        newAccount.setUserID(oldAccount.getUserID());
-        newAccount.setEmployeeID(oldAccount.getEmployeeID());
-        newAccount.setUsername(accountsEditAccountUsername.getText());
-        newAccount.setFirstName(accountsEditAccountFirstName.getText());
-        newAccount.setLastName(accountsEditAccountLastName.getText());
-        newAccount.setEmail(accountsEditAccountEmail.getText());
-        newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
-        newAccount.setAccType((String)accountsEditAccountType.getValue());
-        String locationName = (String)accountsEditAccountLocation.getValue();
-        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
-        newAccount.setLocation(loc);
-
-
-        String accountValue = (String)accountsEditAccountType.getValue();
-        int accountType = Integer.parseInt(accounts.get(accountValue));
+        Account oldAccount = row.get(rowIndex);
 
         try {
-            DataFetcher.updateAccount(oldAccount, newAccount, accountType);
+            if (oldAccount instanceof EmployeeAccount) {
+                //get new account value
+                EmployeeAccount newAccount = new EmployeeAccount();
+                newAccount.setUserID(oldAccount.getUserID());
+                newAccount.setEmployeeID(((EmployeeAccount)oldAccount).getEmployeeID());
+                newAccount.setUsername(accountsEditAccountUsername.getText());
+                newAccount.setFirstName(accountsEditAccountFirstName.getText());
+                newAccount.setLastName(accountsEditAccountLastName.getText());
+                newAccount.setEmail(accountsEditAccountEmail.getText());
+                newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
+                newAccount.setAccType((String) accountsEditAccountType.getValue());
+                String locationName = (String) accountsEditAccountLocation.getValue();
+                Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
+                newAccount.setLocation(loc);
+
+                String accountValue = (String) accountsEditAccountType.getValue();
+                int accountType = Integer.parseInt(accounts.get(accountValue));
+
+                DataFetcher.updateAccount(oldAccount, newAccount, accountType);
+
+                //update table
+                accountsTable.getItems().remove(rowIndex);
+                accountsTable.getItems().add(rowIndex, newAccount);
+            } else {
+                Account newAccount = new Account();
+                newAccount.setUserID(oldAccount.getUserID());
+                newAccount.setUsername(accountsEditAccountUsername.getText());
+                newAccount.setFirstName(accountsEditAccountFirstName.getText());
+                newAccount.setLastName(accountsEditAccountLastName.getText());
+                newAccount.setEmail(accountsEditAccountEmail.getText());
+                newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
+
+                String accountValue = (String) accountsEditAccountType.getValue();
+                int accountType = Integer.parseInt(accounts.get(accountValue));
+
+                DataFetcher.updateAccount(oldAccount, newAccount, accountType);
+
+                //update table
+                accountsTable.getItems().remove(rowIndex);
+                accountsTable.getItems().add(rowIndex, newAccount);
+
+            }
+
         } catch (InsertFailedException ex) {
             return;
         } catch (Exception ex) {
@@ -402,12 +470,7 @@ public class OperatorSystemController {
             messageBox.show("An unknown error has occured adding this account.");
             ex.printStackTrace();
             return;
-        }
-
-        //update table
-        accountsTable.getItems().remove(rowIndex);
-        accountsTable.getItems().add(rowIndex, newAccount);
-    }
+        }    }
 
     /**
      * Deletes the selected account from the table
@@ -427,6 +490,31 @@ public class OperatorSystemController {
 
         //remove from table
         accountsTable.getItems().remove(rowIndex);
+    }
+
+    /**
+     * When a user clicks on a row in the table, the data is automatically
+     * entered into the Edit Account section
+     * @param e MouseEvent object
+     */
+    @FXML
+    protected void updateEditBox(MouseEvent e) {
+        //enable the box
+        editAccountVBox.setDisable(false);
+
+        //fill the data
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Account> row = accountsTable.getItems();
+        Account tmp = row.get(rowIndex);
+        accountsEditAccountUsername.setText(tmp.getUsername());
+        accountsEditAccountFirstName.setText(tmp.getFirstName());
+        accountsEditAccountLastName.setText(tmp.getLastName());
+        accountsEditAccountEmail.setText(tmp.getEmail());
+        accountsEditAccountPhone.setText(tmp.getPhoneNumber());
+        if(tmp instanceof EmployeeAccount) {
+            accountsEditAccountType.setValue(tmp.getAccType());
+            accountsEditAccountLocation.setValue(((EmployeeAccount)tmp).getLocationName());
+        }
     }
 
     /**
@@ -650,30 +738,6 @@ public class OperatorSystemController {
         loadLocations(null);
     }
 
-    /**
-     * When a user clicks on a row in the table, the data is automatically
-     * entered into the Edit Account section
-     * @param e MouseEvent object
-     */
-    @FXML
-    protected void updateEditBox(MouseEvent e) {
-        //enable the box
-        editAccountVBox.setDisable(false);
-
-        //fill the data
-        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<EmployeeAccount> row = accountsTable.getItems();
-        EmployeeAccount tmp = row.get(rowIndex);
-
-        accountsEditAccountUsername.setText(tmp.getUsername());
-        accountsEditAccountFirstName.setText(tmp.getFirstName());
-        accountsEditAccountLastName.setText(tmp.getLastName());
-        accountsEditAccountEmail.setText(tmp.getEmail());
-        accountsEditAccountPhone.setText(tmp.getPhoneNumber());
-        accountsEditAccountType.setValue(tmp.getAccType());
-        accountsEditAccountLocation.setValue(tmp.getLocationName());
-
-    }
 
 
     /**
