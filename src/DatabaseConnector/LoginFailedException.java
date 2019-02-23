@@ -19,6 +19,8 @@ public class LoginFailedException extends Exception {
         super(message);
         Logger lgr = Logger.getLogger(this.getClass().getName());
         lgr.log(Level.SEVERE, message);
+
+        //shown to user on main screen
     }
 
 

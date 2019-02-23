@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 public class HTTPConnection {
@@ -33,30 +34,37 @@ public class HTTPConnection {
      * @throws IOException
      * @throws HTTPErrorException if HTTP response code is not 200 as expected
      */
-    public String getResponse(String url, String parameterString) throws IOException, HTTPErrorException {
+    public String getResponse(String url, String parameterString) throws IOException, HTTPErrorException, TimeoutException {
         HttpURLConnection con = getConnection(url);
+        //10 second timeout IN MILLISECONDS
+        con.setConnectTimeout(1000);
 
-        //send post request
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(parameterString);
-        wr.flush();
-        wr.close();
+        try {
 
-        //get response
-        int responseCode = con.getResponseCode();
-        if(responseCode != 200) {
-            throw new HTTPErrorException("HTTP Error code: " + responseCode);
+            //send post request
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(parameterString);
+            wr.flush();
+            wr.close();
+
+            //get response
+            int responseCode = con.getResponseCode();
+            if (responseCode != 200) {
+                throw new HTTPErrorException("HTTP Error code: " + responseCode);
+            }
+        } catch (SocketTimeoutException e) {
+            throw new TimeoutException("Request timed out. Please try again.");
         }
-
         BufferedReader input = new BufferedReader((new InputStreamReader(con.getInputStream())));
         String inputLine;
         StringBuffer response = new StringBuffer();
 
-        while((inputLine = input.readLine()) != null) {
+        while ((inputLine = input.readLine()) != null) {
             response.append(inputLine);
         }
         input.close();
+
 
         return response.toString();
     }

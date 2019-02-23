@@ -29,8 +29,8 @@ public class EmployeeAccount extends Account {
         this.loc = loc;
     }
 
-    public void setLocation(String name) {
-        this.loc = new Location(name);
+    public void setLocation(String name, int id) {
+        this.loc = new Location(id, name);
     }
 
     public String getLocationName() {

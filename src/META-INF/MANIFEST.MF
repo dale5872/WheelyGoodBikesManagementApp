@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: /Users/dalebaker-allan/lib/javafx-sdk-11.0.1/lib
+Main-Class: ApplicationLauncher
+

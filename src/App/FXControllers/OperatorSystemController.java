@@ -1,5 +1,6 @@
 package App.FXControllers;
 
+import App.Classes.Account;
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 import App.Classes.Location;
@@ -56,6 +57,7 @@ public class OperatorSystemController {
     @FXML private RadioButton operatorsRadio;
     @FXML private RadioButton allRadio;
     @FXML private ComboBox accountsFilter;
+    @FXML private TextField accountsSearchField;
 
     //Add Account Properties
     @FXML private TextField accountsNewAccountUsername;
@@ -177,7 +179,7 @@ public class OperatorSystemController {
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
         //Set up accounts filter - maybe change to dynamically get account types from database?
-        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All", "Managers", "Operators");
+        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All Employees", "Managers", "Operators", "Users");
         accountsFilter.setItems(accountsFilterOptions);
         accountsFilter.getSelectionModel().selectFirst();
 
@@ -197,7 +199,7 @@ public class OperatorSystemController {
         accounts = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("locations");
         equipment_type = DataFetcher.getDropdownValues("equipmentTypes");
-     //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
+        //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
         setValues();
     }
@@ -205,47 +207,57 @@ public class OperatorSystemController {
     /**
      * Finds the parameters selected by the user and loads the data
      * based on those parameters. Parameters are selected through
-     * Radio Buttons
+     * a dropdown box and a search box
      * @param e ActionEvent object
      * @throws InvalidParametersException if no accounts to load
      *
-     * TODO: Refactor to allow EmployeeAccount and Accounts
      * BODY: 'Accounts' tab can be used for both Employees and searching user accounts
      */
     @FXML
     protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
         String params = "";
+        String searchField = accountsSearchField.getText();
 
-        /* CODE FOR COMBO BOX - UNCOMMENT
-
-        switch((String) accountsFilter.getSelectionModel().getSelectedItem()){
-            case "Manager":
-                params = "account_type=Manager";
-                break;
-            case "Operator":
-                params = "account_type=Operator";
-                break;
-            default:
-                break;
-        }*/
-
-
-        if(managersRadio.isSelected()) {
-            params = "account_type=Manager";
-        } else if(operatorsRadio.isSelected()) {
-            params = "account_type=Operator";
-        } else if(allRadio.isSelected()) {
-            //Nothing
-        } else {
-            throw new InvalidParametersException("One parameter must be selected!");
+        if(e != null) {
+            //the call is not from a user event, but from internal code thus ignore
+            String selectedItem = (String) accountsFilter.getSelectionModel().getSelectedItem();
+            switch (selectedItem) {
+                case "All Employees":
+                    if(!searchField.equals("")) {
+                        params = "search=" + searchField;
+                    }
+                    break;
+                case "Managers":
+                    if(!searchField.equals("")) {
+                        params = "account_type=Manager&search=" + searchField;
+                        break;
+                    }
+                    params = "account_type=Manager";
+                    break;
+                case "Operators":
+                    if(!searchField.equals("")) {
+                        params = "account_type=Operator&search=" + searchField;
+                        break;
+                    }
+                    params = "account_type=Operator";
+                    break;
+                case "Users":
+                    if(!searchField.equals(""))
+                    loadUserAccounts("search=" + searchField);
+                    return;
+                default:
+                    throw new InvalidParametersException("One parameter must be selected!");
+            }
         }
 
+
         try {
-            ObservableList<EmployeeAccount> accounts = DataFetcher.accounts(params);
+            ObservableList<EmployeeAccount> accounts = DataFetcher.getEmployeeAccounts(params);
 
             accountsID.setCellValueFactory(
                     new PropertyValueFactory<EmployeeAccount, String>("employeeID")
             );
+
             accountsUsername.setCellValueFactory(
                     new PropertyValueFactory<EmployeeAccount, String>("username")
             );
@@ -274,6 +286,45 @@ public class OperatorSystemController {
         }
     }
 
+
+    /**
+     * Fetches users data based on the search terms and loads them in tha table
+     * @param searchField the string of search terms
+     */
+    @FXML
+    protected void loadUserAccounts(String searchField) {
+        try {
+            ObservableList<Account> accounts = DataFetcher.getUserAccounts(searchField);
+
+            accountsID.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("userID")
+            );
+            accountsUsername.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("username")
+            );
+            accountsFirstName.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("firstName")
+            );
+            accountsLastName.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("lastName")
+            );
+            accountsEmail.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("email")
+            );
+            accountsPhoneNumber.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("phoneNumber")
+            );
+            accountsAccountType.setCellValueFactory(
+                    new PropertyValueFactory<Account, String>("accType")
+            );
+
+            accountsTable.setItems(accounts);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+
+    }
+
     /**
      * Method for adding a new account with the data specified by the user
      * @param e ActionEvent object
@@ -290,7 +341,8 @@ public class OperatorSystemController {
         acc.setEmail(accountsNewAccountEmail.getText());
         acc.setPhoneNumber(accountsNewAccountPhone.getText());
         acc.setAccType((String)accountsNewAccountType.getValue());
-        acc.setLocation((String)accountsNewAccountLocation.getValue());
+        String locationName = (String)accountsNewAccountLocation.getValue();
+        acc.setLocation(locationName, Integer.parseInt(this.locations.get(locationName)));
 
         try {
             DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
@@ -331,7 +383,8 @@ public class OperatorSystemController {
         newAccount.setEmail(accountsEditAccountEmail.getText());
         newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
         newAccount.setAccType((String)accountsEditAccountType.getValue());
-        Location loc = new Location((String)accountsEditAccountLocation.getValue());
+        String locationName = (String)accountsEditAccountLocation.getValue();
+        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
         newAccount.setLocation(loc);
 
 
@@ -383,25 +436,25 @@ public class OperatorSystemController {
     @FXML
     protected void loadEquipment(ActionEvent e) {
         try {
-        ObservableList<Equipment> equipment = DataFetcher.equipment(null);
+            ObservableList<Equipment> equipment = DataFetcher.equipment(null);
 
-        equipmentID.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("ID")
-        );
-        equipmentType.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("TypeName")
-        );
-        equipmentLocation.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("LocationName")
-        );
-        equipmentPrice.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Price")
-        );
-        equipmentStatus.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Status")
-        );
+            equipmentID.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("ID")
+            );
+            equipmentType.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("TypeName")
+            );
+            equipmentLocation.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("LocationName")
+            );
+            equipmentPrice.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("Price")
+            );
+            equipmentStatus.setCellValueFactory(
+                    new PropertyValueFactory<Equipment, String>("Status")
+            );
 
-        equipmentTable.setItems(equipment);
+            equipmentTable.setItems(equipment);
         } catch (EmptyDatasetException exc) {
             return;
         }
@@ -414,7 +467,9 @@ public class OperatorSystemController {
     @FXML
     protected void addEquipment(ActionEvent e) {
         Equipment eq = new Equipment();
-        Location loc = new Location((String)newEquipLocation.getValue());
+
+        String locationName = (String)newEquipLocation.getValue();
+        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
 
         eq.setLocation(loc);
         eq.setTypeName((String)newEquipType.getValue());
@@ -465,7 +520,9 @@ public class OperatorSystemController {
         Equipment tmp = getSelectedEquipment();
 
 
-        Location loc = new Location((String)editEquipLocation.getValue());
+        String locationName = (String)editEquipLocation.getValue();
+        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
+
         tmp.setLocation(loc);
         tmp.setStatus((String)editEquipStatus.getValue());
         tmp.setTypeID(Integer.parseInt(equipment_type.get(editEquipType.getValue())));

@@ -86,13 +86,19 @@ public class JSONData {
         return res;
     }
 
+    /**
+     * Checks the JSON to see if the query succeeded or failed and gets the failure message
+     * @param jsonObj JSONObject
+     * @return true if succeeded, false if failed
+     * @throws JSONErrorException if failed with error
+     */
     public static boolean checkSucceeded(JSONObject jsonObj) throws JSONErrorException {
         String status = (String) jsonObj.get("status");
 
         if(status.equals("success")) {
             return true;
         } else if(status.equals("error")) {
-            throw new JSONErrorException((String)jsonObj.get("message"));
+            throw new JSONErrorException((String)jsonObj.get("message"), (String)jsonObj.get("stackTrace"));
         }
         return false;
     }

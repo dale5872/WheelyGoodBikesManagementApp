@@ -6,6 +6,7 @@ import App.Classes.*;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.Query;
 import DatabaseConnector.Results;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -21,14 +22,14 @@ public class DataFetcher {
      * @param params The HTTP POST params to send
      * @return A list of Accounts filled with the data in each account
      */
-    protected static ObservableList<EmployeeAccount> accounts(String params) throws EmptyDatasetException{
+    protected static ObservableList<EmployeeAccount> getEmployeeAccounts(String params) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
         Query q = new Query("read", "fetchEmployeeAccounts", params);
         Results res = q.executeQuery();
 
         //check we have results
-        if(!res.isEmpty()) {
+        if(res != null && !res.isEmpty()) {
             //add data
             for(int r = 0; r < res.getRows(); r++) {
                 EmployeeAccount acc = new EmployeeAccount();
@@ -40,10 +41,39 @@ public class DataFetcher {
                 acc.setEmail((String)res.getElement(r,"workEmail"));
                 acc.setPhoneNumber((String)res.getElement(r,"workTel"));
                 acc.setAccType((String)res.getElement(r,"type"));
-                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"locationID")), (String)res.getElement(r,"location"));
+                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"locationID")), (String)res.getElement(r,"locationName"));
                 acc.setLocation(loc);
                 acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
 
+                accounts.add(acc);
+            }
+        } else {
+            //throw an exception
+            throw new EmptyDatasetException("No accounts to retrieve");
+        }
+
+        return accounts;
+    }
+
+    protected static ObservableList<Account> getUserAccounts(String params) throws EmptyDatasetException {
+        ObservableList<Account> accounts = FXCollections.observableArrayList();
+
+        Query q = new Query("read", "fetchUserAccounts", params);
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res != null && !res.isEmpty()) {
+            //add data
+            for(int r = 0; r < res.getRows(); r++) {
+                Account acc = new Account();
+
+                acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
+                acc.setUsername((String)res.getElement(r,"username"));
+                acc.setFirstName((String)res.getElement(r,"firstName"));
+                acc.setLastName((String)res.getElement(r,"lastName"));
+                acc.setEmail((String)res.getElement(r,"email"));
+                acc.setPhoneNumber((String)res.getElement(r,"telNumber"));
+                acc.setAccType("User");
                 accounts.add(acc);
             }
         } else {
@@ -106,7 +136,7 @@ public class DataFetcher {
                     + "&phone=" + newAcc.getPhoneNumber()
                     + "&employee_id=" + ((EmployeeAccount)oldAcc).getEmployeeID()
                     + "&user_id=" + oldAcc.getUserID();
-            Query q = new Query("create", "addEmployeeAccount", params);
+            Query q = new Query("update", "updateEmployeeAccount", params);
             if(!q.insertQuery()) {
                 throw new InsertFailedException("Failed to update user: " + newAcc.getUsername());
             }

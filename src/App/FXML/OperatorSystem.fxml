@@ -115,7 +115,7 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="accountsTab" visible="false">
+                  <AnchorPane fx:id="accountsTab">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -126,7 +126,14 @@
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="accountsFilter" onAction="#loadAccounts" prefHeight="30.0" prefWidth="200.0" />
+                                    <ComboBox fx:id="accountsFilter" prefHeight="30.0" prefWidth="200.0" />
+                                    <Label text="Search:" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="accountsSearchField" />
+                                    <Button fx:id="accountsSeatchButton" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Search" textOverrun="CLIP" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="81.0" layoutY="-32.0" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -149,43 +156,6 @@
                                     <VBox layoutX="1277.0" layoutY="7.0" spacing="20.0">
                                        <children>
                                           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </Label>
-                                                      <RadioButton fx:id="allRadio" mnemonicParsing="false" selected="true" text="All">
-                                                         <VBox.margin>
-                                                            <Insets bottom="5.0" />
-                                                         </VBox.margin>
-                                                      </RadioButton>
-                                                      <RadioButton fx:id="managersRadio" mnemonicParsing="false" text="Managers">
-                                                         <VBox.margin>
-                                                            <Insets bottom="5.0" />
-                                                         </VBox.margin>
-                                                      </RadioButton>
-                                                      <RadioButton fx:id="operatorsRadio" mnemonicParsing="false" text="Operators">
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </RadioButton>
-                                                      <HBox alignment="CENTER_RIGHT">
-                                                         <children>
-                                                            <Button fx:id="loadData" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                   <padding>
-                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                   </padding>
-                                                </VBox>
-                                             </children>
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>

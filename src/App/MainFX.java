@@ -6,14 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 /**
  * Main class for starting the management app with JavaFX interfaces
- */
-public class MainFX extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+ * **/
 
+public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage){
         try{
@@ -29,4 +27,5 @@ public class MainFX extends Application {
             System.exit(2);
         }
     }
+
 }

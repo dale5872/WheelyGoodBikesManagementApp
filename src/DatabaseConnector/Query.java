@@ -62,6 +62,8 @@ public class Query {
             //prints error
         } catch (JSONErrorException exc) {
             //prints error
+        } catch (TimeoutException exc) {
+            //prints error
         }
         return null;
     }
@@ -95,6 +97,8 @@ public class Query {
         } catch (HTTPErrorException exc) {
             //prints error
         } catch (JSONErrorException exc) {
+            //prints error
+        } catch (TimeoutException exc) {
             //prints error
         }
 
