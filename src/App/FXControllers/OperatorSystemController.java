@@ -263,8 +263,8 @@ public class OperatorSystemController {
                         accountsEditAccountLocation.setDisable(true);
                         accountsNewAccountType.setDisable(true);
                         accountsNewAccountLocation.setDisable(true);
-                        accountsEditAccountType.getSelectionModel().select("Users");
-                        accountsNewAccountType.getSelectionModel().select("Users");
+                        accountsEditAccountType.getSelectionModel().select("User");
+                        accountsNewAccountType.getSelectionModel().select("User");
                         loadUserAccounts("search=" + searchField);
                     }
                     return;
@@ -354,6 +354,13 @@ public class OperatorSystemController {
      */
     @FXML
     protected void addAccount(ActionEvent e) {
+
+        /**
+         * TODO: Capitalise first letter in First Name and Last Name
+         * BODY: Implement the capitalisation on both add Account and Update accounts
+         */
+
+
         //get account type
         String value = (String)accountsNewAccountType.getValue();
         int accountType = Integer.parseInt(accounts.get(value));
@@ -390,16 +397,7 @@ public class OperatorSystemController {
                 //update table
                 accountsTable.getItems().add(acc);
             }
-
-        } catch (InsertFailedException ex) {
-            //failed
-            return;
         } catch (Exception ex) {
-            //Something else has happened, print to stderr and show error
-            //Show error to the user
-            ShowMessageBox messageBox = new ShowMessageBox();
-            messageBox.show("An unknown error has occured adding this account.");
-            ex.printStackTrace();
             return;
         }
 
@@ -480,10 +478,15 @@ public class OperatorSystemController {
     protected void deleteAccount(ActionEvent e) {
         int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
         ObservableList<EmployeeAccount> row = accountsTable.getItems();
-        EmployeeAccount account = row.get(rowIndex);
+        Account account = row.get(rowIndex);
 
         try {
-            DataFetcher.deleteAccount(account.getUserID(), ((EmployeeAccount) account).getEmployeeID());
+            if(account instanceof EmployeeAccount) {
+                DataFetcher.deleteAccount(account.getUserID(), ((EmployeeAccount) account).getEmployeeID());
+            } else {
+                //user account
+                DataFetcher.deleteAccount(account.getUserID(), -1);
+            }
         } catch (InsertFailedException ex) {
             return;
         }

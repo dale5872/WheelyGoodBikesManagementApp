@@ -96,10 +96,13 @@ public class Query {
             exc.printStackTrace();
         } catch (HTTPErrorException exc) {
             //prints error
+            return false;
         } catch (JSONErrorException exc) {
             //prints error
+            return false;
         } catch (TimeoutException exc) {
             //prints error
+            return false;
         }
 
         //if we get here, we can be sure that it failed

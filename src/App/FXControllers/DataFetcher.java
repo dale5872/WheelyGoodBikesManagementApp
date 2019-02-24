@@ -153,8 +153,16 @@ public class DataFetcher {
         } else if(newAcc instanceof Account) {
             //standard user account
 
-            /** TODO: Implement standard user account */
-
+            String params = "username=" + newAcc.getUsername()
+                    + "&first_name=" + newAcc.getFirstName()
+                    + "&last_name=" + newAcc.getLastName()
+                    + "&email=" + newAcc.getEmail()
+                    + "&phone=" + newAcc.getPhoneNumber()
+                    + "&user_id=" + oldAcc.getUserID();
+            Query q = new Query("update", "updateUserAccount", params);
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Failed to update user: " + newAcc.getUsername());
+            }
         }
     }
 
@@ -165,11 +173,21 @@ public class DataFetcher {
      * @throws InsertFailedException if failure to delete the user account and all of it's data
      */
     protected static void deleteAccount(int userID, int employeeID) throws InsertFailedException {
-        String queryString = "DELETE FROM employee_info WHERE employeeID = '" + employeeID + "';";
 
-        Query q = new Query("delete", "deleteEmployeeAccount", "user_id=" + userID + "&employee_id=" + employeeID);
-        if(!q.insertQuery()) {
-            throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF10");
+        if(employeeID == -1) {
+            //user account
+            Query q = new Query("delete", "deleteUserAccount", "user_id=" + userID);
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF10");
+            }
+        } else if(employeeID >= 0) {
+            Query q = new Query("delete", "deleteEmployeeAccount", "user_id=" + userID + "&employee_id=" + employeeID);
+            if(!q.insertQuery()) {
+                throw new InsertFailedException("Deletion of " + userID + " failed. Error code DF10");
+            }
+        } else {
+            throw new InsertFailedException("Deletion failed. Error code DF11");
+
         }
     }
 

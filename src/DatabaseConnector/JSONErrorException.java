@@ -19,9 +19,6 @@ public class JSONErrorException extends Exception{
         String printOut = message + "\nStack Trace:\n" + stackTrace;
         lgr.log(Level.SEVERE, printOut);
 
-        //show to user
-        ShowMessageBox messageBox = new ShowMessageBox();
-        messageBox.show(message);
     }
 
 }

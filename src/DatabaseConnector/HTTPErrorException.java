@@ -12,9 +12,6 @@ public class HTTPErrorException extends Exception {
         Logger lgr = Logger.getLogger(this.getClass().getName());
         lgr.log(Level.SEVERE, message);
 
-        //show to user
-        ShowMessageBox messageBox = new ShowMessageBox();
-        messageBox.show(message);
     }
 
 }
