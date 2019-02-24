@@ -610,7 +610,6 @@ public class OperatorSystemController {
     protected void updateEquipment(ActionEvent e) {
         Equipment tmp = getSelectedEquipment();
 
-
         String locationName = (String)editEquipLocation.getValue();
         Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
 

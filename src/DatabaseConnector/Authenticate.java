@@ -8,6 +8,11 @@ import App.Classes.Location;
 public class Authenticate {
 
     public static EmployeeAccount authorize(String username, String password) throws LoginFailedException {
+        /**
+         * TODO: Integrate password Encryption
+         * BODY: Encrypt passwords before sending to the PHP script, where it is then dealt with
+         */
+
         Logger lgr = Logger.getLogger(Query.class.getName());
 
         //Create a new query

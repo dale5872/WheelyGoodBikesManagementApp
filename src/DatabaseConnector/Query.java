@@ -36,10 +36,13 @@ public class Query {
         this.type = type;
         this.scriptName = scriptName;
         this.args = args;
+
         return executeQuery();
     }
 
     public Results executeQuery() {
+        //Log
+        lgr.log(Level.INFO, "Executing " + this.type + " query on " + this.scriptName + " with args " + this.args);
         try {
             //Set HTTP POST data
             String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/" + this.type + "/" + this.scriptName + ".php";
@@ -50,6 +53,9 @@ public class Query {
 
             //Parse the data into the Results object and return
             Results res = JSONData.getResults(JSONData.parseData(response));
+
+            //log
+            lgr.log(Level.INFO, "Query successful");
             return res;
             /**
              * TODO Catch Exceptions
@@ -65,6 +71,7 @@ public class Query {
         } catch (TimeoutException exc) {
             //prints error
         }
+        lgr.log(Level.SEVERE, "Query failed");
         return null;
     }
 

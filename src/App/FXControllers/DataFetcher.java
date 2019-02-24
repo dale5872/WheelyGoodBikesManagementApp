@@ -257,7 +257,8 @@ public class DataFetcher {
     protected static void updateEquipment(Equipment e) throws InsertFailedException {
         Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
                 "&location_id=" + e.getLocationID() +
-                "&status=" + e.getStatus());
+                "&status=" + e.getStatus() +
+                "&equipment_id=" + e.getID());
 
         if(!q.insertQuery()) {
             throw new InsertFailedException("Failed to change equipment " + e.getID());
