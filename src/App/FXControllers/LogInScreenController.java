@@ -72,6 +72,8 @@ public class LogInScreenController {
             createAndShowMainWindow(activeAccount);
         } catch (LoginFailedException e) {
             incorrectCredentials.setVisible(true);
+        } catch (InvalidParametersException e) {
+            incorrectCredentials.setVisible(true);
         }
     }
 
@@ -79,7 +81,7 @@ public class LogInScreenController {
      * Creates and opens the appropriate main window - depending on whether the employee is a manager or an operator
      * @param activeAccount
      */
-    private void createAndShowMainWindow(EmployeeAccount activeAccount){
+    private void createAndShowMainWindow(EmployeeAccount activeAccount) throws InvalidParametersException {
         String filename; //The name of the appropriate FXML file
 
         /*
@@ -94,25 +96,10 @@ public class LogInScreenController {
                 filename = "OperatorSystem";
                 break;
             default: //Account is not a manager or operator - reject  log in
-                /**
-                 * TODO reject log in
-                 * BODY As the user's account is not a manager or operator, reject the login with an error message
-                 */
-                    filename = "";
-                break;
+                throw new InvalidParametersException("Unknown error occurred when authenticating user.");
         }
 
         try{
-/**
-            Parent root = FXMLLoader.load(getClass().getResource("../FXML/" + filename + ".fxml"));
-            Scene scene = new Scene(root);
-            Stage managerWindow = new Stage();
-            managerWindow.setTitle("Wheely Good Bikes");
-            managerWindow.setScene(scene);
-            managerWindow.setMaximized(true);
-            managerWindow.show();
-*/
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/" + filename + ".fxml"));
             Parent root = loader.load();
             if(filename.equals("ManagerSystem")) {

@@ -57,10 +57,6 @@ public class Query {
             //log
             lgr.log(Level.INFO, "Query successful");
             return res;
-            /**
-             * TODO Catch Exceptions
-             * BODY Catch exceptions, log them and display to user. Find out why IOException is thrown
-             */
         } catch (IOException exc) {
             lgr.log(Level.SEVERE, "IOException Occured");
             exc.printStackTrace();
@@ -93,11 +89,6 @@ public class Query {
 
             //Parse JSON to get success / fail
             return JSONData.checkSucceeded(JSONData.getJSONObject(response));
-
-            /**
-             * TODO Catch Exceptions
-             * BODY Catch exceptions, log them and display to user. Find out why IOException is thrown
-             */
         } catch (IOException exc) {
             lgr.log(Level.SEVERE, "IOException Occured");
             exc.printStackTrace();

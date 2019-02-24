@@ -1,4 +1,3 @@
-/** TODO: Documentation */
 package App.Classes;
 
 public class Equipment {
@@ -19,19 +18,6 @@ public class Equipment {
         this.price = price;
         this.image = image;
         this.location = location;
-    }
-
-    /**
-     * TODO get equipment location
-     * @param row
-     */
-    public Equipment(Object[] row) {
-        this.id = (int)row[0];
-        this.typeID = (int)row[1];
-        this.typeName = (String)row[2];
-        this.status = (String)row[3];
-        this.price = (float)row[4];
-        this.image = (String)row[5];
     }
 
     public Equipment() {}
