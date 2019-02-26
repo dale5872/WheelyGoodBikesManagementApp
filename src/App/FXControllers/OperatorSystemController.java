@@ -7,6 +7,7 @@ import App.Classes.Location;
 import DatabaseConnector.InsertFailedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -228,7 +229,7 @@ public class OperatorSystemController {
      * BODY: 'Accounts' tab can be used for both Employees and searching user accounts
      */
     @FXML
-    protected void loadAccounts(ActionEvent e) throws InvalidParametersException{
+    protected void loadAccounts(Event e) throws InvalidParametersException{
         String params = "";
         String searchField = accountsSearchField.getText();
 
@@ -291,34 +292,39 @@ public class OperatorSystemController {
         try {
             ObservableList<EmployeeAccount> accounts = DataFetcher.getEmployeeAccounts(params);
 
-            accountsID.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("employeeID")
-            );
+            if (accounts == null) {
+                accountsTable.getItems().clear();
+            } else {
 
-            accountsUsername.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("username")
-            );
-            accountsFirstName.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("firstName")
-            );
-            accountsLastName.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("lastName")
-            );
-            accountsEmail.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("email")
-            );
-            accountsPhoneNumber.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
-            );
-            accountsAccountType.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("accType")
-            );
-            accountsLocation.setCellValueFactory(
-                    new PropertyValueFactory<EmployeeAccount, String>("LocationName")
-            );
+                accountsID.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("employeeID")
+                );
 
-            accountsTable.setItems(accounts);
-        } catch (EmptyDatasetException exc) {
+                accountsUsername.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("username")
+                );
+                accountsFirstName.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("firstName")
+                );
+                accountsLastName.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("lastName")
+                );
+                accountsEmail.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("email")
+                );
+                accountsPhoneNumber.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
+                );
+                accountsAccountType.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("accType")
+                );
+                accountsLocation.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("LocationName")
+                );
+
+                accountsTable.setItems(accounts);
+            }
+        } catch (Exception exc) {
             return;
         }
     }
@@ -333,30 +339,36 @@ public class OperatorSystemController {
         try {
             ObservableList<Account> accounts = DataFetcher.getUserAccounts(searchField);
 
-            accountsID.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("userID")
-            );
-            accountsUsername.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("username")
-            );
-            accountsFirstName.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("firstName")
-            );
-            accountsLastName.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("lastName")
-            );
-            accountsEmail.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("email")
-            );
-            accountsPhoneNumber.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("phoneNumber")
-            );
-            accountsAccountType.setCellValueFactory(
-                    new PropertyValueFactory<Account, String>("accType")
-            );
 
-            accountsTable.setItems(accounts);
-        } catch (EmptyDatasetException exc) {
+            if (accounts == null) {
+                accountsTable.getItems().clear();
+            } else {
+
+                accountsID.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("userID")
+                );
+                accountsUsername.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("username")
+                );
+                accountsFirstName.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("firstName")
+                );
+                accountsLastName.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("lastName")
+                );
+                accountsEmail.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("email")
+                );
+                accountsPhoneNumber.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("phoneNumber")
+                );
+                accountsAccountType.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("accType")
+                );
+
+                accountsTable.setItems(accounts);
+            }
+        } catch (Exception exc) {
             return;
         }
 

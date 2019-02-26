@@ -47,9 +47,6 @@ public class DataFetcher {
 
                 accounts.add(acc);
             }
-        } else {
-            //throw an exception
-            throw new EmptyDatasetException("No accounts to retrieve");
         }
 
         return accounts;
@@ -76,9 +73,6 @@ public class DataFetcher {
                 acc.setAccType("User");
                 accounts.add(acc);
             }
-        } else {
-            //throw an exception
-            throw new EmptyDatasetException("No accounts to retrieve");
         }
 
         return accounts;
