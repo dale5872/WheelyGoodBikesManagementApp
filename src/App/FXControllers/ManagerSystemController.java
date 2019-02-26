@@ -13,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,10 +53,21 @@ public class ManagerSystemController {
     @FXML private Label userAccountID;
     @FXML private Label userAccountUsername;
     @FXML private Label userAccountName;
-    @FXML private Label userAccountEmail;
-    @FXML private Label userAccountPhone;
     @FXML private Label userAccountType;
     @FXML private Label userAccountLocation;
+
+    @FXML private VBox contactDetailsNonEditable;
+    @FXML private Label userAccountEmail;
+    @FXML private Label userAccountPhone;
+
+    @FXML private VBox contactDetailsEditable;
+    @FXML private TextField userAccountPhoneTextbox;
+    @FXML private TextField userAccountEmailTextbox;
+
+    @FXML private HBox changeContactContainer;
+    @FXML private Button contactDetailsViewBtn;
+
+    @FXML private HBox confirmContactContainer;
 
     private static EmployeeAccount employee;
 
@@ -66,7 +79,9 @@ public class ManagerSystemController {
         userAccountUsername.setText(employee.getUsername());
         userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
         userAccountEmail.setText(employee.getEmail());
+        userAccountEmailTextbox.setText(employee.getEmail());
         userAccountPhone.setText(employee.getPhoneNumber());
+        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
         userAccountType.setText(employee.getAccType());
         userAccountLocation.setText(employee.getLocationName());
 
@@ -139,6 +154,50 @@ public class ManagerSystemController {
 
     }
 
+    /**
+     * Handles switching the view of the user's co ntact details, between editable and non editable
+     * @param e
+     */
+    @FXML
+    @SuppressWarnings("Duplicates")
+    protected void switchContactDetailsView(ActionEvent e){
+        if(e.getSource() == contactDetailsViewBtn){
+            contactDetailsNonEditable.setVisible(false);
+            changeContactContainer.setVisible(false);
+
+            contactDetailsEditable.setVisible(true);
+            confirmContactContainer.setVisible(true);
+        }else{
+            contactDetailsNonEditable.setVisible(true);
+            changeContactContainer.setVisible(true);
+
+            contactDetailsEditable.setVisible(false);
+            confirmContactContainer.setVisible(false);
+        }
+    }
+
+    /**
+     * Changes the logged in user's contact details, then switches back to non-editable view
+     * @param e
+     */
+    @FXML
+    protected void changeContactDetails(ActionEvent e){
+        /** TODO: change the logged in user's contact details */
+
+        switchContactDetailsView(e);
+    }
+
+    /**
+     * Cancels changing the logged in user's contact details, setting the textboxes back to the stored value and switching back to non-editable view
+     * @param e
+     */
+    @FXML
+    protected void cancelChangeContact(ActionEvent e){
+        userAccountEmailTextbox.setText(employee.getEmail());
+        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
+
+        switchContactDetailsView(e);
+    }
 
     /**
      * Handles switching between tabs
