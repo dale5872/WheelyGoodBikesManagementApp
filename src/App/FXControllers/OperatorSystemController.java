@@ -54,12 +54,9 @@ public class OperatorSystemController {
     @FXML private TableColumn accountsLocation;
     @FXML private TableView accountsTable;
 
-    //Search Properties
-    @FXML private RadioButton managersRadio;
-    @FXML private RadioButton operatorsRadio;
-    @FXML private RadioButton allRadio;
+    //Filter and search
     @FXML private ComboBox accountsFilter;
-    @FXML private TextField accountsSearchField;
+    @FXML private TextField accountsSearch;
 
     //Add Account Properties
     @FXML private TextField accountsNewAccountUsername;
@@ -99,6 +96,10 @@ public class OperatorSystemController {
     @FXML private ComboBox editEquipLocation;
     @FXML private ComboBox editEquipType;
     @FXML private ComboBox editEquipStatus;
+
+    //Filter and search
+    @FXML private ComboBox equipmentFilter;
+    @FXML private TextField equipmentSearch;
 
     /** Locations Tab **/
     //Table
@@ -149,11 +150,12 @@ public class OperatorSystemController {
 
     //fields
     private static EmployeeAccount employee;
-    private static HashMap<String, String> accounts;
+    private static HashMap<String, String> accountTypes;
     private static HashMap<String, String> locations;
-    private static HashMap<String, String> equipment_type;
+    private static HashMap<String, String> equipmentTypes;
     private static HashMap<String, String> bike_type;
 
+    @SuppressWarnings("Duplicates")
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
 
@@ -193,11 +195,6 @@ public class OperatorSystemController {
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        //Set up accounts filter - maybe change to dynamically get account types from database?
-        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All Employees", "Managers", "Operators", "Users");
-        accountsFilter.setItems(accountsFilterOptions);
-        accountsFilter.getSelectionModel().selectFirst();
-
         //Load in data for adding / editing accounts
         try {
             loadAccounts(null);
@@ -211,12 +208,12 @@ public class OperatorSystemController {
         }
 
         //Load in account types and location dropdown boxes
-        accounts = DataFetcher.getDropdownValues("accountTypes");
+        accountTypes = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("locations");
-        equipment_type = DataFetcher.getDropdownValues("equipmentTypes");
+        equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
         //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
-        setValues();
+        setDropdownValues();
     }
 
     /**
@@ -231,7 +228,7 @@ public class OperatorSystemController {
     @FXML
     protected void loadAccounts(Event e) throws InvalidParametersException{
         String params = "";
-        String searchField = accountsSearchField.getText();
+        String searchField = accountsSearch.getText();
 
         if(e != null) {
             //the call is not from a user event, but from internal code thus ignore
@@ -389,7 +386,7 @@ public class OperatorSystemController {
 
         //get account type
         String value = (String)accountsNewAccountType.getValue();
-        int accountType = Integer.parseInt(accounts.get(value));
+        int accountType = Integer.parseInt(accountTypes.get(value));
 
         try {
             if(accountType == 1) {
@@ -458,7 +455,7 @@ public class OperatorSystemController {
                 newAccount.setLocation(loc);
 
                 String accountValue = (String) accountsEditAccountType.getValue();
-                int accountType = Integer.parseInt(accounts.get(accountValue));
+                int accountType = Integer.parseInt(accountTypes.get(accountValue));
 
                 DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
@@ -475,7 +472,7 @@ public class OperatorSystemController {
                 newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
 
                 String accountValue = (String) accountsEditAccountType.getValue();
-                int accountType = Integer.parseInt(accounts.get(accountValue));
+                int accountType = Integer.parseInt(accountTypes.get(accountValue));
 
                 DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
@@ -494,7 +491,8 @@ public class OperatorSystemController {
             messageBox.show("An unknown error has occured adding this account.");
             ex.printStackTrace();
             return;
-        }    }
+        }
+    }
 
     /**
      * Deletes the selected account from the table
@@ -590,7 +588,7 @@ public class OperatorSystemController {
 
         eq.setLocation(loc);
         eq.setTypeName((String)newEquipType.getValue());
-        eq.setTypeID(Integer.parseInt(equipment_type.get((String)newEquipType.getValue())));
+        eq.setTypeID(Integer.parseInt(equipmentTypes.get((String)newEquipType.getValue())));
         eq.setStatus("Available");
 
         try {
@@ -641,7 +639,7 @@ public class OperatorSystemController {
 
         tmp.setLocation(loc);
         tmp.setStatus((String)editEquipStatus.getValue());
-        tmp.setTypeID(Integer.parseInt(equipment_type.get(editEquipType.getValue())));
+        tmp.setTypeID(Integer.parseInt(equipmentTypes.get(editEquipType.getValue())));
 
         try {
             DataFetcher.updateEquipment(tmp);
@@ -766,59 +764,58 @@ public class OperatorSystemController {
         loadLocations(null);
     }
 
-
-
     /**
      * Sets the values for the drop down menus
      */
-    private void setValues() {
-        //set accountTypes
-        Set s = accounts.keySet();
-        Iterator it = s.iterator();
-        ObservableList<String> options = FXCollections.observableArrayList();
+    @SuppressWarnings("Duplicates")
+    private void setDropdownValues() {
+        //Set the account type dropdowns
+        ObservableList<String> accountTypeOptions = createOptionsListForDropdown(accountTypes);
+        accountsNewAccountType.setItems(accountTypeOptions);
+        accountsEditAccountType.setItems(accountTypeOptions);
 
-        while(it.hasNext()) {
-            options.add((String)it.next());
-        }
+        //Set the location dropdowns
+        ObservableList<String> locationOptions = createOptionsListForDropdown(locations);
+        accountsNewAccountLocation.setItems(locationOptions);
+        accountsEditAccountLocation.setItems(locationOptions);
+        newEquipLocation.setItems(locationOptions);
+        editEquipLocation.setItems(locationOptions);
 
-        accountsNewAccountType.setItems(options);
-        accountsEditAccountType.setItems(options);
+        //Set the equipment type dropdowns
+        ObservableList<String> equipmentTypeOptions = createOptionsListForDropdown(equipmentTypes);
+        newEquipType.setItems(equipmentTypeOptions);
+        editEquipType.setItems(equipmentTypeOptions);
+        equipmentFilter.setItems(equipmentTypeOptions);
 
-        //set location
-        s = locations.keySet();
-        it = s.iterator();
-        options = FXCollections.observableArrayList();
+        //Set the equipment status dropdown
+        ObservableList<String> equipmentStatusOptions = FXCollections.observableArrayList("Available", "Booked", "Damaged");
+        editEquipStatus.setItems(equipmentStatusOptions);
 
-        while(it.hasNext()) {
-            options.add((String)it.next());
-        }
-
-        accountsNewAccountLocation.setItems(options);
-        accountsEditAccountLocation.setItems(options);
-        newEquipLocation.setItems(options);
-        editEquipLocation.setItems(options);
-
-        //Set equipment Types
-        s = equipment_type.keySet();
-        it = s.iterator();
-        options = FXCollections.observableArrayList();
-
-        while(it.hasNext()) {
-            options.add((String)it.next());
-        }
-
-        newEquipType.setItems(options);
-        editEquipType.setItems(options);
-
-        //set status box
-        editEquipStatus.getItems().add(0, "Available");
-        editEquipStatus.getItems().add(1, "Booked");
-        editEquipStatus.getItems().add(2, "Damaged");
-
+        //Set the accounts filter
+        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All Employees", "Managers", "Operators", "Users");
+        accountsFilter.setItems(accountsFilterOptions);
+        accountsFilter.getSelectionModel().selectFirst();
     }
 
     /**
-     * Handles switching the view of the user's co ntact details, between editable and non editable
+     * Creates and ObservableList of options to add to a dropdown menu
+     * @param map
+     * @return
+     */
+    private ObservableList<String> createOptionsListForDropdown(HashMap<String, String> map){
+        Set s = map.keySet();
+        Iterator it = s.iterator();
+        ObservableList<String> options = FXCollections.observableArrayList();
+
+        while(it.hasNext()){
+            options.add((String) it.next());
+        }
+
+        return options;
+    }
+
+    /**
+     * Handles switching the view of the user's contact details, between editable and non editable
      * @param e
      */
     @FXML

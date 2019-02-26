@@ -121,23 +121,30 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Label text="Show:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <ComboBox fx:id="accountsFilter" onAction="#loadAccounts" prefHeight="30.0" prefWidth="200.0" />
-                                    <Label text="Search:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="accountsSearchField" onKeyTyped="#loadAccounts" prefHeight="25.0" promptText="Search...">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                    <Button fx:id="accountsSeatchButton" mnemonicParsing="false" onAction="#loadAccounts" prefWidth="100.0" styleClass="green-button" text="Search" textOverrun="CLIP" />
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label text="Show:" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="accountsFilter" onAction="#loadAccounts" prefHeight="30.0" prefWidth="200.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Search:" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="accountsSearch" onKeyTyped="#loadAccounts" prefHeight="25.0" prefWidth="250.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="81.0" layoutY="-32.0" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -355,244 +362,258 @@
                                  </children>
                               </HBox>
                            </children>
-                           <padding>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                           </padding>
                         </VBox>
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="bikesTab" visible="false">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TableView fx:id="equipmentTable" onMouseClicked="#updateEquipmentEditBox" styleClass="table" HBox.hgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
-                                    <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
-                                    <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
-                                    <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" text="Price" />
-                                    <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
-                                 </columns>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </TableView>
-                              <VBox layoutX="1275.0" spacing="20.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Search Properties:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <HBox alignment="CENTER_RIGHT" prefWidth="380.0">
-                                                   <children>
-                                                      <Button fx:id="addEquip1" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
+                                          <Label text="Show:" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="equipmentFilter" prefHeight="30.0" prefWidth="200.0" />
                                        </children>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </AnchorPane>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Equipment:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <ComboBox fx:id="newEquipType" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Type..." style="-fx-font-size: 14px;">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </ComboBox>
-                                                <ComboBox fx:id="newEquipLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Location...." style="-fx-font-size: 14px;">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </ComboBox>
-                                                <HBox alignment="CENTER_RIGHT" prefWidth="380.0">
-                                                   <children>
-                                                      <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#addEquipment" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
+                                          <Label text="Search:" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="equipmentSearch" onKeyTyped="#loadAccounts" prefHeight="25.0" prefWidth="250.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </AnchorPane>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                       <children>
-                                          <VBox fx:id="editEquipmentVBox" disable="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Equipment:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <ComboBox fx:id="editEquipLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Location...." style="-fx-font-size: 14px;">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </ComboBox>
-                                                <ComboBox fx:id="editEquipType" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Type..." style="-fx-font-size: 14px;">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </ComboBox>
-                                                <ComboBox fx:id="editEquipStatus" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Status..." style="-fx-font-size: 14px;">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </ComboBox>
-                                                <HBox alignment="CENTER_RIGHT" prefWidth="380.0" spacing="10.0">
-                                                   <children>
-                                                      <Button fx:id="deleteEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </Button>
-                                                      <Button fx:id="editEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateEquipment" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
+                                    </HBox>
                                  </children>
-                              </VBox>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TableView fx:id="equipmentTable" onMouseClicked="#updateEquipmentEditBox" styleClass="table" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
+                                          <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
+                                          <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
+                                          <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" text="Price" />
+                                          <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </TableView>
+                                    <VBox layoutX="1275.0" spacing="20.0">
+                                       <children>
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Equipment:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <ComboBox fx:id="newEquipType" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Type..." style="-fx-font-size: 14px;">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </ComboBox>
+                                                      <ComboBox fx:id="newEquipLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Location...." style="-fx-font-size: 14px;">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </ComboBox>
+                                                      <HBox alignment="CENTER_RIGHT" prefWidth="380.0">
+                                                         <children>
+                                                            <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#addEquipment" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </AnchorPane>
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox fx:id="editEquipmentVBox" disable="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Equipment:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <ComboBox fx:id="editEquipLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Location...." style="-fx-font-size: 14px;">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </ComboBox>
+                                                      <ComboBox fx:id="editEquipType" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Type..." style="-fx-font-size: 14px;">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" />
+                                                         </VBox.margin>
+                                                      </ComboBox>
+                                                      <ComboBox fx:id="editEquipStatus" minHeight="-Infinity" prefHeight="30.0" prefWidth="380.0" promptText="Status..." style="-fx-font-size: 14px;">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </ComboBox>
+                                                      <HBox alignment="CENTER_RIGHT" prefWidth="380.0" spacing="10.0">
+                                                         <children>
+                                                            <Button fx:id="deleteEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
+                                                               <HBox.margin>
+                                                                  <Insets />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="editEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateEquipment" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                            </children>
-                           <padding>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                           </padding>
-                        </HBox>
+                        </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="locationsTab" visible="false">
+                  <AnchorPane fx:id="locationsTab">
                      <children>
-                        <HBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TableView fx:id="locationsTable" onMouseClicked="#updateLocationsEditBox" styleClass="table" HBox.hgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
-                                    <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
-                                 </columns>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </TableView>
-                              <VBox layoutX="1275.0" spacing="20.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                       <children>
-                                          <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Location:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="newLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER_RIGHT">
-                                                   <children>
-                                                      <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#addLocation" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
+                                    <Label text="Search:" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="locationSearch" onKeyTyped="#loadAccounts" prefHeight="25.0" prefWidth="250.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TableView fx:id="locationsTable" onMouseClicked="#updateLocationsEditBox" styleClass="table" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
+                                          <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
+                                       </columns>
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
-                                    </AnchorPane>
-                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                    </TableView>
+                                    <VBox layoutX="1275.0" spacing="20.0">
                                        <children>
-                                          <VBox fx:id="editLocationVBox" disable="true" maxHeight="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
                                              <children>
-                                                <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Location:">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="editLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <Button fx:id="deleteLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
-                                                         <HBox.margin>
-                                                            <Insets left="10.0" />
-                                                         </HBox.margin>
-                                                      </Button>
-                                                      <Button fx:id="editLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#editLocation" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Location:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="newLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#addLocation" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
                                                    </children>
-                                                </HBox>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
                                              </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </AnchorPane>
+                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <VBox fx:id="editLocationVBox" disable="true" maxHeight="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Location:">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="editLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </TextField>
+                                                      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                                         <children>
+                                                            <Button fx:id="deleteLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="editLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#editLocation" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
                                        </children>
-                                    </AnchorPane>
+                                    </VBox>
                                  </children>
-                              </VBox>
+                              </HBox>
                            </children>
-                           <padding>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                           </padding>
-                        </HBox>
+                        </VBox>
                      </children></AnchorPane>
                   <AnchorPane fx:id="rentalsTab" visible="false">
                      <children>
@@ -612,11 +633,8 @@
                               <Insets />
                            </VBox.margin>
                         </TableView>
-                     </children>
-                     <padding>
-                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                     </padding></AnchorPane>
-                  <AnchorPane fx:id="userTab">
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="userTab" visible="false">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
@@ -823,13 +841,13 @@
                                  </children>
                               </VBox>
                            </children>
-                           <padding>
-                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                           </padding>
                         </VBox>
                      </children>
                   </AnchorPane>
                </children>
+               <padding>
+                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+               </padding>
             </StackPane>
          </center>
       </BorderPane>
