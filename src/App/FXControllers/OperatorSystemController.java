@@ -31,14 +31,12 @@ public class OperatorSystemController {
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
-    @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private AnchorPane accountsTab; //Gets the accounts tab object
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
     @FXML private AnchorPane locationsTab; //Gets the locations tab object
-    @FXML private AnchorPane rentalsTab; //Gets the rentals tab object
     @FXML private AnchorPane userTab; //Gets the user's account tab object
     private List<AnchorPane> tabs; //List to store all tabs;
 
@@ -114,19 +112,6 @@ public class OperatorSystemController {
     @FXML private VBox editLocationVBox;
     @FXML private TextField editLocationName;
 
-    /** Rentals Tab **/
-    //Table
-    @FXML private TableColumn rentalsID;
-    @FXML private TableColumn rentalsEquipmentID;
-    @FXML private TableColumn rentalsEquipmentName;
-    @FXML private TableColumn rentalsEquipmentPrice;
-    @FXML private TableColumn rentalsStartTime;
-    @FXML private TableColumn rentalsReturnTime;
-    @FXML private TableColumn rentalsTotalPrice;
-    @FXML private TableColumn rentalsLocation;
-    @FXML private TableColumn rentalsStatus;
-    @FXML private TableView rentalsTable;
-
     /** Account Tab **/
     @FXML private Label userAccountID;
     @FXML private Label userAccountUsername;
@@ -181,7 +166,6 @@ public class OperatorSystemController {
         tabButtons.add(accountsTabButton);
         tabButtons.add(bikesTabButton);
         tabButtons.add(locationsTabButton);
-        tabButtons.add(rentalsTabButton);
         tabButtons.add(userTabButton);
 
         /* Initialise the tabs list and add all tabs to it */
@@ -189,7 +173,6 @@ public class OperatorSystemController {
         tabs.add(accountsTab);
         tabs.add(bikesTab);
         tabs.add(locationsTab);
-        tabs.add(rentalsTab);
         tabs.add(userTab);
 
         //Set the first tab as active
@@ -213,7 +196,7 @@ public class OperatorSystemController {
         equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
         //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
-        setDropdownValues();
+        setDropdownOptions();
     }
 
     /**
@@ -768,24 +751,28 @@ public class OperatorSystemController {
      * Sets the values for the drop down menus
      */
     @SuppressWarnings("Duplicates")
-    private void setDropdownValues() {
+    private void setDropdownOptions() {
         //Set the account type dropdowns
-        ObservableList<String> accountTypeOptions = createOptionsListForDropdown(accountTypes);
+        ObservableList<String> accountTypeOptions = OptionsListCreator.createList(accountTypes);
         accountsNewAccountType.setItems(accountTypeOptions);
         accountsEditAccountType.setItems(accountTypeOptions);
 
         //Set the location dropdowns
-        ObservableList<String> locationOptions = createOptionsListForDropdown(locations);
+        ObservableList<String> locationOptions = OptionsListCreator.createList(locations);
         accountsNewAccountLocation.setItems(locationOptions);
         accountsEditAccountLocation.setItems(locationOptions);
         newEquipLocation.setItems(locationOptions);
         editEquipLocation.setItems(locationOptions);
 
         //Set the equipment type dropdowns
-        ObservableList<String> equipmentTypeOptions = createOptionsListForDropdown(equipmentTypes);
+        ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
         newEquipType.setItems(equipmentTypeOptions);
         editEquipType.setItems(equipmentTypeOptions);
+
+        //Set the equipment filter dropdown
+        equipmentTypeOptions.add(0, "All");
         equipmentFilter.setItems(equipmentTypeOptions);
+        equipmentFilter.getSelectionModel().selectFirst();
 
         //Set the equipment status dropdown
         ObservableList<String> equipmentStatusOptions = FXCollections.observableArrayList("Available", "Booked", "Damaged");
@@ -795,23 +782,6 @@ public class OperatorSystemController {
         ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All Employees", "Managers", "Operators", "Users");
         accountsFilter.setItems(accountsFilterOptions);
         accountsFilter.getSelectionModel().selectFirst();
-    }
-
-    /**
-     * Creates and ObservableList of options to add to a dropdown menu
-     * @param map
-     * @return
-     */
-    private ObservableList<String> createOptionsListForDropdown(HashMap<String, String> map){
-        Set s = map.keySet();
-        Iterator it = s.iterator();
-        ObservableList<String> options = FXCollections.observableArrayList();
-
-        while(it.hasNext()){
-            options.add((String) it.next());
-        }
-
-        return options;
     }
 
     /**

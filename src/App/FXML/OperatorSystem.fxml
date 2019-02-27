@@ -64,15 +64,6 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="rentalsTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Rentals" textOverrun="CLIP">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <styleClass>
-                                    <String fx:value="nav-bar-tab" />
-                                    <String fx:value="nav-bar-tab-inactive" />
-                                 </styleClass>
-                              </ToggleButton>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
@@ -614,26 +605,8 @@
                               </HBox>
                            </children>
                         </VBox>
-                     </children></AnchorPane>
-                  <AnchorPane fx:id="rentalsTab" visible="false">
-                     <children>
-                        <TableView fx:id="rentalTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <columns>
-                              <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
-                              <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
-                              <TableColumn fx:id="rentalsEquipmentName" prefWidth="300.0" text="Equipment Name" />
-                              <TableColumn fx:id="rentalsEquipmentPrice" prefWidth="150.0" text="Equipment Price" />
-                              <TableColumn fx:id="rentalsStartTime" prefWidth="120.0" text="Start Time" />
-                              <TableColumn fx:id="rentalsReturnTime" prefWidth="120.0" text="Return Time" />
-                              <TableColumn fx:id="rentalsTotalPrice" prefWidth="100.0" text="Total Price" />
-                              <TableColumn fx:id="rentalsLocation" prefWidth="250.0" text="Location" />
-                              <TableColumn fx:id="rentalsStatus" prefWidth="150.0" text="Status" />
-                           </columns>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TableView>
-                     </children></AnchorPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="userTab" visible="false">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">

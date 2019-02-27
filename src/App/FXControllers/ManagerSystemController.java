@@ -17,8 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Controller for the manager system
@@ -27,12 +26,14 @@ import java.util.List;
 public class ManagerSystemController {
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton penaltiesTabButton; //Gets the penalties tab button object
+    @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
     @FXML private ToggleButton reportsTabButton; //Gets the reports tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button object
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
     @FXML private AnchorPane penaltiesTab; //Gets the penalties tab object
+    @FXML private AnchorPane rentalsTab; //Gets the rentals tab object
     @FXML private AnchorPane reportsTab; //Gets the reports tab object
     @FXML private AnchorPane userTab; //Gets the user tab object
     private List<AnchorPane> tabs; //List to store all tabs;
@@ -41,13 +42,30 @@ public class ManagerSystemController {
     @FXML private FlowPane unsolvedPenalties;
     @FXML private FlowPane solvedPenalties;
 
-    /** Equipment Table **/
+    /** Equipment Tab **/
+    //Table
     @FXML private TableView equipmentTable;
     @FXML private TableColumn equipmentID;
     @FXML private TableColumn equipmentType;
     @FXML private TableColumn equipmentLocation;
     @FXML private TableColumn equipmentPrice;
     @FXML private TableColumn equipmentStatus;
+
+    @FXML private ComboBox equipmentFilter;
+    @FXML private TextField equipmentSearch;
+
+    /** Rentals Tab **/
+    //Table
+    @FXML private TableColumn rentalsID;
+    @FXML private TableColumn rentalsEquipmentID;
+    @FXML private TableColumn rentalsEquipmentName;
+    @FXML private TableColumn rentalsEquipmentPrice;
+    @FXML private TableColumn rentalsStartTime;
+    @FXML private TableColumn rentalsReturnTime;
+    @FXML private TableColumn rentalsTotalPrice;
+    @FXML private TableColumn rentalsLocation;
+    @FXML private TableColumn rentalsStatus;
+    @FXML private TableView rentalsTable;
 
     /** Account Tab **/
     @FXML private Label userAccountID;
@@ -103,6 +121,7 @@ public class ManagerSystemController {
         tabButtons = new ArrayList<>();
         tabButtons.add(bikesTabButton);
         tabButtons.add(penaltiesTabButton);
+        tabButtons.add(rentalsTabButton);
         tabButtons.add(reportsTabButton);
         tabButtons.add(userTabButton);
 
@@ -110,13 +129,25 @@ public class ManagerSystemController {
         tabs = new ArrayList<>();
         tabs.add(bikesTab);
         tabs.add(penaltiesTab);
+        tabs.add(rentalsTab);
         tabs.add(reportsTab);
         tabs.add(userTab);
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        //TEMP? Add options to penalties view drop down
+        setDropdownOptions();
+    }
+
+    private void setDropdownOptions(){
+        //Set the equipment filter dropdown
+        HashMap<String, String> equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
+        ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
+        equipmentTypeOptions.add(0, "All");
+        equipmentFilter.setItems(equipmentTypeOptions);
+        equipmentFilter.getSelectionModel().selectFirst();
+
+        //Set the penalties view dropdown
         ObservableList<String> options = FXCollections.observableArrayList("Unsolved Penalties", "Solved Penalties");
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
