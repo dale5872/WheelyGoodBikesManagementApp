@@ -1,15 +1,10 @@
 package App.FXControllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
-public class MessageBoxController {
+public class MessageBoxController extends Controller{
     @FXML private Label messageLabel;
-
 
     private String message;
 
@@ -23,8 +18,7 @@ public class MessageBoxController {
     }
 
     public void closeMessageBox() {
-        Stage messageBox = (Stage)messageLabel.getScene().getWindow();
-        messageBox.close();
+        this.stage.close();
     }
 
 }

@@ -1,9 +1,11 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+
+import App.JavaFXLoader;
 import DatabaseConnector.Authenticate;
 import DatabaseConnector.LoginFailedException;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +21,7 @@ import javafx.stage.Stage;
 /**
  * Controller for the login window
  */
-public class LogInScreenController {
+public class LogInScreenController extends Controller{
     @FXML private TextField usernameField; //Get the username TextField object from the FXML
     @FXML private PasswordField passwordFieldHidden; //Get the PasswordField object from the FXML
     @FXML private TextField passwordFieldVisible; //Get the visible password field object from the FXML
@@ -61,12 +63,10 @@ public class LogInScreenController {
      */
     @FXML
     protected void login(){
-
         incorrectCredentials.setVisible(false);
         String username = usernameField.getText();
         String password = passwordFieldHidden.getText();
 
-        /* To test UI with DATABASE */
         try {
             EmployeeAccount activeAccount = Authenticate.authorize(username, password);
             createAndShowMainWindow(activeAccount);
@@ -99,36 +99,24 @@ public class LogInScreenController {
                 throw new InvalidParametersException("Unknown error occurred when authenticating user.");
         }
 
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/" + filename + ".fxml"));
-            Parent root = loader.load();
-            if(filename.equals("ManagerSystem")) {
-                ManagerSystemController controller = loader.getController();
-                controller.setEmployee(activeAccount);
-            } else if(filename.equals("OperatorSystem")) {
-                OperatorSystemController controller = loader.getController();
-                controller.setEmployee(activeAccount);
-            }
-            Scene scene = new Scene(root);
-            Stage managerWindow = new Stage();
-            managerWindow.setTitle("Wheely Good Bikes");
-            managerWindow.setScene(scene);
-            managerWindow.setMaximized(true);
-            managerWindow.show();
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow(filename, "Wheely Good Bikes", true);
 
-            closeLoginScreen();
-        }catch(Exception e){
-            System.out.print(e.getMessage());
-            e.printStackTrace();
-            System.exit(2);
+        if(activeAccount.getAccType().equals("Manager")){
+            ManagerSystemController controller = (ManagerSystemController) loader.getController();
+            controller.setEmployee(activeAccount);
+        }else{
+            OperatorSystemController controller = (OperatorSystemController) loader.getController();
+            controller.setEmployee(activeAccount);
         }
+
+        closeLoginScreen();
     }
 
     /**
      * Closes the log in screen
      */
     private void closeLoginScreen(){
-        Stage logInScreen = (Stage) usernameField.getScene().getWindow();
-        logInScreen.close();
+        this.stage.close();
     }
 }

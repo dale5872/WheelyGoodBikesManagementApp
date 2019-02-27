@@ -4,14 +4,14 @@ import App.Classes.Account;
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 import App.Classes.Location;
+
+import App.JavaFXLoader;
 import DatabaseConnector.InsertFailedException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -19,15 +19,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import java.io.IOException;
+
 import java.util.*;
 
 /**
  * Controller for the operator system
  * This class contains methods for all event handling on the operator system
  */
-public class OperatorSystemController {
+public class OperatorSystemController extends Controller{
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
@@ -190,7 +189,7 @@ public class OperatorSystemController {
             System.exit(100);
         }
 
-        //Load in account types and location dropdown boxes
+        //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("locations");
         equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
@@ -360,12 +359,12 @@ public class OperatorSystemController {
      */
     @FXML
     protected void addAccount(ActionEvent e) {
+        //new JavaFXLoader().loadNewFXWindow("AddEditAccount", "Add Account", false);
 
         /**
          * TODO: Capitalise first letter in First Name and Last Name
          * BODY: Implement the capitalisation on both add Account and Update accounts
          */
-
 
         //get account type
         String value = (String)accountsNewAccountType.getValue();
@@ -842,28 +841,11 @@ public class OperatorSystemController {
     /**
      * Logs the user out
      */
-    @SuppressWarnings("Duplicates")
     @FXML
     protected void logout(ActionEvent e) {
+        new JavaFXLoader().loadNewFXWindow("LogIn", "Wheely Good Bikes", false);
+
         this.employee = null;
-        try {
-            /* Create and show the log in window */
-            Parent root = FXMLLoader.load(getClass().getResource("../FXML/LogIn.fxml"));
-            Scene scene = new Scene(root);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Wheely Good Bikes");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            Stage thisScreen = (Stage) userTabButton.getScene().getWindow();
-            thisScreen.close();
-
-        }catch (IOException ex){
-            System.out.print(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
-        }
+        this.stage.close();
     }
-
-
 }

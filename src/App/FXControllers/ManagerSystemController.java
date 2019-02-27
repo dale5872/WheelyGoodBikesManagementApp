@@ -2,28 +2,26 @@ package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
+
+import App.JavaFXLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import java.io.IOException;
+
 import java.util.*;
 
 /**
  * Controller for the manager system
  * This class contains methods for all event handling on the manager system
  */
-public class ManagerSystemController {
+public class ManagerSystemController extends Controller{
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton penaltiesTabButton; //Gets the penalties tab button object
     @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
@@ -254,26 +252,11 @@ public class ManagerSystemController {
     /**
      * Logs the user out
      */
-    @SuppressWarnings("Duplicates")
     @FXML
     protected void logout(ActionEvent e) {
+        new JavaFXLoader().loadNewFXWindow("LogIn", "Wheely Good Bikes", false);
+
         this.employee = null;
-        try {
-            /* Create and show the log in window */
-            Parent root = FXMLLoader.load(getClass().getResource("../FXML/LogIn.fxml"));
-            Scene scene = new Scene(root);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Wheely Good Bikes");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            Stage thisScreen = (Stage) userTabButton.getScene().getWindow();
-            thisScreen.close();
-
-        }catch (IOException ex){
-            System.out.print(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
-        }
+        this.stage.close();
     }
 }
