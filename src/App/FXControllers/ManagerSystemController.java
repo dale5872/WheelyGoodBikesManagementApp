@@ -7,6 +7,7 @@ import App.JavaFXLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -105,9 +106,9 @@ public class ManagerSystemController extends Controller{
          * TODO Manager Automatic Loading
          * BODY Implement the automatic loading for Manager view with PHP script
          */
-        /** Run these after employee set
+        /** Run these after employee set */
         loadEquipment(null);
-         */
+
     }
 
     /**
@@ -156,9 +157,11 @@ public class ManagerSystemController extends Controller{
      * @param e ActionEvent object
      */
     @FXML
-    protected void loadEquipment(ActionEvent e) {
+    protected void loadEquipment(Event e) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.equipment(this.employee.getLocation());
+            String searchParameters = equipmentSearch.getText();
+
+            ObservableList<Equipment> equipment = DataFetcher.equipment(this.employee.getLocation(), "search=" + searchParameters);
 
             equipmentID.setCellValueFactory(
                     new PropertyValueFactory<Equipment, String>("ID")

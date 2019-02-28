@@ -177,7 +177,7 @@
                                                 <Font name="System Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <ComboBox fx:id="equipmentFilter" prefHeight="30.0" prefWidth="200.0" />
+                                          <ComboBox fx:id="equipmentFilter" onAction="#loadEquipment" prefHeight="30.0" prefWidth="200.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
@@ -187,7 +187,7 @@
                                                 <Font name="System Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="equipmentSearch" onKeyTyped="#loadAccounts" prefHeight="25.0" prefWidth="250.0">
+                                          <TextField fx:id="equipmentSearch" onKeyTyped="#loadEquipment" prefHeight="25.0" prefWidth="250.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -315,7 +315,7 @@
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="locationSearch" onKeyTyped="#loadAccounts" prefHeight="25.0" prefWidth="250.0">
+                                    <TextField fx:id="locationSearch" onKeyTyped="#loadLocations" prefHeight="25.0" prefWidth="250.0">
                                        <font>
                                           <Font size="14.0" />
                                        </font>

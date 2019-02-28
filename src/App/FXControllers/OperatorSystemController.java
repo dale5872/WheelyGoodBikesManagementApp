@@ -14,6 +14,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
@@ -97,6 +98,9 @@ public class OperatorSystemController extends Controller{
     //Edit Location
     @FXML private VBox editLocationVBox;
     @FXML private TextField editLocationName;
+
+    //Filter and Search
+    @FXML private TextField locationSearch;
 
     /** Account Tab **/
     @FXML private Label userAccountID;
@@ -451,9 +455,26 @@ public class OperatorSystemController extends Controller{
      * @param e ActionEvent object
      */
     @FXML
-    protected void loadEquipment(ActionEvent e) {
+    protected void loadEquipment(Event e) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.equipment(null);
+            String searchParameter = equipmentSearch.getText();
+
+            /**
+            if((searchParameter == null || searchParameter.equals("")) && e instanceof KeyEvent) {
+                //empty search string
+                return;
+            } else
+                */
+
+            if(e instanceof ActionEvent) {
+                //dropdown menu
+                searchParameter = (String) equipmentFilter.getSelectionModel().getSelectedItem();
+                if(searchParameter.equals("All")) {
+                    searchParameter = "";
+                }
+            }
+
+            ObservableList<Equipment> equipment = DataFetcher.equipment(null, "search=" + searchParameter);
 
             equipmentID.setCellValueFactory(
                     new PropertyValueFactory<Equipment, String>("ID")
@@ -573,10 +594,18 @@ public class OperatorSystemController extends Controller{
      * @param e ActionEvent object
      */
     @FXML
-    protected void loadLocations(ActionEvent e) {
-
+    protected void loadLocations(Event e) {
         try {
-            ObservableList<Location> locations = DataFetcher.locations();
+            String searchParameters = locationSearch.getText();
+
+            /**
+            if((searchParameters == null || searchParameters.equals("")) && e instanceof KeyEvent) {
+                //empty seatch string, dont query
+                return;
+            }
+            **/
+
+            ObservableList<Location> locations = DataFetcher.locations("search=" + searchParameters);
 
             locationsID.setCellValueFactory(
                     new PropertyValueFactory<Equipment, String>("locationID")

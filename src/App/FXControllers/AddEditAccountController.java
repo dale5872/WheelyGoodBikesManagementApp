@@ -177,5 +177,12 @@ public class AddEditAccountController extends Controller{
     protected void cancel(){
         parentController.enable();
         this.stage.close();
+
+        /**
+         * TODO: Window closing bug if closed by 'X'
+         * BODY: When closing the window by using the 'X' instead of the cancel button, the parent controller is not re-enabled
+         */
     }
+
+
 }

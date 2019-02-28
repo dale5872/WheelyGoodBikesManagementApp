@@ -29,7 +29,9 @@ public class DataFetcher {
         Results res = q.executeQuery();
 
         //check we have results
-        if(res != null && !res.isEmpty()) {
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty dataset", false);
+        } else {
             //add data
             for(int r = 0; r < res.getRows(); r++) {
                 EmployeeAccount acc = new EmployeeAccount();
@@ -59,7 +61,9 @@ public class DataFetcher {
         Results res = q.executeQuery();
 
         //check we have results
-        if(res != null && !res.isEmpty()) {
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty dataset", false);
+        } else {
             //add data
             for(int r = 0; r < res.getRows(); r++) {
                 Account acc = new Account();
@@ -190,22 +194,24 @@ public class DataFetcher {
      * @param managerLoc returns the dataset based on the managers location, null if operator requesting
      * @return list of Equipment objects
      */
-    protected static ObservableList<Equipment> equipment(Location managerLoc) throws EmptyDatasetException {
+    protected static ObservableList<Equipment> equipment(Location managerLoc, String searchParameters) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
 
         if(managerLoc == null) {
-            q.updateQuery("read", "fetchEquipment", "");
+            q.updateQuery("read", "fetchEquipment", searchParameters);
         } else {
             //get query based on location
-            q.updateQuery("read", "fetchEquipment", "location_id=" + managerLoc.getLocationID());
+            q.updateQuery("read", "fetchEquipment", "location_id=" + managerLoc.getLocationID() + "&" + searchParameters);
         }
 
         Results res = q.executeQuery();
 
         //check we have results
-        if(!res.isEmpty()) {
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
+        } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
                 e.setID(Integer.parseInt((String) res.getElement(r, "equipmentID")));
@@ -217,8 +223,6 @@ public class DataFetcher {
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 equipment.add(e);
             }
-        } else {
-            throw new EmptyDatasetException("Empty Dataset: No equipment to return.");
         }
 
         return equipment;
@@ -281,20 +285,20 @@ public class DataFetcher {
      * Return all of the locations and its data that is in the database
      * @return the list of Location objects
      */
-    protected static ObservableList<Location> locations() throws EmptyDatasetException{
+    protected static ObservableList<Location> locations(String searchParameters) throws EmptyDatasetException{
         ObservableList<Location> locations = FXCollections.observableArrayList();
 
 
-        Query q = new Query("read", "fetchLocations", "");
+        Query q = new Query("read", "fetchLocations", searchParameters);
         Results res = q.executeQuery();
 
         //check we have results
-        if(!res.isEmpty()) {
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: Could not list of locations", false);
+        } else {
             for(int r = 0; r < res.getRows(); r++) {
                 locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
             }
-        } else {
-            throw new EmptyDatasetException("Empty Dataset: Could not list of locations");
         }
 
         return locations;
