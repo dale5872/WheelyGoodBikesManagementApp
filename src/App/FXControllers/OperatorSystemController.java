@@ -27,6 +27,8 @@ import java.util.*;
  * This class contains methods for all event handling on the operator system
  */
 public class OperatorSystemController extends Controller{
+    @FXML private AnchorPane parentPane;
+
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
@@ -55,25 +57,10 @@ public class OperatorSystemController extends Controller{
     @FXML private ComboBox accountsFilter;
     @FXML private TextField accountsSearch;
 
-    //Add Account Properties
-    @FXML private TextField accountsNewAccountUsername;
-    @FXML private TextField accountsNewAccountPassword;
-    @FXML private TextField accountsNewAccountFirstName;
-    @FXML private TextField accountsNewAccountLastName;
-    @FXML private TextField accountsNewAccountEmail;
-    @FXML private TextField accountsNewAccountPhone;
-    @FXML private ComboBox accountsNewAccountType;
-    @FXML private ComboBox accountsNewAccountLocation;
+    //Edit and delete buttons
+    @FXML private Button accountsEditAccount;
+    @FXML private Button accountsDeleteAccount;
 
-    //Edit Account Properties
-    @FXML private VBox editAccountVBox;
-    @FXML private TextField accountsEditAccountUsername;
-    @FXML private TextField accountsEditAccountFirstName;
-    @FXML private TextField accountsEditAccountLastName;
-    @FXML private TextField accountsEditAccountEmail;
-    @FXML private TextField accountsEditAccountPhone;
-    @FXML private ComboBox accountsEditAccountType;
-    @FXML private ComboBox accountsEditAccountLocation;
 
     /** Equipment Tab **/
     //Table
@@ -199,6 +186,20 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
+     * Disable the window
+     */
+    public void disable(){
+        parentPane.setDisable(true);
+    }
+
+    /**
+     * Enable the window
+     */
+    public void enable(){
+        parentPane.setDisable(false);
+    }
+
+    /**
      * Finds the parameters selected by the user and loads the data
      * based on those parameters. Parameters are selected through
      * a dropdown box and a search box
@@ -217,21 +218,11 @@ public class OperatorSystemController extends Controller{
             String selectedItem = (String) accountsFilter.getSelectionModel().getSelectedItem();
             switch (selectedItem) {
                 case "All Employees":
-                    //set account controls
-                    accountsEditAccountType.setDisable(false);
-                    accountsEditAccountLocation.setDisable(false);
-                    accountsNewAccountType.setDisable(false);
-                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "search=" + searchField;
                     }
                     break;
                 case "Managers":
-                    //set account controls
-                    accountsEditAccountType.setDisable(false);
-                    accountsEditAccountLocation.setDisable(false);
-                    accountsNewAccountType.setDisable(false);
-                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "account_type=Manager&search=" + searchField;
                         break;
@@ -239,11 +230,6 @@ public class OperatorSystemController extends Controller{
                     params = "account_type=Manager";
                     break;
                 case "Operators":
-                    //set account controls
-                    accountsEditAccountType.setDisable(false);
-                    accountsEditAccountLocation.setDisable(false);
-                    accountsNewAccountType.setDisable(false);
-                    accountsNewAccountLocation.setDisable(false);
                     if(!searchField.equals("")) {
                         params = "account_type=Operator&search=" + searchField;
                         break;
@@ -252,13 +238,6 @@ public class OperatorSystemController extends Controller{
                     break;
                 case "Users":
                     if(!searchField.equals("")) {
-                        //set account controls
-                        accountsEditAccountType.setDisable(true);
-                        accountsEditAccountLocation.setDisable(true);
-                        accountsNewAccountType.setDisable(true);
-                        accountsNewAccountLocation.setDisable(true);
-                        accountsEditAccountType.getSelectionModel().select("User");
-                        accountsNewAccountType.getSelectionModel().select("User");
                         loadUserAccounts("search=" + searchField);
                     }
                     return;
@@ -354,119 +333,71 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Method for adding a new account with the data specified by the user
+     * Creates and shows the dialog for adding an account, also disabling the operator system screen
      * @param e ActionEvent object
      */
     @FXML
-    protected void addAccount(ActionEvent e) {
-        //new JavaFXLoader().loadNewFXWindow("AddEditAccount", "Add Account", false);
+    protected void showAddAccountDialog(ActionEvent e) {
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditAccount", "Add Account", false);
 
-        /**
-         * TODO: Capitalise first letter in First Name and Last Name
-         * BODY: Implement the capitalisation on both add Account and Update accounts
-         */
+        this.disable();
 
-        //get account type
-        String value = (String)accountsNewAccountType.getValue();
-        int accountType = Integer.parseInt(accountTypes.get(value));
+        AddEditAccountController controller = (AddEditAccountController) loader.getController();
+        controller.setParent(this);
+        controller.setDropdownValues(accountTypes, locations);
+    }
 
-        try {
-            if(accountType == 1) {
-                //user account
-                Account acc = new Account();
-                acc.setUsername(accountsNewAccountUsername.getText());
-                acc.setFirstName(accountsNewAccountFirstName.getText());
-                acc.setLastName(accountsNewAccountLastName.getText());
-                acc.setEmail(accountsNewAccountEmail.getText());
-                acc.setPhoneNumber(accountsNewAccountPhone.getText());
+    public void addAccount(Account account, String password, int accountType){
+        this.enable();
 
-                DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
+        try{
+            DataFetcher.addAccount(account, password, accountType);
 
-                //update table
-                accountsTable.getItems().add(acc);
-
-
-            } else {
-                EmployeeAccount acc = new EmployeeAccount();
-                acc.setUsername(accountsNewAccountUsername.getText());
-                acc.setFirstName(accountsNewAccountFirstName.getText());
-                acc.setLastName(accountsNewAccountLastName.getText());
-                acc.setEmail(accountsNewAccountEmail.getText());
-                acc.setPhoneNumber(accountsNewAccountPhone.getText());
-                acc.setAccType((String) accountsNewAccountType.getValue());
-                String locationName = (String) accountsNewAccountLocation.getValue();
-                acc.setLocation(locationName, Integer.parseInt(this.locations.get(locationName)));
-
-                DataFetcher.addAccount(acc, accountsNewAccountPassword.getText(), accountType);
-
-                //update table
-                accountsTable.getItems().add(acc);
-            }
-        } catch (Exception ex) {
+            //Update table
+            accountsTable.getItems().add(account);
+        }catch(Exception ex){
             return;
         }
-
     }
 
     /**
-     * Updates the account selected in the table with the information
-     * specified by the user in the input form
+     * Creates and shows the dialog for editing an account, also disabling the operator system screen
      * @param e ActionEvent object
      */
     @FXML
-    protected void updateAccount(ActionEvent e) {
+    protected void showEditAccountDialog(ActionEvent e) {
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditAccount", "Edit Account", false);
+
+        this.enable();
+
+        AddEditAccountController controller = (AddEditAccountController) loader.getController();
+        controller.setParent(this);
+        controller.setDropdownValues(accountTypes, locations);
+
+        /* Get the selected account and pass to edit dialog */
         int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<EmployeeAccount> row = accountsTable.getItems();
+        Account acc = (Account) accountsTable.getItems().get(rowIndex);
+        controller.setExistingAccount(acc);
+    }
 
-        Account oldAccount = row.get(rowIndex);
+    public void updateAccount(Account oldAccount, Account newAccount, int accountType){
+        /* Enable the window */
+        parentPane.setDisable(false);
 
-        try {
-            if (oldAccount instanceof EmployeeAccount) {
-                //get new account value
-                EmployeeAccount newAccount = new EmployeeAccount();
-                newAccount.setUserID(oldAccount.getUserID());
-                newAccount.setEmployeeID(((EmployeeAccount)oldAccount).getEmployeeID());
-                newAccount.setUsername(accountsEditAccountUsername.getText());
-                newAccount.setFirstName(accountsEditAccountFirstName.getText());
-                newAccount.setLastName(accountsEditAccountLastName.getText());
-                newAccount.setEmail(accountsEditAccountEmail.getText());
-                newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
-                newAccount.setAccType((String) accountsEditAccountType.getValue());
-                String locationName = (String) accountsEditAccountLocation.getValue();
-                Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
-                newAccount.setLocation(loc);
+        try{
+            DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
-                String accountValue = (String) accountsEditAccountType.getValue();
-                int accountType = Integer.parseInt(accountTypes.get(accountValue));
-
-                DataFetcher.updateAccount(oldAccount, newAccount, accountType);
-
-                //update table
-                accountsTable.getItems().remove(rowIndex);
-                accountsTable.getItems().add(rowIndex, newAccount);
-            } else {
-                Account newAccount = new Account();
-                newAccount.setUserID(oldAccount.getUserID());
-                newAccount.setUsername(accountsEditAccountUsername.getText());
-                newAccount.setFirstName(accountsEditAccountFirstName.getText());
-                newAccount.setLastName(accountsEditAccountLastName.getText());
-                newAccount.setEmail(accountsEditAccountEmail.getText());
-                newAccount.setPhoneNumber(accountsEditAccountPhone.getText());
-
-                String accountValue = (String) accountsEditAccountType.getValue();
-                int accountType = Integer.parseInt(accountTypes.get(accountValue));
-
-                DataFetcher.updateAccount(oldAccount, newAccount, accountType);
-
-                //update table
-                accountsTable.getItems().remove(rowIndex);
-                accountsTable.getItems().add(rowIndex, newAccount);
-
-            }
-
-        } catch (InsertFailedException ex) {
+            //Update table
+            int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+            accountsTable.getItems().remove(rowIndex);
+            accountsTable.getItems().add(rowIndex, newAccount);
+        }catch(InsertFailedException ex){
             return;
-        } catch (Exception ex) {
+        }catch(Exception ex){
             //Something else has happened, print to stderr and show error
             //Show error to the user
             ShowMessageBox messageBox = new ShowMessageBox();
@@ -502,27 +433,16 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * When a user clicks on a row in the table, the data is automatically
-     * entered into the Edit Account section
-     * @param e MouseEvent object
+     * When a user clicks on a row in the table, the edit and delete buttons are enabled
      */
     @FXML
-    protected void updateEditBox(MouseEvent e) {
-        //enable the box
-        editAccountVBox.setDisable(false);
-
-        //fill the data
-        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<Account> row = accountsTable.getItems();
-        Account tmp = row.get(rowIndex);
-        accountsEditAccountUsername.setText(tmp.getUsername());
-        accountsEditAccountFirstName.setText(tmp.getFirstName());
-        accountsEditAccountLastName.setText(tmp.getLastName());
-        accountsEditAccountEmail.setText(tmp.getEmail());
-        accountsEditAccountPhone.setText(tmp.getPhoneNumber());
-        if(tmp instanceof EmployeeAccount) {
-            accountsEditAccountType.setValue(tmp.getAccType());
-            accountsEditAccountLocation.setValue(((EmployeeAccount)tmp).getLocationName());
+    protected void setEditDeleteAccountButtons(MouseEvent e) {
+        if(accountsTable.getSelectionModel().getSelectedIndex() >= 0){ //If something in the table is selected
+            accountsEditAccount.setDisable(false);
+            accountsDeleteAccount.setDisable(false);
+        }else{ //If nothing in the table is selected
+            accountsEditAccount.setDisable(true);
+            accountsDeleteAccount.setDisable(true);
         }
     }
 
@@ -751,15 +671,8 @@ public class OperatorSystemController extends Controller{
      */
     @SuppressWarnings("Duplicates")
     private void setDropdownOptions() {
-        //Set the account type dropdowns
-        ObservableList<String> accountTypeOptions = OptionsListCreator.createList(accountTypes);
-        accountsNewAccountType.setItems(accountTypeOptions);
-        accountsEditAccountType.setItems(accountTypeOptions);
-
         //Set the location dropdowns
         ObservableList<String> locationOptions = OptionsListCreator.createList(locations);
-        accountsNewAccountLocation.setItems(locationOptions);
-        accountsEditAccountLocation.setItems(locationOptions);
         newEquipLocation.setItems(locationOptions);
         editEquipLocation.setItems(locationOptions);
 

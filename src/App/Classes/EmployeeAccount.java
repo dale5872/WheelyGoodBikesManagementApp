@@ -1,6 +1,7 @@
 /** TODO: Documentation */
 package App.Classes;
-public class EmployeeAccount extends Account {
+
+public class EmployeeAccount extends Account{
 
     private int employeeID;
     private Location loc;

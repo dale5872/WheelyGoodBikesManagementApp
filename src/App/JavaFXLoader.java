@@ -84,7 +84,7 @@ public class JavaFXLoader {
     }
 
     /**
-     * Returns the controller from the loaded window
+     * Returns the controller from the window
      * @return
      */
     public Controller getController(){
