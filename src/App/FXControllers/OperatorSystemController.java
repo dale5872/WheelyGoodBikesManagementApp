@@ -14,7 +14,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
@@ -344,18 +343,57 @@ public class OperatorSystemController extends Controller{
     protected void showAddAccountDialog(ActionEvent e) {
         /* Load the popup */
         JavaFXLoader loader = new JavaFXLoader();
-        loader.loadNewFXWindow("AddEditAccount", "Add Account", false);
+        loader.loadNewFXWindow("AddAccount", "Add Account", false);
 
         this.disable();
 
-        AddEditAccountController controller = (AddEditAccountController) loader.getController();
-        controller.setParent(this);
+        AddAccountController controller = (AddAccountController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
         controller.setDropdownValues(accountTypes, locations);
     }
 
-    public void addAccount(Account account, String password, int accountType){
-        this.enable();
+    /**
+     * Creates and shows the dialog for editing an account, also disabling the operator system screen
+     * @param e ActionEvent object
+     */
+    @FXML
+    protected void showEditAccountDialog(ActionEvent e) {
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("EditAccount", "Edit Account", false);
 
+        this.disable();
+
+        EditAccountController controller = (EditAccountController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setDropdownValues(accountTypes, locations);
+
+        /* Get the selected account and pass to edit dialog */
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        EmployeeAccount acc = (EmployeeAccount) accountsTable.getItems().get(rowIndex);
+        controller.setExistingAccount(acc);
+    }
+
+    /**
+     *  Prepares an AddAccountController
+     *  Passes the parent controller, sets the on close action, and sets the dropdown values
+     * @param controller
+     */
+    private void prepareAddEditController(AddAccountController controller){
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setDropdownValues(accountTypes, locations);
+    }
+
+    /**
+     * Add a new account
+     * @param account
+     * @param password
+     * @param accountType
+     */
+    public void addAccount(Account account, String password, int accountType){
         try{
             DataFetcher.addAccount(account, password, accountType);
 
@@ -367,31 +405,12 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Creates and shows the dialog for editing an account, also disabling the operator system screen
-     * @param e ActionEvent object
+     * Update an existing account
+     * @param oldAccount
+     * @param newAccount
+     * @param accountType
      */
-    @FXML
-    protected void showEditAccountDialog(ActionEvent e) {
-        /* Load the popup */
-        JavaFXLoader loader = new JavaFXLoader();
-        loader.loadNewFXWindow("AddEditAccount", "Edit Account", false);
-
-        this.enable();
-
-        AddEditAccountController controller = (AddEditAccountController) loader.getController();
-        controller.setParent(this);
-        controller.setDropdownValues(accountTypes, locations);
-
-        /* Get the selected account and pass to edit dialog */
-        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        Account acc = (Account) accountsTable.getItems().get(rowIndex);
-        controller.setExistingAccount(acc);
-    }
-
     public void updateAccount(Account oldAccount, Account newAccount, int accountType){
-        /* Enable the window */
-        parentPane.setDisable(false);
-
         try{
             DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
