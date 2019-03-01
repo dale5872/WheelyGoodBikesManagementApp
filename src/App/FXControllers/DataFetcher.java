@@ -15,14 +15,15 @@ import java.util.HashMap;
 public class DataFetcher {
 
     /**
-     * Uses the query string to fetch the data from the SQL server and
-     * creates many Account / EmployeeAccount objects and parses the data
+     * Uses the parameter string to fetch the data from the SQL server and
+     * creates many EmployeeAccount objects and parses the data
      * into these objects. Then returns the list of these objects for
      * display into the table
      * @param params The HTTP POST params to send
      * @return A list of Accounts filled with the data in each account
+     * Scope: Package-private (No modifier)
      */
-    protected static ObservableList<EmployeeAccount> getEmployeeAccounts(String params) throws EmptyDatasetException{
+    static ObservableList<EmployeeAccount> getEmployeeAccounts(String params) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
         Query q = new Query("read", "fetchEmployeeAccounts", params);
@@ -54,7 +55,16 @@ public class DataFetcher {
         return accounts;
     }
 
-    protected static ObservableList<Account> getUserAccounts(String params) throws EmptyDatasetException {
+    /**
+     * Uses the parameter string to fetch the data from the SQL server and
+     * creates many EmployeeAccount objects and parses the data
+     * into these objects. Then returns the list of these objects for
+     * display into the table
+     * @param params The HTTP POST params to send
+     * @return A list of Accounts filled with the data in each account
+     * Scope: Package-private (No modifier)
+     */
+    static ObservableList<Account> getUserAccounts(String params) throws EmptyDatasetException {
         ObservableList<Account> accounts = FXCollections.observableArrayList();
 
         Query q = new Query("read", "fetchUserAccounts", params);
@@ -87,10 +97,10 @@ public class DataFetcher {
      * then returns the account's user id once added to the database and returns
      * that value
      * @param acc the Account object of the new user to be added into the database
-     * @return the user ID of the new account
      * @throws InsertFailedException Error Codes DF01-DF04
+     * Scope: Package-private (No modifier)
      */
-    protected static void addAccount(Account acc, String password, int accountType) throws InsertFailedException{
+    static void addAccount(Account acc, String password, int accountType) throws InsertFailedException{
         if(acc instanceof EmployeeAccount) {
             String params = "username=" + acc.getUsername()
                     + "&password=" + password
@@ -125,8 +135,9 @@ public class DataFetcher {
      * @param newAcc the nre account
      * @param accountType account type
      * @throws InsertFailedException exception if failure to update the account
+     * Scope: Package-private (No modifier)
      */
-    protected static void updateAccount(Account oldAcc, Account newAcc, int accountType) throws InsertFailedException {
+    static void updateAccount(Account oldAcc, Account newAcc, int accountType) throws InsertFailedException {
         //check if account info is the same
         //update user table for any account
         int userID = oldAcc.getUserID();
@@ -169,8 +180,9 @@ public class DataFetcher {
      * @param userID ID of the user account
      * @param employeeID the employee ID
      * @throws InsertFailedException if failure to delete the user account and all of it's data
+     * Scope: Package-private (No modifier)
      */
-    protected static void deleteAccount(int userID, int employeeID) throws InsertFailedException {
+    static void deleteAccount(int userID, int employeeID) throws InsertFailedException {
 
         if(employeeID == -1) {
             //user account
@@ -190,11 +202,120 @@ public class DataFetcher {
     }
 
     /**
-     * Return all the equipment data from the database with the given query
+     * Fetches all the bikes from the database and returns this data as a list
+     * @param managerLoc Location of the manager
+     * @param searchParameters Any search parameters
+     * @return List of Equipment objects (as bikes)
+     * @throws EmptyDatasetException if empty
+     */
+    static ObservableList<Equipment> getBikes(Location managerLoc, String searchParameters) throws EmptyDatasetException {
+        ObservableList<Equipment> equipment = FXCollections.observableArrayList();
+
+        Query q = new Query();
+
+        if(managerLoc == null) {
+            q.updateQuery("read", "fetchBikes", searchParameters);
+        } else {
+            //get query based on location
+            q.updateQuery("read", "fetchBikes", "location_id=" + managerLoc.getLocationID() + "&" + searchParameters);
+        }
+
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No getEquipment to return.", false);
+        } else {
+            for(int r = 0; r < res.getRows(); r++) {
+                Equipment e = new Equipment();
+                e.setID(Integer.parseInt((String) res.getElement(r, "bikeID")));
+                e.setTypeID(Integer.parseInt((String)res.getElement(r,"bikeType")));
+                e.setTypeName((String)res.getElement(r,"bikeName"));
+                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
+                e.setLocation(loc);
+                e.setStatus((String)res.getElement(r,"bikeStatus"));
+                e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
+                e.setEquipmentType("Bike");
+                equipment.add(e);
+            }
+        }
+
+        return equipment;
+    }
+
+    /**
+     * Adds a new bike with the specified location to the database
+     * @param e Equipment object to be added
+     * @throws InsertFailedException if failed to be added to the database
+     * Scope: Package-private (No modifier)
+     */
+    static void addBike(Equipment e) throws InsertFailedException, EmptyDatasetException {
+        if(e.getEquipmentType().equals("Bike")) {
+            Query q = new Query("create", "addBike", "bike_type=" + e.getTypeID() +
+                    "&location_id=" + e.getLocationID() +
+                    "&status=" + e.getStatus());
+
+            if (q.insertQuery()) {
+                //success
+            } else {
+                throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            }
+        } else {
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+        }
+    }
+
+    /**
+     * Updates the bike in the database
+     * @param e Equipment class to update in the database
+     * @throws InsertFailedException if failed to update
+     * Scope: Package-private (No modifier)
+     */
+    static void updateBike(Equipment e) throws InsertFailedException {
+        if(e.getEquipmentType().equals("Bike")) {
+            Query q = new Query("update", "updateBike", "bike_type=" + e.getTypeID() +
+                    "&location_id=" + e.getLocationID() +
+                    "&status=" + e.getStatus() +
+                    "&equipment_id=" + e.getID());
+
+            if (!q.insertQuery()) {
+                throw new InsertFailedException("Failed to change getEquipment " + e.getID());
+            }
+        } else {
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+        }
+    }
+
+    /**
+     * Deletes the selected getEquipment from the database
+     * @param e Equipment object to delete
+     * @throws InsertFailedException if failed to delete
+     */
+    static void deleteBike(Equipment e) throws InsertFailedException {
+        if(e.getEquipmentType().equals("Bike")) {
+            Query q = new Query("delete", "deleteBike", "bike_id=" + e.getID());
+
+            if (!q.insertQuery()) {
+                throw new InsertFailedException("Deleting getEquipment " + e.getID() + " failed." +
+                        "\n" +
+                        "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
+                        "\nWait for rental to complete, or mark rental as complete." +
+                        "\nCannot remove until solved.");
+            }
+        } else {
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+        }
+    }
+
+
+    /**
+     * Return all the getEquipment data from the database with the given query
      * @param managerLoc returns the dataset based on the managers location, null if operator requesting
      * @return list of Equipment objects
+     * @throws EmptyDatasetException if empty
+     * Scope: Package-private (No modifier)
      */
-    protected static ObservableList<Equipment> equipment(Location managerLoc, String searchParameters) throws EmptyDatasetException {
+    static ObservableList<Equipment> getEquipment(Location managerLoc, String searchParameters) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
@@ -210,7 +331,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
+            throw new EmptyDatasetException("Empty Dataset: No getEquipment to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
@@ -221,6 +342,7 @@ public class DataFetcher {
                 e.setLocation(loc);
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
+                e.setEquipmentType("Equipment");
                 equipment.add(e);
             }
         }
@@ -230,62 +352,73 @@ public class DataFetcher {
 
 
     /**
-     * Adds a new piece of equipment to the selected location
+     * Adds a new equipment with the specified location to the database
      * @param e Equipment object to be added
      * @throws InsertFailedException if failed to be added to the database
+     * Scope: Package-private (No modifier)
      */
-    protected static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
-        Query q = new Query("create", "addEquipment", "equipment_type=" + e.getTypeID() +
-                "&location_id=" + e.getLocationID() +
-                "&status=" + e.getStatus());
+    static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
+        if(e.getEquipmentType().equals("Equipment")) {
+            Query q = new Query("create", "addEquipment", "equipment_type=" + e.getTypeID() +
+                    "&location_id=" + e.getLocationID() +
+                    "&status=" + e.getStatus());
 
-        if(q.insertQuery()) {
-            //success
-        } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+            if (q.insertQuery()) {
+                //success
+            } else {
+                throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            }
         }
-
     }
 
     /**
-     * Updates the equipment in the database
+     * Updates the getEquipment in the database
      * @param e Equipment class to update in the database
      * @throws InsertFailedException if failed to update
+     * Scope: Package-private (No modifier)
      */
-    protected static void updateEquipment(Equipment e) throws InsertFailedException {
-        Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
-                "&location_id=" + e.getLocationID() +
-                "&status=" + e.getStatus() +
-                "&equipment_id=" + e.getID());
+    static void updateEquipment(Equipment e) throws InsertFailedException {
+        if(e.getEquipmentType().equals("Equipment")) {
+            Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
+                    "&location_id=" + e.getLocationID() +
+                    "&status=" + e.getStatus() +
+                    "&equipment_id=" + e.getID());
 
-        if(!q.insertQuery()) {
-            throw new InsertFailedException("Failed to change equipment " + e.getID());
+            if (!q.insertQuery()) {
+                throw new InsertFailedException("Failed to change getEquipment " + e.getID());
+            }
+        } else {
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
         }
-
     }
 
     /**
-     * Deletes the selected equipment from the database
+     * Deletes the selected getEquipment from the database
      * @param e Equipment object to delete
      * @throws InsertFailedException if failed to delete
      */
-    protected static void deleteEquipment(Equipment e) throws InsertFailedException {
-        Query q = new Query("delete", "deleteEquipment", "equipment_id=" + e.getID());
+    static void deleteEquipment(Equipment e) throws InsertFailedException {
+        if(e.getEquipmentType().equals("Equipment")) {
+            Query q = new Query("delete", "deleteEquipment", "equipment_id=" + e.getID());
 
-        if(!q.insertQuery()) {
-            throw new InsertFailedException("Deleting equipment " + e.getID() + " failed." +
-                    "\n" +
-                    "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
-                    "\nWait for rental to complete, or mark rental as complete." +
-                    "\nCannot remove until solved.");
+            if (!q.insertQuery()) {
+                throw new InsertFailedException("Deleting getEquipment " + e.getID() + " failed." +
+                        "\n" +
+                        "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
+                        "\nWait for rental to complete, or mark rental as complete." +
+                        "\nCannot remove until solved.");
+            }
+        } else {
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
         }
     }
 
     /**
-     * Return all of the locations and its data that is in the database
+     * Return all of the getLocations and its data that is in the database
      * @return the list of Location objects
+     * Scope: Package-private (No modifier)
      */
-    protected static ObservableList<Location> locations(String searchParameters) throws EmptyDatasetException{
+    static ObservableList<Location> getLocations(String searchParameters) throws EmptyDatasetException{
         ObservableList<Location> locations = FXCollections.observableArrayList();
 
 
@@ -294,7 +427,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: Could not list of locations", false);
+            throw new EmptyDatasetException("Empty Dataset: Could not list of getLocations", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
@@ -309,8 +442,9 @@ public class DataFetcher {
      * @param locationName name of the new location
      * @return true if succeed, false if failed
      * @throws InsertFailedException if failure and shows message to user
+     * Scope: Package-private (No modifier)
      */
-    protected static boolean addLocation(String locationName) throws InsertFailedException {
+    static boolean addLocation(String locationName) throws InsertFailedException {
         Query q = new Query("create", "addLocation", "location_name=" + locationName);
 
         if(q.insertQuery()) {
@@ -325,8 +459,9 @@ public class DataFetcher {
      * @param newLoc location object containing the new name of the location
      * @return true if succeed, false if failed
      * @throws InsertFailedException if failure and shows message to user
+     * Scope: Package-private (No modifier)
      */
-    protected static boolean editLocation(Location newLoc) throws InsertFailedException {
+    static boolean editLocation(Location newLoc) throws InsertFailedException {
         Query q = new Query("update", "updateLocation", "location_name=" + newLoc.getName() + "&location_id=" + newLoc.getLocationID());
 
         if(q.insertQuery()) {
@@ -342,7 +477,7 @@ public class DataFetcher {
      * @return true if succeed
      * @throws InsertFailedException when failed, gives user a message
      */
-    protected static boolean deleteLocation(Location loc) throws InsertFailedException {
+    static boolean deleteLocation(Location loc) throws InsertFailedException {
         Query q = new Query("delete", "deleteLocation", "location_id=" + loc.getLocationID());
 
         if(q.insertQuery()) {
@@ -370,11 +505,12 @@ public class DataFetcher {
     /**
      * Returns a HashMap of the values needed for the dropdown values in the
      * add / edit forms
-     * @param dropdown "accountTypes" or "locations" are acceptable inputs
+     * @param dropdown "accountTypes" or "getLocations" are acceptable inputs
      * @return HashMap of the names of each dropdown values and their corresponding
      * ID numbers in the database (ID, Name)
+     * Scope: Package-private (No modifier)
      */
-    protected static HashMap<String, String> getDropdownValues(String dropdown) {
+    static HashMap<String, String> getDropdownValues(String dropdown) {
 
 
         HashMap<String, String> accountTypes = new HashMap<>();
@@ -390,7 +526,7 @@ public class DataFetcher {
                 id = "accountTypeID";
                 name = "type";
                 break;
-            case "locations":
+            case "getLocations":
                 q.updateQuery("read", "fetchLocations", "");
                 id = "locationID";
                 name = "name";

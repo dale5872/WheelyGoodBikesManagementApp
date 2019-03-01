@@ -3,7 +3,7 @@ import DatabaseConnector.HTTPConnection;
 public class HTTPRequest {
 
     public static void main(String[] args) {
-        //send a request for all the locations
+        //send a request for all the getLocations
         System.out.println("------- Test Read Query ------ \n");
         String url = "http://www2.macs.hw.ac.uk/~db47/WheelyGoodBikes/DatabaseLayer/read/fetchLocations.php";
         String parameters = ""; //no parameters

@@ -23,7 +23,7 @@ public class EditAccountController extends AccountPopupController{
     @FXML private ComboBox workLocationCombo;
 
     /**
-     * Adds the account types and locations to the dropdown boxes
+     * Adds the account types and getLocations to the dropdown boxes
      * @param accountTypes
      * @param locations
      */

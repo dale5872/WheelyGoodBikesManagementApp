@@ -3,7 +3,7 @@ import DatabaseConnector.Query;
 public class QueryRequest {
 
     public static void main(String[] args) {
-        //send a request for all the locations
+        //send a request for all the getLocations
         System.out.println("------- Test Read Query ------ \n");
         String parameters = ""; //no parameters
 

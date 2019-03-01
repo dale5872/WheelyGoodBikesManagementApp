@@ -139,7 +139,7 @@ public class ManagerSystemController extends Controller{
     }
 
     private void setDropdownOptions(){
-        //Set the equipment filter dropdown
+        //Set the getEquipment filter dropdown
         HashMap<String, String> equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
         ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
         equipmentTypeOptions.add(0, "All");
@@ -153,7 +153,7 @@ public class ManagerSystemController extends Controller{
     }
 
     /**
-     * Loads in all the equipment in the current managers location
+     * Loads in all the getEquipment in the current managers location
      * @param e ActionEvent object
      */
     @FXML
@@ -161,7 +161,7 @@ public class ManagerSystemController extends Controller{
         try {
             String searchParameters = equipmentSearch.getText();
 
-            ObservableList<Equipment> equipment = DataFetcher.equipment(this.employee.getLocation(), "search=" + searchParameters);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + searchParameters);
 
             equipmentID.setCellValueFactory(
                     new PropertyValueFactory<Equipment, String>("ID")

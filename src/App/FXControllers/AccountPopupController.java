@@ -36,7 +36,7 @@ public class AccountPopupController extends Controller{
     }
 
     /**
-     * Adds the account types and locations to given dropdown boxes
+     * Adds the account types and getLocations to given dropdown boxes
      * @param accountTypes
      * @param locations
      */
