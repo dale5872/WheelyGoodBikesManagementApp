@@ -54,7 +54,9 @@ public class OperatorSystemController extends Controller{
     @FXML private TableView accountsTable;
 
     //Filter and search
-    @FXML private ComboBox accountsFilter;
+    @FXML private ComboBox accountsView;
+    @FXML private ComboBox employeesFilter;
+    @FXML private Label searchUsersWarning;
     @FXML private TextField accountsSearch;
 
     //Edit and delete buttons
@@ -121,29 +123,12 @@ public class OperatorSystemController extends Controller{
 
     @FXML private HBox confirmContactContainer;
 
-
     //fields
     private static EmployeeAccount employee;
     private static HashMap<String, String> accountTypes;
     private static HashMap<String, String> locations;
     private static HashMap<String, String> equipmentTypes;
     private static HashMap<String, String> bike_type;
-
-    @SuppressWarnings("Duplicates")
-    public void setEmployee(EmployeeAccount e) {
-        this.employee = e;
-
-        //set account labels
-        userAccountID.setText("" + employee.getEmployeeID());
-        userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
-        userAccountEmail.setText(employee.getEmail());
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-        userAccountType.setText(employee.getAccType());
-        userAccountLocation.setText(employee.getLocationName());
-    }
 
     /**
      * The initialise method is called when the form first loads
@@ -168,16 +153,9 @@ public class OperatorSystemController extends Controller{
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
         //Load in data for adding / editing accounts
-        try {
-            loadAccounts(null);
-            loadEquipment(null);
-            loadLocations(null);
-        } catch (InvalidParametersException e) {
-            //Some real issue here...
-            ShowMessageBox messageBox = new ShowMessageBox();
-            messageBox.show("FATAL ERROR HAS OCCURED. ERROR CODE: OSC01");
-            System.exit(100);
-        }
+        loadEmployeeAccounts("");
+        loadEquipment(null);
+        loadLocations(null);
 
         //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
@@ -186,6 +164,22 @@ public class OperatorSystemController extends Controller{
         //   bike_type = DataFetcher.getDropdownValues("bikeTypes");
 
         setDropdownOptions();
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void setEmployee(EmployeeAccount e) {
+        this.employee = e;
+
+        //set account labels
+        userAccountID.setText("" + employee.getEmployeeID());
+        userAccountUsername.setText(employee.getUsername());
+        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
+        userAccountEmail.setText(employee.getEmail());
+        userAccountEmailTextbox.setText(employee.getEmail());
+        userAccountPhone.setText(employee.getPhoneNumber());
+        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
+        userAccountType.setText(employee.getAccType());
+        userAccountLocation.setText(employee.getLocationName());
     }
 
     /**
@@ -203,85 +197,112 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Finds the parameters selected by the user and loads the data
-     * based on those parameters. Parameters are selected through
-     * a dropdown box and a search box
-     * @param e ActionEvent object
-     * @throws InvalidParametersException if no accounts to load
-     *
-     * BODY: 'Accounts' tab can be used for both Employees and searching user accounts
+     * Handles switching between "Users" and "Employees" on accounts table
+     * Employee-only columns are shown or hidden, then table is updated according to options chosen
      */
     @FXML
-    protected void loadAccounts(Event e) throws InvalidParametersException{
-        String params = "";
-        String searchField = accountsSearch.getText();
+    protected void changeAccountsView(){
+        boolean showingEmployees = accountsView.getSelectionModel().getSelectedItem().equals("Employees");
+        employeeInfoVisible(showingEmployees);
+        filterAndSearchAccounts();
+    }
 
-        if(e != null) {
-            //the call is not from a user event, but from internal code thus ignore
-            String selectedItem = (String) accountsFilter.getSelectionModel().getSelectedItem();
-            switch (selectedItem) {
-                case "All Employees":
-                    if(!searchField.equals("")) {
-                        params = "search=" + searchField;
+    /**
+     * If showing employees, show the employees filter and columns, hide the "Search to view users" warning
+     * If showing users, hide the employees filter and columns, show the "Search to view users" warning
+     * @param showingEmployees
+     */
+    private void employeeInfoVisible(boolean showingEmployees){
+        if(showingEmployees){
+            employeesFilter.setVisible(true);
+            searchUsersWarning.setVisible(false);
+
+            accountsEmail.setVisible(true);
+            accountsPhoneNumber.setVisible(true);
+            accountsAccountType.setVisible(true);
+            accountsLocation.setVisible(true);
+        }else{ //Showing users
+            employeesFilter.setVisible(false);
+            searchUsersWarning.setVisible(true);
+
+            accountsEmail.setVisible(false);
+            accountsPhoneNumber.setVisible(false);
+            accountsAccountType.setVisible(false);
+            accountsLocation.setVisible(false);
+        }
+    }
+
+    /**
+     * Gets the filters set or search terms entered by the user displays the appropriate data in the accounts table
+     */
+    @FXML
+    protected void filterAndSearchAccounts(){
+        accountsTable.getItems().clear(); //Clear all previous results
+        setEditDeleteAccountButtons();
+
+        String params;
+        String searchTerm = accountsSearch.getText();
+        boolean showingEmployees = accountsView.getSelectionModel().getSelectedItem().equals("Employees");
+
+        if(showingEmployees){
+            String filter = (String) employeesFilter.getSelectionModel().getSelectedItem();
+            switch(filter){
+                case "All":
+                    if(searchTerm.equals("")){ //If no search term has been entered, show all
+                        loadEmployeeAccounts("");
+                    }else{
+                        params = "search=" + searchTerm;
+                        loadEmployeeAccounts(params);
                     }
                     break;
                 case "Managers":
-                    if(!searchField.equals("")) {
-                        params = "account_type=Manager&search=" + searchField;
-                        break;
-                    }
                     params = "account_type=Manager";
+
+                    if (!searchTerm.equals("")) {
+                        params += "&search=" + searchTerm;
+                    }
+
+                    loadEmployeeAccounts(params);
                     break;
                 case "Operators":
-                    if(!searchField.equals("")) {
-                        params = "account_type=Operator&search=" + searchField;
-                        break;
-                    }
                     params = "account_type=Operator";
-                    break;
-                case "Users":
-                    if(!searchField.equals("")) {
-                        loadUserAccounts("search=" + searchField);
+
+                    if (!searchTerm.equals("")) {
+                        params += "&search=" + searchTerm;
                     }
-                    return;
+
+                    loadEmployeeAccounts(params);
+                    break;
                 default:
-                    throw new InvalidParametersException("One parameter must be selected!");
+                    break;
+            }
+        }else{ //Showing users
+            if(!searchTerm.equals("")){
+                loadUserAccounts("search=" + searchTerm);
             }
         }
+    }
 
-
-        try {
+    /**
+     * Fetches employee accounts from the database using given parameters, and displays them on the accounts table
+     * Pass blank parameters to show all
+     * @param params
+     */
+    protected void loadEmployeeAccounts(String params){
+        try{
             ObservableList<EmployeeAccount> accounts = DataFetcher.getEmployeeAccounts(params);
 
-            if (accounts == null) {
+            if(accounts == null){
                 accountsTable.getItems().clear();
-            } else {
-
-                accountsID.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("employeeID")
-                );
-
-                accountsUsername.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("username")
-                );
-                accountsFirstName.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("firstName")
-                );
-                accountsLastName.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("lastName")
-                );
-                accountsEmail.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("email")
-                );
-                accountsPhoneNumber.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("phoneNumber")
-                );
-                accountsAccountType.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("accType")
-                );
-                accountsLocation.setCellValueFactory(
-                        new PropertyValueFactory<EmployeeAccount, String>("LocationName")
-                );
+            }else{
+                accountsID.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("employeeID"));
+                accountsUsername.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("username"));
+                accountsFirstName.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("firstName"));
+                accountsLastName.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("lastName"));
+                accountsEmail.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("email"));
+                accountsPhoneNumber.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("phoneNumber"));
+                accountsAccountType.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("accType"));
+                accountsLocation.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("LocationName"));
 
                 accountsTable.setItems(accounts);
             }
@@ -290,49 +311,29 @@ public class OperatorSystemController extends Controller{
         }
     }
 
-
     /**
-     * Fetches users data based on the search terms and loads them in tha table
-     * @param searchField the string of search terms
+     * Fetches user accounts from the database using given parameters, and displays them on the accounts table
+     * Pass blank parameters to show all
+     * @param params the string of search terms
      */
     @FXML
-    protected void loadUserAccounts(String searchField) {
-        try {
-            ObservableList<Account> accounts = DataFetcher.getUserAccounts(searchField);
+    protected void loadUserAccounts(String params) {
+        try{
+            ObservableList<Account> accounts = DataFetcher.getUserAccounts(params);
 
-
-            if (accounts == null) {
+            if(accounts == null){
                 accountsTable.getItems().clear();
-            } else {
-
-                accountsID.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("userID")
-                );
-                accountsUsername.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("username")
-                );
-                accountsFirstName.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("firstName")
-                );
-                accountsLastName.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("lastName")
-                );
-                accountsEmail.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("email")
-                );
-                accountsPhoneNumber.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("phoneNumber")
-                );
-                accountsAccountType.setCellValueFactory(
-                        new PropertyValueFactory<Account, String>("accType")
-                );
+            }else{
+                accountsID.setCellValueFactory(new PropertyValueFactory<Account, String>("userID"));
+                accountsUsername.setCellValueFactory(new PropertyValueFactory<Account, String>("username"));
+                accountsFirstName.setCellValueFactory(new PropertyValueFactory<Account, String>("firstName"));
+                accountsLastName.setCellValueFactory(new PropertyValueFactory<Account, String>("lastName"));
 
                 accountsTable.setItems(accounts);
             }
-        } catch (Exception exc) {
+        }catch (Exception exc){
             return;
         }
-
     }
 
     /**
@@ -377,17 +378,6 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     *  Prepares an AddAccountController
-     *  Passes the parent controller, sets the on close action, and sets the dropdown values
-     * @param controller
-     */
-    private void prepareAddEditController(AddAccountController controller){
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setDropdownValues(accountTypes, locations);
-    }
-
-    /**
      * Add a new account
      * @param account
      * @param password
@@ -398,7 +388,7 @@ public class OperatorSystemController extends Controller{
             DataFetcher.addAccount(account, password, accountType);
 
             //Update table
-            accountsTable.getItems().add(account);
+            filterAndSearchAccounts();
         }catch(Exception ex){
             return;
         }
@@ -415,9 +405,7 @@ public class OperatorSystemController extends Controller{
             DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
             //Update table
-            int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-            accountsTable.getItems().remove(rowIndex);
-            accountsTable.getItems().add(rowIndex, newAccount);
+            filterAndSearchAccounts();
         }catch(InsertFailedException ex){
             return;
         }catch(Exception ex){
@@ -456,11 +444,14 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * When a user clicks on a row in the table, the edit and delete buttons are enabled
+     * When a user clicks on a row in the employees table, the edit and delete buttons are enabled
      */
     @FXML
-    protected void setEditDeleteAccountButtons(MouseEvent e) {
-        if(accountsTable.getSelectionModel().getSelectedIndex() >= 0){ //If something in the table is selected
+    protected void setEditDeleteAccountButtons() {
+        boolean accountsViewEmployees = accountsView.getSelectionModel().getSelectedItem().equals("Employees"); //If the table is set to show employees
+        boolean itemSelected = (accountsTable.getSelectionModel().getSelectedIndex() >= 0); //If an item is selected
+
+        if(accountsViewEmployees && itemSelected){ //If something in the table is selected
             accountsEditAccount.setDisable(false);
             accountsDeleteAccount.setDisable(false);
         }else{ //If nothing in the table is selected
@@ -738,10 +729,15 @@ public class OperatorSystemController extends Controller{
         ObservableList<String> equipmentStatusOptions = FXCollections.observableArrayList("Available", "Booked", "Damaged");
         editEquipStatus.setItems(equipmentStatusOptions);
 
-        //Set the accounts filter
-        ObservableList<String> accountsFilterOptions = FXCollections.observableArrayList("All Employees", "Managers", "Operators", "Users");
-        accountsFilter.setItems(accountsFilterOptions);
-        accountsFilter.getSelectionModel().selectFirst();
+        //Set the accounts table view option
+        ObservableList<String> accountsTableViewOptions = FXCollections.observableArrayList("Employees", "Users");
+        accountsView.setItems(accountsTableViewOptions);
+        accountsView.getSelectionModel().selectFirst();
+
+        //Set the accounts table view option
+        ObservableList<String> employeesFilterOptions = FXCollections.observableArrayList("All", "Managers", "Operators");
+        employeesFilter.setItems(employeesFilterOptions);
+        employeesFilter.getSelectionModel().selectFirst();
     }
 
     /**
