@@ -12,6 +12,14 @@
          <children>
                <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                    <children>
+                       <Label fx:id="allFieldsWarning" text="All fields are required" textFill="WHITE">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                           <VBox.margin>
+                               <Insets />
+                           </VBox.margin>
+                       </Label>
                   <VBox>
                      <children>
                         <Label text="Username" textFill="WHITE">

@@ -287,7 +287,7 @@ public class DataFetcher {
     }
 
     /**
-     * Deletes the selected getEquipment from the database
+     * Deletes the selected equipment from the database
      * @param e Equipment object to delete
      * @throws InsertFailedException if failed to delete
      */
@@ -309,7 +309,7 @@ public class DataFetcher {
 
 
     /**
-     * Return all the getEquipment data from the database with the given query
+     * Return all the equipment data from the database with the given query
      * @param managerLoc returns the dataset based on the managers location, null if operator requesting
      * @return list of Equipment objects
      * @throws EmptyDatasetException if empty
@@ -372,7 +372,7 @@ public class DataFetcher {
     }
 
     /**
-     * Updates the getEquipment in the database
+     * Updates the equipment in the database
      * @param e Equipment class to update in the database
      * @throws InsertFailedException if failed to update
      * Scope: Package-private (No modifier)
@@ -393,7 +393,7 @@ public class DataFetcher {
     }
 
     /**
-     * Deletes the selected getEquipment from the database
+     * Deletes the selected equipment from the database
      * @param e Equipment object to delete
      * @throws InsertFailedException if failed to delete
      */
@@ -414,7 +414,7 @@ public class DataFetcher {
     }
 
     /**
-     * Return all of the getLocations and its data that is in the database
+     * Return all of the locations and its data that is in the database
      * @return the list of Location objects
      * Scope: Package-private (No modifier)
      */
@@ -505,7 +505,7 @@ public class DataFetcher {
     /**
      * Returns a HashMap of the values needed for the dropdown values in the
      * add / edit forms
-     * @param dropdown "accountTypes" or "getLocations" are acceptable inputs
+     * @param dropdown "accountTypes" or "locations" are acceptable inputs
      * @return HashMap of the names of each dropdown values and their corresponding
      * ID numbers in the database (ID, Name)
      * Scope: Package-private (No modifier)

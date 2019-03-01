@@ -32,7 +32,7 @@ public class AddAccountController extends AccountPopupController{
     @FXML private PasswordField reenterPassword;
 
     /**
-     * Adds the account types and getLocations to the dropdown boxes
+     * Adds the account types and locations to the dropdown boxes
      * @param accountTypes
      * @param locations
      */
@@ -92,7 +92,7 @@ public class AddAccountController extends AccountPopupController{
     }
 
     /**
-     * Checks that no fields are blank, and that the passwords match
+     * Checks that no fields are blank and that the passwords match, showing/highlighting warning labels if not
      * @return
      */
     private boolean validateInput(){
@@ -121,28 +121,47 @@ public class AddAccountController extends AccountPopupController{
      * Returns TRUE if there are blank fields, FALSE if there are none
      * @return
      */
+    @SuppressWarnings("Duplicates")
     private boolean checkForBlankFields(){
         if(username.getText().equals("")){
             return true;
-        }else if(firstName.getText().equals("")){
-            return true;
-        }else if(lastName.getText().equals("")){
-            return true;
-        }else if(email.getText().equals("")){
-            return true;
-        }else if(phoneNumber.getText().equals("")){
-            return true;
-        }else if(accountTypeCombo.getSelectionModel().getSelectedIndex() < 0){
-            return true;
-        }else if(workLocationCombo.getSelectionModel().getSelectedIndex() < 0){
-            return true;
-        }else if(password.getText().equals("")){
-            return true;
-        }else if(reenterPassword.getText().equals("")){
-            return true;
-        }else{
-            return false;
         }
+
+        if(firstName.getText().equals("")){
+            return true;
+        }
+
+        if(lastName.getText().equals("")){
+            return true;
+        }
+
+        if(email.getText().equals("")){
+            return true;
+        }
+
+        if(phoneNumber.getText().equals("")){
+            return true;
+        }
+
+        if(accountTypeCombo.getSelectionModel().getSelectedIndex() < 0){
+            return true;
+        }
+
+        if(!accountTypeCombo.getValue().equals("User")) { //Only need to check this if the account is not a user account
+            if (workLocationCombo.getSelectionModel().getSelectedIndex() < 0) {
+                return true;
+            }
+        }
+
+        if(password.getText().equals("")){
+            return true;
+        }
+
+        if(reenterPassword.getText().equals("")){
+            return true;
+        }
+
+        return false;
     }
 
     /**

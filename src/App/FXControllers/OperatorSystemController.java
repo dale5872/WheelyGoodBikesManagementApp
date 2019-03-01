@@ -31,13 +31,13 @@ public class OperatorSystemController extends Controller{
 
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
-    @FXML private ToggleButton locationsTabButton; //Gets getLocations yellow tab button object
+    @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button
     private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private AnchorPane accountsTab; //Gets the accounts tab object
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
-    @FXML private AnchorPane locationsTab; //Gets the getLocations tab object
+    @FXML private AnchorPane locationsTab; //Gets the locations tab object
     @FXML private AnchorPane userTab; //Gets the user's account tab object
     private List<AnchorPane> tabs; //List to store all tabs;
 
@@ -71,11 +71,11 @@ public class OperatorSystemController extends Controller{
     @FXML private TableColumn equipmentStatus;
     @FXML private TableView equipmentTable;
 
-    //Add getEquipment
+    //Add equipment
     @FXML private ComboBox newEquipLocation;
     @FXML private ComboBox newEquipType;
 
-    //Edit getEquipment
+    //Edit equipment
     @FXML private VBox editEquipmentVBox;
     @FXML private ComboBox editEquipLocation;
     @FXML private ComboBox editEquipType;
@@ -179,7 +179,7 @@ public class OperatorSystemController extends Controller{
             System.exit(100);
         }
 
-        //Load in account types, getLocations and getEquipment types
+        //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("getLocations");
         equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
@@ -470,7 +470,7 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Loads data from the SQL database into the getEquipment table
+     * Loads data from the SQL database into the equipment table
      * @param e ActionEvent object
      */
     @FXML
@@ -518,7 +518,7 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Adds a new piece of getEquipment to the database
+     * Adds a new piece of equipment to the database
      * @param e ActionEvent object
      */
     @FXML
@@ -546,7 +546,7 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Adds the information to the edit box for editing getEquipment
+     * Adds the information to the edit box for editing equipment
      * @param e MouseEvent object
      */
     @FXML
@@ -569,7 +569,7 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Update the selected getEquipment with the selected parameters
+     * Update the selected equipment with the selected parameters
      * @param e ActionEvent object
      */
     @FXML
@@ -654,13 +654,13 @@ public class OperatorSystemController extends Controller{
             return;
         }
 
-        //reload getLocations as only a few so wont take long to execute
+        //reload locations as only a few so wont take long to execute
         loadLocations(null);
 
     }
 
     /**
-     * Edits the selected getLocations name
+     * Edits the selected locations name
      * @param e ActionEvent object
      */
     @FXML
@@ -700,7 +700,7 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Deletes the selected location and reloads the getLocations
+     * Deletes the selected location and reloads the locations
      * @param e ActionEvent object
      */
     @FXML
@@ -724,17 +724,17 @@ public class OperatorSystemController extends Controller{
         newEquipLocation.setItems(locationOptions);
         editEquipLocation.setItems(locationOptions);
 
-        //Set the getEquipment type dropdowns
+        //Set the equipment type dropdowns
         ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
         newEquipType.setItems(equipmentTypeOptions);
         editEquipType.setItems(equipmentTypeOptions);
 
-        //Set the getEquipment filter dropdown
+        //Set the equipment filter dropdown
         equipmentTypeOptions.add(0, "All");
         equipmentFilter.setItems(equipmentTypeOptions);
         equipmentFilter.getSelectionModel().selectFirst();
 
-        //Set the getEquipment status dropdown
+        //Set the equipment status dropdown
         ObservableList<String> equipmentStatusOptions = FXCollections.observableArrayList("Available", "Booked", "Damaged");
         editEquipStatus.setItems(equipmentStatusOptions);
 

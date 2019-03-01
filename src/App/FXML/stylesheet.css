@@ -81,5 +81,6 @@
 }
 
 .warningLabel{
-	-fx-text-fill: #ff7a00;
+	-fx-text-fill: #FFFF00;
+	-fx-font-weight: bold;
 }

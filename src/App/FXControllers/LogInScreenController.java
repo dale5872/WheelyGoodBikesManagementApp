@@ -68,6 +68,10 @@ public class LogInScreenController extends Controller{
         String password = passwordFieldHidden.getText();
 
         try {
+            /**
+             * TODO: Bug when incorrect credentials are entered
+             * BODY: Creating activeAccount throws an uncaught NullPointerException
+             */
             EmployeeAccount activeAccount = Authenticate.authorize(username, password);
             createAndShowMainWindow(activeAccount);
         } catch (LoginFailedException e) {
