@@ -2,6 +2,7 @@ package App;
 
 import App.FXControllers.Controller;
 
+import App.FXControllers.FatalErrorException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ public class JavaFXLoader {
      * @param title The title of the window
      * @param maximised Whether the window should be maximised
      */
-    public void loadNewFXWindow(String filename, String title, boolean maximised){
+    public void loadNewFXWindow(String filename, String title, boolean maximised) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/" + filename + ".fxml"));
             Parent root = loader.load();
@@ -31,13 +32,12 @@ public class JavaFXLoader {
             this.controller = loader.getController();
             this.controller.setStage(stage);
         }catch(Exception ex){
-            /**
-             * TODO: Proper error handling for when FXML files can't be found/loaded
-             * BODY: Critical error
-             */
-            System.out.print(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
+            //We know a messagebox exists, thus we can still use that by throwing a fatal error exception
+            try {
+                throw new FatalErrorException("Could not load " + filename + "controller.", ex);
+            } catch (FatalErrorException e) {
+                //program exits anyway
+            }
         }
     }
 
@@ -48,7 +48,7 @@ public class JavaFXLoader {
      * @param title The title of the window
      * @param maximised Whether the window should be maximised
      */
-    public void loadNewFXWindow(Stage stage, String filename, String title, boolean maximised){
+    public void loadNewFXWindow(Stage stage, String filename, String title, boolean maximised) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/" + filename + ".fxml"));
             Parent root = loader.load();
@@ -59,13 +59,12 @@ public class JavaFXLoader {
             this.controller = loader.getController();
             this.controller.setStage(stage);
         }catch(Exception ex){
-            /**
-             * TODO: Proper error handling for when FXML files can't be found/loaded
-             * BODY: Critical error
-             */
-            System.out.print(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
+            //We know a messagebox exists, thus we can still use that by throwing a fatal error exception
+            try {
+                throw new FatalErrorException("Could not load " + filename + "controller.", ex);
+            } catch (FatalErrorException e) {
+                //program exits anyway
+            }
         }
     }
 
