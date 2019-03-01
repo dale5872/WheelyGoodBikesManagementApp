@@ -79,3 +79,7 @@
 .contactBox{
 	-fx-border-color: white;
 }
+
+.warningLabel{
+	-fx-text-fill: #ff7a00;
+}

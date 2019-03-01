@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -8,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="main-background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.LogInScreenController">
     <children>
-        <VBox alignment="CENTER" layoutX="90.0" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1">
             <children>
                 <Label alignment="CENTER" text="Wheely Good Bikes" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
                     <VBox.margin>
@@ -71,7 +72,7 @@
                         <Insets />
                     </VBox.margin>
                 </Button>
-                <Label fx:id="incorrectCredentials" text="The username or password is incorrect" textAlignment="CENTER" textFill="#ff7a00" visible="false">
+                <Label fx:id="incorrectCredentials" styleClass="warningLabel" text="The username or password is incorrect" textAlignment="CENTER" visible="false">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
