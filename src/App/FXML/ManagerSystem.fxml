@@ -9,7 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="main-background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.ManagerSystemController">
+<AnchorPane prefHeight="900.0" prefWidth="1600.0" styleClass="main-background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.ManagerSystemController">
     <children>
         <BorderPane layoutX="290.0" layoutY="207.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
@@ -127,7 +127,8 @@
                                                                 <Font name="System Bold" size="16.0" />
                                                             </font>
                                                         </Label>
-                                                        <ComboBox fx:id="equipmentFilter" prefHeight="30.0" prefWidth="200.0" />
+                                                        <ComboBox fx:id="equipmentView" onAction="#changeEquipmentView" prefHeight="30.0" prefWidth="200.0" />
+                                                        <ComboBox fx:id="equipmentFilter" onAction="#filterAndSearchEquipment" prefHeight="30.0" prefWidth="200.0" />
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
@@ -137,7 +138,7 @@
                                                                 <Font name="System Bold" size="16.0" />
                                                             </font>
                                                         </Label>
-                                                        <TextField fx:id="equipmentSearch" onKeyTyped="#loadEquipment" prefHeight="25.0" prefWidth="250.0">
+                                                        <TextField fx:id="equipmentSearch" onKeyTyped="#filterAndSearchEquipment" prefHeight="25.0" prefWidth="250.0">
                                                             <font>
                                                                 <Font size="14.0" />
                                                             </font>

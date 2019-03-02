@@ -186,6 +186,7 @@ public class OperatorSystemController extends Controller{
     /**
      * Sets the values for the drop down menus
      */
+    @SuppressWarnings("Duplicates")
     private void setDropdownOptions() {
         //Set the location dropdowns
         ObservableList<String> locationOptions = OptionsListCreator.createList(locations);

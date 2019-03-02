@@ -7,7 +7,6 @@ import App.JavaFXLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -50,6 +49,8 @@ public class ManagerSystemController extends Controller{
     @FXML private TableColumn equipmentPrice;
     @FXML private TableColumn equipmentStatus;
 
+    //Filter and search
+    @FXML private ComboBox equipmentView;
     @FXML private ComboBox equipmentFilter;
     @FXML private TextField equipmentSearch;
 
@@ -88,28 +89,8 @@ public class ManagerSystemController extends Controller{
 
     private static EmployeeAccount employee;
 
-    public void setEmployee(EmployeeAccount e) {
-        this.employee = e;
-
-        //set account labels
-        userAccountID.setText("" + employee.getEmployeeID());
-        userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
-        userAccountEmail.setText(employee.getEmail());
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-        userAccountType.setText(employee.getAccType());
-        userAccountLocation.setText(employee.getLocationName());
-
-        /**
-         * TODO Manager Automatic Loading
-         * BODY Implement the automatic loading for Manager view with PHP script
-         */
-        /** Run these after employee set */
-        loadEquipment(null);
-
-    }
+    private static HashMap<String, String> equipmentTypes;
+    private static HashMap<String, String> bikeTypes;
 
     /**
      * The initialise method is called when the form first loads
@@ -135,15 +116,46 @@ public class ManagerSystemController extends Controller{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
+        equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
+        bikeTypes = DataFetcher.getDropdownValues("bikeTypes");
+
         setDropdownOptions();
     }
 
+    @SuppressWarnings("Duplicates")
+    public void setEmployee(EmployeeAccount e) {
+        this.employee = e;
+
+        //set account labels
+        userAccountID.setText("" + employee.getEmployeeID());
+        userAccountUsername.setText(employee.getUsername());
+        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
+        userAccountEmail.setText(employee.getEmail());
+        userAccountEmailTextbox.setText(employee.getEmail());
+        userAccountPhone.setText(employee.getPhoneNumber());
+        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
+        userAccountType.setText(employee.getAccType());
+        userAccountLocation.setText(employee.getLocationName());
+
+        /**
+         * TODO Manager Automatic Loading
+         * BODY Implement the automatic loading for Manager view with PHP script
+         */
+        /** Run these after employee set */
+        loadEquipment("");
+    }
+
+    @SuppressWarnings("Duplicates")
     private void setDropdownOptions(){
-        //Set the equipment filter dropdown
-        HashMap<String, String> equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
-        ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
-        equipmentTypeOptions.add(0, "All");
-        equipmentFilter.setItems(equipmentTypeOptions);
+        //Set the equipment view dropdown
+        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Equipment");
+        equipmentView.setItems(equipmentViewOptions);
+        equipmentView.getSelectionModel().selectFirst();
+
+        //Set the equipment filter for bikes (default view option)
+        ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+        equipmentFilterOptions.add(0, "All");
+        equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
 
         //Set the penalties view dropdown
@@ -153,37 +165,101 @@ public class ManagerSystemController extends Controller{
     }
 
     /**
-     * Loads in all the equipment in the current managers location
-     * @param e ActionEvent object
+     * Handles selecting between "Bikes" and "Equipment" in the equipment view dropdown
+     * The bikes types or equipment types (as appropriate) are put in the filter dropdown, along with an "All" option
+     * The table is then updated accordingly
      */
     @FXML
-    protected void loadEquipment(Event e) {
+    @SuppressWarnings("Duplicates")
+    protected void changeEquipmentView(){
+        boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
+        ObservableList<String> equipmentFilterOptions;
+
+        /* Create options list for filter dropdown */
+        if(showingBikes){
+            equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+        }else{ //Showing equipment
+            equipmentFilterOptions = OptionsListCreator.createList(equipmentTypes);
+        }
+
+        /* Add "All" option to list and add list to dropdown */
+        equipmentFilterOptions.add(0, "All");
+        equipmentFilter.setItems(equipmentFilterOptions);
+        equipmentFilter.getSelectionModel().selectFirst();
+
+        filterAndSearchEquipment();
+    }
+
+    /**
+     * Gets the filter that has been set and loads the bikes or equipment into the table accordingly
+     */
+    @FXML
+    @SuppressWarnings("Duplicates")
+    protected void filterAndSearchEquipment(){
+        /*
+         * This method is called by the system every time the items in the combo box are changed.
+         * This causes a NullPointerException to be thrown as no item is selected at that point, so only act if an item is selected.
+         */
+        if(!equipmentFilter.getSelectionModel().isEmpty()){
+            equipmentTable.getItems().clear();
+
+            String params;
+            String selectedItem = (String) equipmentFilter.getSelectionModel().getSelectedItem();
+
+            if(selectedItem.equals("All")){
+                params = "";
+            }else{
+                params = selectedItem;
+            }
+
+            boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
+            if(showingBikes){
+                loadBikes(params);
+            }else{ //Showing equipment
+                loadEquipment(params);
+            }
+        }
+    }
+
+    /**
+     * Loads bikes from the database, given a search parameter, and displays it in the equipment table
+     * @param params Parameters to search by
+     */
+    private void loadBikes(String params) {
         try {
-            String searchParameters = equipmentSearch.getText();
-
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + searchParameters);
-
-            equipmentID.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("ID")
-            );
-            equipmentType.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("TypeName")
-            );
-            equipmentLocation.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("LocationName")
-            );
-            equipmentPrice.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("Price")
-            );
-            equipmentStatus.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("Status")
-            );
-
-            equipmentTable.setItems(equipment);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + params);
+            fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
         }
+    }
 
+    /**
+     * Loads equipment from the database, given a search parameter, and displays it in the equipment table
+     * @param params Parameters to search by
+     */
+    private void loadEquipment(String params) {
+        try {
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + params);
+            fillEquipmentTable(equipment);
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+    }
+
+    /**
+     * Displays a list of bikes/equipment in the equipment table
+     * @param equipment An ObservableList of Equipment objects to display
+     */
+    @SuppressWarnings("Duplicates")
+    private void fillEquipmentTable(ObservableList<Equipment> equipment){
+        equipmentID.setCellValueFactory(new PropertyValueFactory<Equipment, String>("ID"));
+        equipmentType.setCellValueFactory(new PropertyValueFactory<Equipment, String>("TypeName"));
+        equipmentLocation.setCellValueFactory(new PropertyValueFactory<Equipment, String>("LocationName"));
+        equipmentPrice.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Price"));
+        equipmentStatus.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Status"));
+
+        equipmentTable.setItems(equipment);
     }
 
     /**
