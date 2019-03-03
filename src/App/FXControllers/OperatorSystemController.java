@@ -540,20 +540,24 @@ public class OperatorSystemController extends Controller{
             equipmentTable.getItems().clear();
             setEditDeleteEquipmentButtons();
 
-            String params;
+            String typeParam = "type=";
+            String searchParam = "&search=";
             String selectedItem = (String) equipmentFilter.getSelectionModel().getSelectedItem();
 
-            if(selectedItem.equals("All")){
-                params = "";
-            }else{
-                params = selectedItem;
+            //check type
+            if(!selectedItem.equals("All")){
+                typeParam += selectedItem;
             }
+
+            //we need to get search parameter
+            String searchString = equipmentSearch.getText();
+            searchParam += searchString;
 
             boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
             if(showingBikes){
-                loadBikes(params);
+                loadBikes(typeParam + searchParam);
             }else{ //Showing equipment
-                loadEquipment(params);
+                loadEquipment(typeParam + searchParam);
             }
         }
     }
@@ -577,7 +581,7 @@ public class OperatorSystemController extends Controller{
      */
     private void loadEquipment(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, "search=" + params);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, params);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
