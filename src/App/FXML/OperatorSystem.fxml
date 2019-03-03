@@ -174,7 +174,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="bikesTab">
+                  <AnchorPane fx:id="bikesTab" visible="false">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -221,8 +221,8 @@
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                  <children>
-                                    <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#showAddEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                    <Button fx:id="editEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showEditEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
+                                    <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#showAddEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Add..." textOverrun="CLIP" />
+                                    <Button fx:id="editEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showEditEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Edit..." textOverrun="CLIP" />
                                     <Button fx:id="deleteEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
                                        <HBox.margin>
                                           <Insets />
@@ -234,7 +234,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="locationsTab" visible="false">
+                  <AnchorPane fx:id="locationsTab">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -245,7 +245,7 @@
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="locationSearch" onKeyTyped="#loadLocations" prefHeight="25.0" prefWidth="250.0">
+                                    <TextField fx:id="locationSearch" onKeyTyped="#filterAndSearchLocations" prefHeight="25.0" prefWidth="250.0">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -254,7 +254,7 @@
                               </HBox>
                               <HBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TableView fx:id="locationsTable" onMouseClicked="#updateLocationsEditBox" styleClass="table" HBox.hgrow="ALWAYS">
+                                    <TableView fx:id="locationsTable" onMouseClicked="#setEditDeleteLocationButtons" styleClass="table" HBox.hgrow="ALWAYS">
                                        <columns>
                                           <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
                                           <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
@@ -263,82 +263,13 @@
                                           <Insets />
                                        </VBox.margin>
                                     </TableView>
-                                    <VBox layoutX="1275.0" spacing="20.0">
-                                       <children>
-                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Add Location:">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </Label>
-                                                      <TextField fx:id="newLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </TextField>
-                                                      <HBox alignment="CENTER_RIGHT">
-                                                         <children>
-                                                            <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#addLocation" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                   <padding>
-                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                   </padding>
-                                                </VBox>
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                          </AnchorPane>
-                                          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox fx:id="editLocationVBox" disable="true" maxHeight="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label layoutX="14.0" layoutY="14.0" style="-fx-background-color: white;" text="Edit Location:">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </Label>
-                                                      <TextField fx:id="editLocationName" layoutX="14.0" layoutY="39.0" prefHeight="25.0" promptText="Name...">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets bottom="10.0" />
-                                                         </VBox.margin>
-                                                      </TextField>
-                                                      <HBox alignment="CENTER_RIGHT" spacing="10.0">
-                                                         <children>
-                                                            <Button fx:id="deleteLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="green-button" text="Delete" textOverrun="CLIP">
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Button>
-                                                            <Button fx:id="editLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#editLocation" prefWidth="100.0" styleClass="green-button" text="Update" textOverrun="CLIP" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                   <padding>
-                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                   </padding>
-                                                </VBox>
-                                             </children>
-                                          </AnchorPane>
-                                       </children>
-                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#showAddLocationDialog" prefWidth="100.0" styleClass="green-button" text="Add..." textOverrun="CLIP" />
+                                    <Button fx:id="editLocation" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showEditLocationDialog" prefWidth="100.0" styleClass="green-button" text="Edit..." textOverrun="CLIP" />
+                                    <Button fx:id="deleteLocation" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP" />
                                  </children>
                               </HBox>
                            </children>

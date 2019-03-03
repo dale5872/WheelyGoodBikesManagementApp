@@ -88,12 +88,9 @@ public class OperatorSystemController extends Controller{
     @FXML private TableColumn locationsName;
     @FXML private TableView locationsTable;
 
-    //Add Location
-    @FXML private TextField newLocationName;
-
-    //Edit Location
-    @FXML private VBox editLocationVBox;
-    @FXML private TextField editLocationName;
+    //Add, edit and delete buttons
+    @FXML private Button editLocation;
+    @FXML private Button deleteLocation;
 
     //Filter and Search
     @FXML private TextField locationSearch;
@@ -150,7 +147,7 @@ public class OperatorSystemController extends Controller{
         //Load data into tables
         loadEmployeeAccounts("");
         loadBikes("");
-        loadLocations(null);
+        loadLocations("");
 
         //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
@@ -629,6 +626,9 @@ public class OperatorSystemController extends Controller{
         controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
     }
 
+    /**
+     * Creates and shows the dialog for editing new equipment/bikes, also disabling the operator system screen
+     */
     @FXML
     protected void showEditEquipmentDialog(){
         /* Load the popup */
@@ -732,6 +732,7 @@ public class OperatorSystemController extends Controller{
      * When a user clicks on a row in the equipment table, the edit and delete buttons are enabled
      */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void setEditDeleteEquipmentButtons(){
         boolean equipmentSelected = !equipmentTable.getSelectionModel().isEmpty();
 
@@ -745,84 +746,110 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Loads data from the SQL database into the Locations table
-     * @param e ActionEvent object
+     * Gets the search term that has been entered and loads the locations into the table accordingly
      */
     @FXML
-    protected void loadLocations(Event e) {
-        try {
-            String searchParameters = locationSearch.getText();
+    protected void filterAndSearchLocations(){
+        locationsTable.getItems().clear();
+        setEditDeleteLocationButtons();
+        loadLocations(locationSearch.getText());
+    }
 
-            /**
-            if((searchParameters == null || searchParameters.equals("")) && e instanceof KeyEvent) {
-                //empty seatch string, dont query
-                return;
-            }
-            **/
-
-            ObservableList<Location> locations = DataFetcher.getLocations("search=" + searchParameters);
+    /**
+     * Loads data from the SQL database into the Locations table
+     * @param params Search parameters
+     */
+    private void loadLocations(String params){
+        try{
+            ObservableList<Location> locations = DataFetcher.getLocations("search=" + params);
 
             locationsID.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("locationID")
-            );
+                    new PropertyValueFactory<Equipment, String>("locationID"));
+
             locationsName.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("Name")
-            );
+                    new PropertyValueFactory<Equipment, String>("Name"));
 
             locationsTable.setItems(locations);
-        } catch (EmptyDatasetException exc) {
+        }catch(EmptyDatasetException exc){
             return;
         }
+    }
+
+    /**
+     * Creates and shows the dialog for adding a location, also disabling the operator system screen
+     */
+    @FXML
+    protected void showAddLocationDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditLocation", "Add Location", false);
+
+        this.disable();
+
+        AddEditLocationController controller = (AddEditLocationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+    }
+
+    /**
+     * Creates and shows the dialog for editing a location, also disabling the operator system screen
+     */
+    @FXML
+    protected void showEditLocationDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditLocation", "Edit Location", false);
+
+        this.disable();
+
+        AddEditLocationController controller = (AddEditLocationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setLocation(getSelectedLocation());
     }
 
     /**
      * Adds a new location to the database and reloads the table
-     * @param e ActionEvent object
+     * @param name The name of the new location to add
      */
-    @FXML
-    protected void addLocation(ActionEvent e) {
-        String locationName = newLocationName.getText();
+    public void addLocation(String name) {
+        try{
+            DataFetcher.addLocation(name);
 
-        try {
-            DataFetcher.addLocation(locationName);
-        } catch (InsertFailedException exc) {
-            //message box already shows...
+            //Update table
+            filterAndSearchLocations();
+        }catch(InsertFailedException exc){
             return;
         }
-
-        //reload locations as only a few so wont take long to execute
-        loadLocations(null);
-
     }
 
     /**
-     * Edits the selected locations name
-     * @param e ActionEvent object
+     * Updates a location in the database
+     * @param location The updated location
      */
-    @FXML
-    protected void editLocation(ActionEvent e) {
-        Location tmp = getSelectedLocation();
-        tmp.setName(editLocationName.getText());
-        try {
-            DataFetcher.editLocation(tmp);
-        } catch (InsertFailedException exc) {
+    public void editLocation(Location location) {
+        try{
+            DataFetcher.editLocation(location);
+
+            //Update table
+            filterAndSearchLocations();
+        }catch(InsertFailedException exc){
             return;
         }
-
-        //update table
-        loadLocations(null);
     }
 
     /**
-     *
-     * @param e MouseEvent object
+     * Deletes the selected location and reloads the locations table
      */
     @FXML
-    protected void updateLocationsEditBox(MouseEvent e) {
-        //enable the edit box
-        editLocationVBox.setDisable(false);
-        Location tmp = getSelectedLocation();
-        editLocationName.setText(tmp.getName());
+    protected void deleteLocation() {
+        try{
+            DataFetcher.deleteLocation(getSelectedLocation());
+        } catch(InsertFailedException exc){
+            return;
+        }
+
+        filterAndSearchLocations();
     }
 
     /**
@@ -836,18 +863,20 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Deletes the selected location and reloads the locations
-     * @param e ActionEvent object
+     * Enables the edit and delete location buttons if/when a location is selected in the table
      */
     @FXML
-    protected void deleteLocation(ActionEvent e) {
-        try {
-            DataFetcher.deleteLocation(getSelectedLocation());
-        } catch (InsertFailedException exc) {
-            return;
-        }
+    @SuppressWarnings("Duplicates")
+    protected void setEditDeleteLocationButtons(){
+        boolean locationSelected = !locationsTable.getSelectionModel().isEmpty();
 
-        loadLocations(null);
+        if(locationSelected){
+            editLocation.setDisable(false);
+            deleteLocation.setDisable(false);
+        }else{
+            editLocation.setDisable(true);
+            deleteLocation.setDisable(true);
+        }
     }
 
     /**
