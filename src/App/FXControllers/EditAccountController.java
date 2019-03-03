@@ -79,11 +79,9 @@ public class EditAccountController extends AccountPopupController{
             newAccount.setLocation(chosenLocation, locationIndex);
 
             /* Pass newAccount back to parent form */
-            this.parentController.updateAccount(existingAccount, newAccount, accountTypeIndex);
+            super.parentController.updateAccount(existingAccount, newAccount, accountTypeIndex);
 
-            /* Close */
-            this.parentController.enable();
-            this.stage.close();
+            super.close();
         }
     }
 
@@ -91,6 +89,7 @@ public class EditAccountController extends AccountPopupController{
      * Checks that no fields are blank, and highlight warning label if there are
      * @return
      */
+    @SuppressWarnings("Duplicates")
     private boolean validateInput(){
         boolean hasBlankFields = checkForBlankFields();
 
@@ -131,23 +130,14 @@ public class EditAccountController extends AccountPopupController{
             return true;
         }
 
-        if(accountTypeCombo.getSelectionModel().getSelectedIndex() < 0){
+        if(accountTypeCombo.getSelectionModel().isEmpty()){
             return true;
         }
 
-        if(workLocationCombo.getSelectionModel().getSelectedIndex() < 0){
+        if(workLocationCombo.getSelectionModel().isEmpty()){
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Closes the form without making changes
-     */
-    @FXML
-    protected void cancel(){
-        this.parentController.enable();
-        this.stage.close();
     }
 }

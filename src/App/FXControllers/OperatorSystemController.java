@@ -73,20 +73,14 @@ public class OperatorSystemController extends Controller{
     @FXML private TableColumn equipmentStatus;
     @FXML private TableView equipmentTable;
 
-    //Add equipment
-    @FXML private ComboBox newEquipLocation;
-    @FXML private ComboBox newEquipType;
-
-    //Edit equipment
-    @FXML private VBox editEquipmentVBox;
-    @FXML private ComboBox editEquipLocation;
-    @FXML private ComboBox editEquipType;
-    @FXML private ComboBox editEquipStatus;
-
     //Filter and search
     @FXML private ComboBox equipmentView;
     @FXML private ComboBox equipmentFilter;
     @FXML private TextField equipmentSearch;
+
+    //Edit and delete buttons
+    @FXML private Button editEquip;
+    @FXML private Button deleteEquip;
 
     /** Locations Tab **/
     //Table
@@ -188,22 +182,6 @@ public class OperatorSystemController extends Controller{
      */
     @SuppressWarnings("Duplicates")
     private void setDropdownOptions() {
-        //Set the location dropdowns
-        ObservableList<String> locationOptions = OptionsListCreator.createList(locations);
-        newEquipLocation.setItems(locationOptions);
-        editEquipLocation.setItems(locationOptions);
-
-        //Set the equipment type dropdowns
-        ObservableList<String> equipmentTypeOptions = OptionsListCreator.createList(equipmentTypes);
-        newEquipType.setItems(equipmentTypeOptions);
-        editEquipType.setItems(equipmentTypeOptions);
-
-        //Set the equipment status dropdown
-        ObservableList<String> equipmentStatusOptions = FXCollections.observableArrayList("Available", "Booked", "Damaged");
-        editEquipStatus.setItems(equipmentStatusOptions);
-
-
-
         //Set the accounts table view option
         ObservableList<String> accountsTableViewOptions = FXCollections.observableArrayList("Employees", "Users");
         accountsView.setItems(accountsTableViewOptions);
@@ -215,7 +193,7 @@ public class OperatorSystemController extends Controller{
         employeesFilter.getSelectionModel().selectFirst();
 
         //Set the equipment view dropdown
-        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Equipment");
+        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
         equipmentView.setItems(equipmentViewOptions);
         equipmentView.getSelectionModel().selectFirst();
 
@@ -339,14 +317,29 @@ public class OperatorSystemController extends Controller{
             if(accounts == null){
                 accountsTable.getItems().clear();
             }else{
-                accountsID.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("employeeID"));
-                accountsUsername.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("username"));
-                accountsFirstName.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("firstName"));
-                accountsLastName.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("lastName"));
-                accountsEmail.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("email"));
-                accountsPhoneNumber.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("phoneNumber"));
-                accountsAccountType.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("accType"));
-                accountsLocation.setCellValueFactory(new PropertyValueFactory<EmployeeAccount, String>("LocationName"));
+                accountsID.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("employeeID"));
+
+                accountsUsername.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("username"));
+
+                accountsFirstName.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("firstName"));
+
+                accountsLastName.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("lastName"));
+
+                accountsEmail.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("email"));
+
+                accountsPhoneNumber.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("phoneNumber"));
+
+                accountsAccountType.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("accType"));
+
+                accountsLocation.setCellValueFactory(
+                        new PropertyValueFactory<EmployeeAccount, String>("LocationName"));
 
                 accountsTable.setItems(accounts);
             }
@@ -368,10 +361,17 @@ public class OperatorSystemController extends Controller{
             if(accounts == null){
                 accountsTable.getItems().clear();
             }else{
-                accountsID.setCellValueFactory(new PropertyValueFactory<Account, String>("userID"));
-                accountsUsername.setCellValueFactory(new PropertyValueFactory<Account, String>("username"));
-                accountsFirstName.setCellValueFactory(new PropertyValueFactory<Account, String>("firstName"));
-                accountsLastName.setCellValueFactory(new PropertyValueFactory<Account, String>("lastName"));
+                accountsID.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("userID"));
+
+                accountsUsername.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("username"));
+
+                accountsFirstName.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("firstName"));
+
+                accountsLastName.setCellValueFactory(
+                        new PropertyValueFactory<Account, String>("lastName"));
 
                 accountsTable.setItems(accounts);
             }
@@ -382,10 +382,9 @@ public class OperatorSystemController extends Controller{
 
     /**
      * Creates and shows the dialog for adding an account, also disabling the operator system screen
-     * @param e ActionEvent object
      */
     @FXML
-    protected void showAddAccountDialog(ActionEvent e) {
+    protected void showAddAccountDialog() {
         /* Load the popup */
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddAccount", "Add Account", false);
@@ -400,10 +399,9 @@ public class OperatorSystemController extends Controller{
 
     /**
      * Creates and shows the dialog for editing an account, also disabling the operator system screen
-     * @param e ActionEvent object
      */
     @FXML
-    protected void showEditAccountDialog(ActionEvent e) {
+    protected void showEditAccountDialog() {
         /* Load the popup */
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("EditAccount", "Edit Account", false);
@@ -493,7 +491,7 @@ public class OperatorSystemController extends Controller{
     @FXML
     protected void setEditDeleteAccountButtons() {
         boolean accountsViewEmployees = accountsView.getSelectionModel().getSelectedItem().equals("Employees"); //If the table is set to show employees
-        boolean itemSelected = (accountsTable.getSelectionModel().getSelectedIndex() >= 0); //If an item is selected
+        boolean itemSelected = !accountsTable.getSelectionModel().isEmpty(); //If an item is selected
 
         if(accountsViewEmployees && itemSelected){ //If something in the table is selected
             accountsEditAccount.setDisable(false);
@@ -510,6 +508,7 @@ public class OperatorSystemController extends Controller{
      * The table is then updated accordingly
      */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void changeEquipmentView(){
         boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
         ObservableList<String> equipmentFilterOptions;
@@ -525,21 +524,21 @@ public class OperatorSystemController extends Controller{
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
-
-        filterAndSearchEquipment();
     }
 
     /**
      * Gets the filter that has been set and loads the bikes or equipment into the table accordingly
      */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void filterAndSearchEquipment(){
         /*
          * This method is called by the system every time the items in the combo box are changed.
          * This causes a NullPointerException to be thrown as no item is selected at that point, so only act if an item is selected.
          */
-        if(!equipmentFilter.getSelectionModel().isEmpty()){
+        if(!(equipmentFilter.getSelectionModel().isEmpty())){
             equipmentTable.getItems().clear();
+            setEditDeleteEquipmentButtons();
 
             String params;
             String selectedItem = (String) equipmentFilter.getSelectionModel().getSelectedItem();
@@ -591,88 +590,113 @@ public class OperatorSystemController extends Controller{
      */
     @SuppressWarnings("Duplicates")
     private void fillEquipmentTable(ObservableList<Equipment> equipment){
-        equipmentID.setCellValueFactory(new PropertyValueFactory<Equipment, String>("ID"));
-        equipmentType.setCellValueFactory(new PropertyValueFactory<Equipment, String>("TypeName"));
-        equipmentLocation.setCellValueFactory(new PropertyValueFactory<Equipment, String>("LocationName"));
-        equipmentPrice.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Price"));
-        equipmentStatus.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Status"));
+        equipmentID.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("ID"));
+
+        equipmentType.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("TypeName"));
+
+        equipmentLocation.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("LocationName"));
+
+        equipmentPrice.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Price"));
+
+        equipmentStatus.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Status"));
 
         equipmentTable.setItems(equipment);
     }
 
     /**
+     * Creates and shows the dialog for adding new equipment/bikes, also disabling the operator system screen
+     */
+    @FXML
+    protected void showAddEquipmentDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEquipment", "Add Equipment", false);
+
+        this.disable();
+
+        AddEquipmentController controller = (AddEquipmentController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
+    }
+
+    @FXML
+    protected void showEditEquipmentDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("EditEquipment", "Edit Equipment", false);
+
+        this.disable();
+
+        EditEquipmentController controller = (EditEquipmentController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setDropdownValues(locations);
+
+        /* Get the selected equipment and pass it to the controller */
+        Equipment equipment = getSelectedEquipment();
+        controller.setEquipment(equipment);
+    }
+
+    /**
+     * Adds a new bike to the database
+     */
+    public void addBike(Equipment bike){
+        try{
+            DataFetcher.addBike(bike);
+
+            //Update table
+            filterAndSearchEquipment();
+        }catch(InsertFailedException | EmptyDatasetException e) {
+            return;
+        }
+    }
+
+    /**
      * Adds a new piece of equipment to the database
-     * @param e ActionEvent object
      */
-    @FXML
-    protected void addEquipment(ActionEvent e) {
-        Equipment eq = new Equipment();
+    public void addEquipment(Equipment equipment){
+        try{
+            DataFetcher.addEquipment(equipment);
 
-        String locationName = (String)newEquipLocation.getValue();
-        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
-
-        eq.setLocation(loc);
-        eq.setTypeName((String)newEquipType.getValue());
-        eq.setTypeID(Integer.parseInt(equipmentTypes.get((String)newEquipType.getValue())));
-        eq.setStatus("Available");
-
-        try {
-            DataFetcher.addEquipment(eq);
-        } catch (InsertFailedException exc) {
-            return;
-        } catch (EmptyDatasetException exc) {
+            //Update table
+            filterAndSearchEquipment();
+        }catch(InsertFailedException | EmptyDatasetException e) {
             return;
         }
-
-        //inefficent but necessary to reload data
-        loadEquipment(null);
     }
 
     /**
-     * Adds the information to the edit box for editing equipment
-     * @param e MouseEvent object
+     * Update the a piece of equipment in the database
      */
-    @FXML
-    protected void updateEquipmentEditBox(MouseEvent e) {
-        //enable the box
-        editEquipmentVBox.setDisable(false);
-
-        //fil the data
-        Equipment tmp = getSelectedEquipment();
-
-        editEquipLocation.setValue(tmp.getLocationName());
-        editEquipType.setValue(tmp.getTypeName());
-        editEquipStatus.setValue(tmp.getStatus());
-    }
-
-    private Equipment getSelectedEquipment() {
-        int rowIndex = equipmentTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<Equipment> row = equipmentTable.getItems();
-        return row.get(rowIndex);
-    }
-
-    /**
-     * Update the selected equipment with the selected parameters
-     * @param e ActionEvent object
-     */
-    @FXML
-    protected void updateEquipment(ActionEvent e) {
-        Equipment tmp = getSelectedEquipment();
-
-        String locationName = (String)editEquipLocation.getValue();
-        Location loc = new Location(Integer.parseInt(this.locations.get(locationName)), locationName);
-
-        tmp.setLocation(loc);
-        tmp.setStatus((String)editEquipStatus.getValue());
-        tmp.setTypeID(Integer.parseInt(equipmentTypes.get(editEquipType.getValue())));
-
+    public void updateBike(Equipment bike){
         try {
-            DataFetcher.updateEquipment(tmp);
+            DataFetcher.updateBike(bike);
+
+            //Update table
+            filterAndSearchEquipment();
         } catch (InsertFailedException exc) {
             return;
         }
+    }
 
-        loadEquipment(null);
+    /**
+     * Update the a piece of equipment in the database
+     */
+    public void updateEquipment(Equipment equipment){
+        try {
+            DataFetcher.updateEquipment(equipment);
+
+            //Update table
+            filterAndSearchEquipment();
+        } catch (InsertFailedException exc) {
+            return;
+        }
     }
 
     /**
@@ -684,12 +708,37 @@ public class OperatorSystemController extends Controller{
         Equipment tmp = getSelectedEquipment();
         try {
             DataFetcher.deleteEquipment(tmp);
-            loadEquipment(null);
+            filterAndSearchEquipment();
         } catch (InsertFailedException exc) {
             return;
         }
     }
 
+    /**
+     * Gets the equipment selected in the table
+     * @return
+     */
+    private Equipment getSelectedEquipment(){
+        int rowIndex = equipmentTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Equipment> row = equipmentTable.getItems();
+        return row.get(rowIndex);
+    }
+
+    /**
+     * When a user clicks on a row in the equipment table, the edit and delete buttons are enabled
+     */
+    @FXML
+    protected void setEditDeleteEquipmentButtons(){
+        boolean equipmentSelected = !equipmentTable.getSelectionModel().isEmpty();
+
+        if(equipmentSelected){
+            editEquip.setDisable(false);
+            deleteEquip.setDisable(false);
+        }else{
+            editEquip.setDisable(true);
+            deleteEquip.setDisable(true);
+        }
+    }
 
     /**
      * Loads data from the SQL database into the Locations table

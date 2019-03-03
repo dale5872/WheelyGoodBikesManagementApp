@@ -9,7 +9,7 @@ public class Equipment {
     private float price;
     private String image;
     private Location location;
-    private String equipmentType; //Bike or Equipment
+    private String category; //Bike or Equipment
 
     public Equipment(int id, int typeID, String typeName, String status, float price, String image, Location location) {
         this.id = id;
@@ -83,9 +83,9 @@ public class Equipment {
         return this.location.getLocationID();
     }
 
-    public String getEquipmentType() { return this.equipmentType; }
+    public String getCategory() { return this.category; }
 
-    public void setEquipmentType(String equipmentType) { this.equipmentType = equipmentType; }
+    public void setCategory(String category) { this.category = category; }
 
 }
 

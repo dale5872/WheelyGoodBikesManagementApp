@@ -83,11 +83,9 @@ public class AddAccountController extends AccountPopupController{
             }
 
             /* Pass newAccount back to parent form */
-            this.parentController.addAccount(newAccount, password.getText(), accountTypeIndex);
+            super.parentController.addAccount(newAccount, password.getText(), accountTypeIndex);
 
-            /* Close */
-            this.parentController.enable();
-            this.stage.close();
+            super.close();
         }
     }
 
@@ -95,6 +93,7 @@ public class AddAccountController extends AccountPopupController{
      * Checks that no fields are blank and that the passwords match, showing/highlighting warning labels if not
      * @return
      */
+    @SuppressWarnings("Duplicates")
     private boolean validateInput(){
         boolean hasBlankFields = checkForBlankFields();
         boolean passwordsMatch = reenterPassword.getText().equals(password.getText());
@@ -143,12 +142,12 @@ public class AddAccountController extends AccountPopupController{
             return true;
         }
 
-        if(accountTypeCombo.getSelectionModel().getSelectedIndex() < 0){
+        if(accountTypeCombo.getSelectionModel().isEmpty()){
             return true;
         }
 
         if(!accountTypeCombo.getValue().equals("User")) { //Only need to check this if the account is not a user account
-            if (workLocationCombo.getSelectionModel().getSelectedIndex() < 0) {
+            if (workLocationCombo.getSelectionModel().isEmpty()) {
                 return true;
             }
         }
@@ -162,14 +161,5 @@ public class AddAccountController extends AccountPopupController{
         }
 
         return false;
-    }
-
-    /**
-     * Closes the form without making changes
-     */
-    @FXML
-    protected void cancel(){
-        this.parentController.enable();
-        this.stage.close();
     }
 }

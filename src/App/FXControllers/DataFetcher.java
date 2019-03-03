@@ -6,7 +6,6 @@ import App.Classes.*;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.Query;
 import DatabaseConnector.Results;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -224,7 +223,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: No getEquipment to return.", false);
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
@@ -235,7 +234,7 @@ public class DataFetcher {
                 e.setLocation(loc);
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
-                e.setEquipmentType("Bike");
+                e.setCategory("Bike");
                 equipment.add(e);
             }
         }
@@ -250,7 +249,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void addBike(Equipment e) throws InsertFailedException, EmptyDatasetException {
-        if(e.getEquipmentType().equals("Bike")) {
+        if(e.getCategory().equals("Bike")) {
             Query q = new Query("create", "addBike", "bike_type=" + e.getTypeID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus());
@@ -258,10 +257,10 @@ public class DataFetcher {
             if (q.insertQuery()) {
                 //success
             } else {
-                throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+                throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
             }
         } else {
-            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
         }
     }
 
@@ -272,7 +271,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void updateBike(Equipment e) throws InsertFailedException {
-        if(e.getEquipmentType().equals("Bike")) {
+        if(e.getCategory().equals("Bike")) {
             Query q = new Query("update", "updateBike", "bike_type=" + e.getTypeID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus() +
@@ -292,7 +291,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to delete
      */
     static void deleteBike(Equipment e) throws InsertFailedException {
-        if(e.getEquipmentType().equals("Bike")) {
+        if(e.getCategory().equals("Bike")) {
             Query q = new Query("delete", "deleteBike", "bike_id=" + e.getID());
 
             if (!q.insertQuery()) {
@@ -342,7 +341,7 @@ public class DataFetcher {
                 e.setLocation(loc);
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
-                e.setEquipmentType("Equipment");
+                e.setCategory("Equipment");
                 equipment.add(e);
             }
         }
@@ -358,7 +357,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
-        if(e.getEquipmentType().equals("Equipment")) {
+        if(e.getCategory().equals("Equipment")) {
             Query q = new Query("create", "addEquipment", "equipment_type=" + e.getTypeID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus());
@@ -378,17 +377,17 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void updateEquipment(Equipment e) throws InsertFailedException {
-        if(e.getEquipmentType().equals("Equipment")) {
+        if(e.getCategory().equals("Equipment")) {
             Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus() +
                     "&equipment_id=" + e.getID());
 
             if (!q.insertQuery()) {
-                throw new InsertFailedException("Failed to change getEquipment " + e.getID());
+                throw new InsertFailedException("Failed to change equipment " + e.getID());
             }
         } else {
-            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
         }
     }
 
@@ -398,18 +397,18 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to delete
      */
     static void deleteEquipment(Equipment e) throws InsertFailedException {
-        if(e.getEquipmentType().equals("Equipment")) {
+        if(e.getCategory().equals("Equipment")) {
             Query q = new Query("delete", "deleteEquipment", "equipment_id=" + e.getID());
 
             if (!q.insertQuery()) {
-                throw new InsertFailedException("Deleting getEquipment " + e.getID() + " failed." +
+                throw new InsertFailedException("Deleting equipment " + e.getID() + " failed." +
                         "\n" +
                         "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
                         "\nWait for rental to complete, or mark rental as complete." +
                         "\nCannot remove until solved.");
             }
         } else {
-            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
         }
     }
 
