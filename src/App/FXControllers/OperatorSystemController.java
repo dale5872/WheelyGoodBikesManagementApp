@@ -411,9 +411,34 @@ public class OperatorSystemController extends Controller{
         controller.setDropdownValues(accountTypes, locations);
 
         /* Get the selected account and pass to edit dialog */
-        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        EmployeeAccount acc = (EmployeeAccount) accountsTable.getItems().get(rowIndex);
+        EmployeeAccount acc = (EmployeeAccount) getSelectedAccount();
         controller.setExistingAccount(acc);
+    }
+
+    /**
+     * Creates and shows the dialog for deleting an account, also disabling the operator system screen
+     */
+    @FXML
+    protected void showDeleteAccountDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("DeletionConfirmation", "Delete Account", false);
+
+        this.disable();
+
+        DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setThingToDelete("account");
+    }
+
+    /**
+     * Gets the account selected on the table
+     * @return
+     */
+    private Account getSelectedAccount(){
+        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
+        return (Account) accountsTable.getItems().get(rowIndex);
     }
 
     /**
@@ -459,27 +484,22 @@ public class OperatorSystemController extends Controller{
 
     /**
      * Deletes the selected account from the table
-     * @param e ActionEvent object
      */
-    @FXML
-    protected void deleteAccount(ActionEvent e) {
-        int rowIndex = accountsTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<EmployeeAccount> row = accountsTable.getItems();
-        Account account = row.get(rowIndex);
+    public void deleteAccount() {
+        try{
+            Account account = getSelectedAccount();
 
-        try {
-            if(account instanceof EmployeeAccount) {
+            if(account instanceof EmployeeAccount){
                 DataFetcher.deleteAccount(account.getUserID(), ((EmployeeAccount) account).getEmployeeID());
-            } else {
-                //user account
+            }else{//User account
                 DataFetcher.deleteAccount(account.getUserID(), -1);
             }
-        } catch (InsertFailedException ex) {
+
+            //Update table
+            filterAndSearchAccounts();
+        }catch(InsertFailedException ex){
             return;
         }
-
-        //remove from table
-        accountsTable.getItems().remove(rowIndex);
     }
 
     /**
@@ -648,6 +668,39 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
+     * Creates and shows the dialog for deleting a piece of equipment, also disabling the operator system screen
+     */
+    @FXML
+    protected void showDeleteEquipmentDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("DeletionConfirmation", "Delete Equipment", false);
+
+        this.disable();
+
+        DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+
+        if(equipmentView.getSelectionModel().getSelectedItem().equals("Bikes")){
+            controller.setThingToDelete("bike");
+        }else{
+            controller.setThingToDelete("equipment");
+        }
+    }
+
+    /**
+     * Gets the equipment selected in the table
+     * @return
+     */
+    private Equipment getSelectedEquipment(){
+        int rowIndex = equipmentTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Equipment> row = equipmentTable.getItems();
+        return row.get(rowIndex);
+    }
+
+
+    /**
      * Adds a new bike to the database
      */
     public void addBike(Equipment bike){
@@ -704,28 +757,33 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Delete the selected Equipment object
-     * @param e ActionEvent object
+     * Delete the selected bike
      */
-    @FXML
-    protected void deleteEquipment(ActionEvent e) {
-        Equipment tmp = getSelectedEquipment();
-        try {
-            DataFetcher.deleteEquipment(tmp);
+    public void deleteBike() {
+        try{
+            Equipment bike = getSelectedEquipment();
+            DataFetcher.deleteBike(bike);
+
+            //Update table
             filterAndSearchEquipment();
-        } catch (InsertFailedException exc) {
+        }catch(InsertFailedException exc){
             return;
         }
     }
 
     /**
-     * Gets the equipment selected in the table
-     * @return
+     * Delete the selected equipment
      */
-    private Equipment getSelectedEquipment(){
-        int rowIndex = equipmentTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<Equipment> row = equipmentTable.getItems();
-        return row.get(rowIndex);
+    public void deleteEquipment() {
+        try{
+            Equipment equipment = getSelectedEquipment();
+            DataFetcher.deleteEquipment(equipment);
+
+            //Update table
+            filterAndSearchEquipment();
+        }catch(InsertFailedException exc){
+            return;
+        }
     }
 
     /**
@@ -809,6 +867,33 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
+     * Creates and shows the dialog for deleting a location, also disabling the operator system screen
+     */
+    @FXML
+    protected void showDeleteLocationDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("DeletionConfirmation", "Delete Location", false);
+
+        this.disable();
+
+        DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setThingToDelete("location");
+    }
+
+    /**
+     * Returns the selected location object in the table
+     * @return
+     */
+    private Location getSelectedLocation() {
+        int rowIndex = locationsTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Location> row = locationsTable.getItems();
+        return row.get(rowIndex);
+    }
+
+    /**
      * Adds a new location to the database and reloads the table
      * @param name The name of the new location to add
      */
@@ -841,25 +926,15 @@ public class OperatorSystemController extends Controller{
     /**
      * Deletes the selected location and reloads the locations table
      */
-    @FXML
-    protected void deleteLocation() {
+    public void deleteLocation() {
         try{
             DataFetcher.deleteLocation(getSelectedLocation());
+
+            //Update table
+            filterAndSearchLocations();
         } catch(InsertFailedException exc){
             return;
         }
-
-        filterAndSearchLocations();
-    }
-
-    /**
-     * Returns the selected location object in the table
-     * @return
-     */
-    private Location getSelectedLocation() {
-        int rowIndex = locationsTable.getSelectionModel().selectedIndexProperty().get();
-        ObservableList<Location> row = locationsTable.getItems();
-        return row.get(rowIndex);
     }
 
     /**

@@ -45,8 +45,8 @@
                 </VBox>
                 <HBox alignment="CENTER_RIGHT" spacing="10.0">
                     <children>
-                        <Button fx:id="confirmBtn" minWidth="-Infinity" mnemonicParsing="false" onAction="#confirm" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
-                        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefWidth="100.0" styleClass="green-button" text="Cancel" textOverrun="CLIP" />
+                        <Button fx:id="confirmBtn" defaultButton="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#confirm" prefWidth="100.0" styleClass="green-button" text="Add" textOverrun="CLIP" />
+                        <Button cancelButton="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefWidth="100.0" styleClass="green-button" text="Cancel" textOverrun="CLIP" />
                     </children>
                 </HBox>
             </children>

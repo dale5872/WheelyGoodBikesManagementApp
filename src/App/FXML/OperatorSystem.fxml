@@ -167,7 +167,7 @@
                                  <children>
                                     <Button fx:id="accountsAddAccount" mnemonicParsing="false" onAction="#showAddAccountDialog" prefWidth="100.0" styleClass="green-button" text="Add..." textOverrun="CLIP" />
                                     <Button fx:id="accountsEditAccount" disable="true" mnemonicParsing="false" onAction="#showEditAccountDialog" prefWidth="100.0" styleClass="green-button" text="Edit..." textOverrun="CLIP" />
-                                    <Button fx:id="accountsDeleteAccount" disable="true" mnemonicParsing="false" onAction="#deleteAccount" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP" />
+                                    <Button fx:id="accountsDeleteAccount" disable="true" mnemonicParsing="false" onAction="#showDeleteAccountDialog" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP" />
                                  </children>
                               </HBox>
                            </children>
@@ -223,7 +223,7 @@
                                  <children>
                                     <Button fx:id="addEquip" minWidth="-Infinity" mnemonicParsing="false" onAction="#showAddEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Add..." textOverrun="CLIP" />
                                     <Button fx:id="editEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showEditEquipmentDialog" prefWidth="100.0" styleClass="green-button" text="Edit..." textOverrun="CLIP" />
-                                    <Button fx:id="deleteEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteEquipment" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
+                                    <Button fx:id="deleteEquip" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDeleteEquipmentDialog" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -269,7 +269,7 @@
                                  <children>
                                     <Button fx:id="addLocation" minWidth="-Infinity" mnemonicParsing="false" onAction="#showAddLocationDialog" prefWidth="100.0" styleClass="green-button" text="Add..." textOverrun="CLIP" />
                                     <Button fx:id="editLocation" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showEditLocationDialog" prefWidth="100.0" styleClass="green-button" text="Edit..." textOverrun="CLIP" />
-                                    <Button fx:id="deleteLocation" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteLocation" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP" />
+                                    <Button fx:id="deleteLocation" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDeleteLocationDialog" prefWidth="100.0" styleClass="delete-button" text="Delete" textOverrun="CLIP" />
                                  </children>
                               </HBox>
                            </children>
