@@ -399,20 +399,25 @@ public class OperatorSystemController extends Controller{
      */
     @FXML
     protected void showEditAccountDialog() {
-        /* Load the popup */
-        JavaFXLoader loader = new JavaFXLoader();
-        loader.loadNewFXWindow("EditAccount", "Edit Account", false);
-
-        this.disable();
-
-        EditAccountController controller = (EditAccountController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setDropdownValues(accountTypes, locations);
-
-        /* Get the selected account and pass to edit dialog */
         EmployeeAccount acc = (EmployeeAccount) getSelectedAccount();
-        controller.setExistingAccount(acc);
+
+        if(acc.getUserID() == employee.getUserID()){ //Check that we're not trying to edit the account that's logged in, as doing so could cause problems
+            new ShowMessageBox().show("You cannot edit the active account.");
+        }else{
+            /* Load the popup */
+            JavaFXLoader loader = new JavaFXLoader();
+            loader.loadNewFXWindow("EditAccount", "Edit Account", false);
+
+            this.disable();
+
+            EditAccountController controller = (EditAccountController) loader.getController();
+            controller.setParentController(this);
+            controller.setOnCloseAction();
+            controller.setDropdownValues(accountTypes, locations);
+
+            /* Pass the selected account to edit dialog */
+            controller.setExistingAccount(acc);
+        }
     }
 
     /**
@@ -420,16 +425,20 @@ public class OperatorSystemController extends Controller{
      */
     @FXML
     protected void showDeleteAccountDialog(){
-        /* Load the popup */
-        JavaFXLoader loader = new JavaFXLoader();
-        loader.loadNewFXWindow("DeletionConfirmation", "Delete Account", false);
+        if(getSelectedAccount().getUserID() == employee.getUserID()){ //Check that we're not trying to delete the account that's logged in, for obvious reasons
+            new ShowMessageBox().show("You cannot delete the active account.");
+        }else {
+            /* Load the popup */
+            JavaFXLoader loader = new JavaFXLoader();
+            loader.loadNewFXWindow("DeletionConfirmation", "Delete Account", false);
 
-        this.disable();
+            this.disable();
 
-        DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setThingToDelete("account");
+            DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
+            controller.setParentController(this);
+            controller.setOnCloseAction();
+            controller.setThingToDelete("account");
+        }
     }
 
     /**
@@ -464,7 +473,7 @@ public class OperatorSystemController extends Controller{
      * @param newAccount The new account to replace it with
      * @param accountType The account type
      */
-    public void updateAccount(Account oldAccount, Account newAccount, int accountType){
+    public void updateAccount(EmployeeAccount oldAccount, EmployeeAccount newAccount, int accountType){
         try{
             DataFetcher.updateAccount(oldAccount, newAccount, accountType);
 
@@ -982,9 +991,45 @@ public class OperatorSystemController extends Controller{
      */
     @FXML
     protected void changeContactDetails(ActionEvent e){
-        /** TODO: change the logged in user's contact details */
+        boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
+        boolean emailBlank = userAccountEmailTextbox.getText().equals("");
 
-        switchContactDetailsView(e);
+        if(phoneBlank || emailBlank) { //Blank check
+            new ShowMessageBox().show("You must enter an email address and phone number.");
+        }else{ //No blanks, so change
+            try{
+                /* Create a new EmployeeAccount object, with all the unchanged values*/
+                EmployeeAccount newAcc = new EmployeeAccount();
+                newAcc.setUserID(employee.getUserID());
+                newAcc.setEmployeeID(employee.getEmployeeID());
+                newAcc.setUsername(employee.getUsername());
+                newAcc.setFirstName(employee.getFirstName());
+                newAcc.setLastName(employee.getLastName());
+                newAcc.setLocation(employee.getLocation());
+                newAcc.setAccType(employee.getAccType());
+
+                /* Pass the new phone number and email to newAcc */
+                String newPhone = userAccountPhoneTextbox.getText();
+                String newEmail = userAccountEmailTextbox.getText();
+                newAcc.setPhoneNumber(newPhone);
+                newAcc.setEmail(newEmail);
+
+                /* Get the account type index */
+                int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
+
+                /* Update the account ion the database */
+                DataFetcher.updateAccount(employee, newAcc, accountType);
+
+                /* Update the account in this controller and the table */
+                setEmployee(newAcc);
+                filterAndSearchAccounts();
+
+                /* Switch back to non-editable view */
+                switchContactDetailsView(e);
+            }catch(InsertFailedException e1){
+                return;
+            }
+        }
     }
 
     /**

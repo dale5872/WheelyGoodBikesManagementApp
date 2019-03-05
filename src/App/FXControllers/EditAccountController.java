@@ -65,9 +65,13 @@ public class EditAccountController extends AccountPopupController{
     @FXML
     protected void confirm(){
         if(validateInput() == true){
-            /* Create new account and set values */
+            /* Create new account and set common  values */
             EmployeeAccount newAccount = new EmployeeAccount();
             super.setCommonValues(newAccount, username, firstName, lastName, email, phoneNumber, accountTypeCombo);
+
+            /* Set IDs of new account */
+            newAccount.setUserID(existingAccount.getUserID());
+            newAccount.setEmployeeID(existingAccount.getEmployeeID());
 
             /* Get the chosen account type and map it to its system index */
             String chosenAccountType = (String) accountTypeCombo.getValue();
