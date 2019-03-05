@@ -990,6 +990,7 @@ public class OperatorSystemController extends Controller{
      * @param e
      */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void changeContactDetails(ActionEvent e){
         boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
         boolean emailBlank = userAccountEmailTextbox.getText().equals("");
@@ -1015,7 +1016,7 @@ public class OperatorSystemController extends Controller{
                 newAcc.setEmail(newEmail);
 
                 /* Get the account type index */
-                int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
+                int accountType = Integer.parseInt(accountTypes.get(employee.getAccType()));
 
                 /* Update the account ion the database */
                 DataFetcher.updateAccount(employee, newAcc, accountType);

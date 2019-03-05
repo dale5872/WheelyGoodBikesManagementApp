@@ -4,6 +4,7 @@ import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 
 import App.JavaFXLoader;
+import DatabaseConnector.InsertFailedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -284,10 +285,47 @@ public class ManagerSystemController extends Controller{
      * @param e
      */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void changeContactDetails(ActionEvent e){
-        /** TODO: change the logged in user's contact details */
+        boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
+        boolean emailBlank = userAccountEmailTextbox.getText().equals("");
 
-        switchContactDetailsView(e);
+        if(phoneBlank || emailBlank) { //Blank check
+            new ShowMessageBox().show("You must enter an email address and phone number.");
+        }else{ //No blanks, so change
+            try{
+                /* Create a new EmployeeAccount object, with all the unchanged values*/
+                EmployeeAccount newAcc = new EmployeeAccount();
+                newAcc.setUserID(employee.getUserID());
+                newAcc.setEmployeeID(employee.getEmployeeID());
+                newAcc.setUsername(employee.getUsername());
+                newAcc.setFirstName(employee.getFirstName());
+                newAcc.setLastName(employee.getLastName());
+                newAcc.setLocation(employee.getLocation());
+                newAcc.setAccType(employee.getAccType());
+
+                /* Pass the new phone number and email to newAcc */
+                String newPhone = userAccountPhoneTextbox.getText();
+                String newEmail = userAccountEmailTextbox.getText();
+                newAcc.setPhoneNumber(newPhone);
+                newAcc.setEmail(newEmail);
+
+                /* Get the account type index */
+                HashMap<String, String> accountTypes = DataFetcher.getDropdownValues("accountTypes");
+                int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
+
+                /* Update the account ion the database */
+                DataFetcher.updateAccount(employee, newAcc, accountType);
+
+                /* Update the account in this controller */
+                setEmployee(newAcc);
+
+                /* Switch back to non-editable view */
+                switchContactDetailsView(e);
+            }catch(InsertFailedException e1){
+                return;
+            }
+        }
     }
 
     /**
