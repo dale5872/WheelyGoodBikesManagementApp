@@ -3,7 +3,6 @@ package App.FXControllers;
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 
-import App.JavaFXLoader;
 import DatabaseConnector.InsertFailedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,8 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.util.*;
 
@@ -22,20 +19,18 @@ import java.util.*;
  * Controller for the manager system
  * This class contains methods for all event handling on the manager system
  */
-public class ManagerSystemController extends Controller{
+public class ManagerSystemController extends SystemController{
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton penaltiesTabButton; //Gets the penalties tab button object
     @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
     @FXML private ToggleButton reportsTabButton; //Gets the reports tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button object
-    private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
     @FXML private AnchorPane penaltiesTab; //Gets the penalties tab object
     @FXML private AnchorPane rentalsTab; //Gets the rentals tab object
     @FXML private AnchorPane reportsTab; //Gets the reports tab object
     @FXML private AnchorPane userTab; //Gets the user tab object
-    private List<AnchorPane> tabs; //List to store all tabs;
 
     @FXML private ComboBox penaltiesViewOption;
     @FXML private FlowPane unsolvedPenalties;
@@ -56,6 +51,9 @@ public class ManagerSystemController extends Controller{
     @FXML private TextField equipmentSearch;
 
     /** Rentals Tab **/
+    //Search
+    @FXML private TextField rentalSearch;
+
     //Table
     @FXML private TableColumn rentalsID;
     @FXML private TableColumn rentalsEquipmentID;
@@ -68,28 +66,6 @@ public class ManagerSystemController extends Controller{
     @FXML private TableColumn rentalsStatus;
     @FXML private TableView rentalsTable;
 
-    /** Account Tab **/
-    @FXML private Label userAccountID;
-    @FXML private Label userAccountUsername;
-    @FXML private Label userAccountName;
-    @FXML private Label userAccountType;
-    @FXML private Label userAccountLocation;
-
-    @FXML private VBox contactDetailsNonEditable;
-    @FXML private Label userAccountEmail;
-    @FXML private Label userAccountPhone;
-
-    @FXML private VBox contactDetailsEditable;
-    @FXML private TextField userAccountPhoneTextbox;
-    @FXML private TextField userAccountEmailTextbox;
-
-    @FXML private HBox changeContactContainer;
-    @FXML private Button contactDetailsViewBtn;
-
-    @FXML private HBox confirmContactContainer;
-
-    private static EmployeeAccount employee;
-
     private static HashMap<String, String> equipmentTypes;
     private static HashMap<String, String> bikeTypes;
 
@@ -99,20 +75,20 @@ public class ManagerSystemController extends Controller{
     @SuppressWarnings("Duplicates")
     public void initialize(){
         /* Initialise the tabButtons list and add all tab buttons to it */
-        tabButtons = new ArrayList<>();
-        tabButtons.add(bikesTabButton);
-        tabButtons.add(penaltiesTabButton);
-        tabButtons.add(rentalsTabButton);
-        tabButtons.add(reportsTabButton);
-        tabButtons.add(userTabButton);
+        super.tabButtons = new ArrayList<>();
+        super.tabButtons.add(bikesTabButton);
+        super.tabButtons.add(penaltiesTabButton);
+        super.tabButtons.add(rentalsTabButton);
+        super.tabButtons.add(reportsTabButton);
+        super.tabButtons.add(userTabButton);
 
         /* Initialise the tabs list and add all tabs to it */
-        tabs = new ArrayList<>();
-        tabs.add(bikesTab);
-        tabs.add(penaltiesTab);
-        tabs.add(rentalsTab);
-        tabs.add(reportsTab);
-        tabs.add(userTab);
+        super.tabs = new ArrayList<>();
+        super.tabs.add(bikesTab);
+        super.tabs.add(penaltiesTab);
+        super.tabs.add(rentalsTab);
+        super.tabs.add(reportsTab);
+        super.tabs.add(userTab);
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
@@ -123,28 +99,17 @@ public class ManagerSystemController extends Controller{
         setDropdownOptions();
     }
 
-    @SuppressWarnings("Duplicates")
+    @Override
     public void setEmployee(EmployeeAccount e) {
-        this.employee = e;
+        super.setEmployee(e);
 
-        //set account labels
-        userAccountID.setText("" + employee.getEmployeeID());
-        userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
-        userAccountEmail.setText(employee.getEmail());
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-        userAccountType.setText(employee.getAccType());
-        userAccountLocation.setText(employee.getLocationName());
-
-        loadEquipment("");
+        loadBikes("");
     }
 
     @SuppressWarnings("Duplicates")
     private void setDropdownOptions(){
         //Set the equipment view dropdown
-        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Equipment");
+        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
         equipmentView.setItems(equipmentViewOptions);
         equipmentView.getSelectionModel().selectFirst();
 
@@ -182,8 +147,6 @@ public class ManagerSystemController extends Controller{
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
-
-        filterAndSearchEquipment();
     }
 
     /**
@@ -249,35 +212,22 @@ public class ManagerSystemController extends Controller{
      */
     @SuppressWarnings("Duplicates")
     private void fillEquipmentTable(ObservableList<Equipment> equipment){
-        equipmentID.setCellValueFactory(new PropertyValueFactory<Equipment, String>("ID"));
-        equipmentType.setCellValueFactory(new PropertyValueFactory<Equipment, String>("TypeName"));
-        equipmentLocation.setCellValueFactory(new PropertyValueFactory<Equipment, String>("LocationName"));
-        equipmentPrice.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Price"));
-        equipmentStatus.setCellValueFactory(new PropertyValueFactory<Equipment, String>("Status"));
+        equipmentID.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("ID"));
+
+        equipmentType.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("TypeName"));
+
+        equipmentLocation.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("LocationName"));
+
+        equipmentPrice.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("FormattedPrice"));
+
+        equipmentStatus.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Status"));
 
         equipmentTable.setItems(equipment);
-    }
-
-    /**
-     * Handles switching the view of the user's co ntact details, between editable and non editable
-     * @param e
-     */
-    @FXML
-    @SuppressWarnings("Duplicates")
-    protected void switchContactDetailsView(ActionEvent e){
-        if(e.getSource() == contactDetailsViewBtn){
-            contactDetailsNonEditable.setVisible(false);
-            changeContactContainer.setVisible(false);
-
-            contactDetailsEditable.setVisible(true);
-            confirmContactContainer.setVisible(true);
-        }else{
-            contactDetailsNonEditable.setVisible(true);
-            changeContactContainer.setVisible(true);
-
-            contactDetailsEditable.setVisible(false);
-            confirmContactContainer.setVisible(false);
-        }
     }
 
     /**
@@ -321,33 +271,11 @@ public class ManagerSystemController extends Controller{
                 setEmployee(newAcc);
 
                 /* Switch back to non-editable view */
-                switchContactDetailsView(e);
+                super.switchContactDetailsView(e);
             }catch(InsertFailedException e1){
                 return;
             }
         }
-    }
-
-    /**
-     * Cancels changing the logged in user's contact details, setting the textboxes back to the stored value and switching back to non-editable view
-     * @param e
-     */
-    @FXML
-    protected void cancelChangeContact(ActionEvent e){
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-
-        switchContactDetailsView(e);
-    }
-
-    /**
-     * Handles switching between tabs
-     * @param e the ActionEvent from the button click
-     */
-    @FXML
-    protected void switchTab(ActionEvent e){
-        ToggleButton clickedButton = (ToggleButton) e.getSource();
-        TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
     }
 
     @FXML
@@ -359,16 +287,5 @@ public class ManagerSystemController extends Controller{
             unsolvedPenalties.setVisible(false);
             solvedPenalties.setVisible(true);
         }
-    }
-
-    /**
-     * Logs the user out
-     */
-    @FXML
-    protected void logout(ActionEvent e) {
-        new JavaFXLoader().loadNewFXWindow("LogIn", "Wheely Good Bikes", false);
-
-        this.employee = null;
-        this.stage.close();
     }
 }

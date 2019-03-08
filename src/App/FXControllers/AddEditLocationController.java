@@ -33,12 +33,14 @@ public class AddEditLocationController extends PopupController{
     @FXML
     protected void confirm(){
         if(validateInput() == true){
+            OperatorSystemController controller = (OperatorSystemController) super.parentController;
+
             if (location == null) { //No existing location, so we're adding a new one
-                super.parentController.addLocation(name.getText());
+                controller.addLocation(name.getText());
             } else { //Updating an existing location
                 location.setName(name.getText());
 
-                super.parentController.editLocation(location);
+                controller.editLocation(location);
             }
 
             super.close();

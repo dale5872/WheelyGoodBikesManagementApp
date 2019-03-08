@@ -10,15 +10,11 @@ import DatabaseConnector.InsertFailedException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.util.*;
 
@@ -26,20 +22,16 @@ import java.util.*;
  * Controller for the operator system
  * This class contains methods for all event handling on the operator system
  */
-public class OperatorSystemController extends Controller{
-    @FXML private AnchorPane parentPane;
-
+public class OperatorSystemController extends SystemController{
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
     @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button
-    private List<ToggleButton> tabButtons; //List to store all tab buttons
 
     @FXML private AnchorPane accountsTab; //Gets the accounts tab object
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
     @FXML private AnchorPane locationsTab; //Gets the locations tab object
     @FXML private AnchorPane userTab; //Gets the user's account tab object
-    private List<AnchorPane> tabs; //List to store all tabs;
 
     /** ACCOUNTS TAB */
     //Table
@@ -95,28 +87,7 @@ public class OperatorSystemController extends Controller{
     //Filter and Search
     @FXML private TextField locationSearch;
 
-    /** Account Tab **/
-    @FXML private Label userAccountID;
-    @FXML private Label userAccountUsername;
-    @FXML private Label userAccountName;
-    @FXML private Label userAccountType;
-    @FXML private Label userAccountLocation;
-
-    @FXML private VBox contactDetailsNonEditable;
-    @FXML private Label userAccountEmail;
-    @FXML private Label userAccountPhone;
-
-    @FXML private VBox contactDetailsEditable;
-    @FXML private TextField userAccountPhoneTextbox;
-    @FXML private TextField userAccountEmailTextbox;
-
-    @FXML private HBox changeContactContainer;
-    @FXML private Button contactDetailsViewBtn;
-
-    @FXML private HBox confirmContactContainer;
-
     //fields
-    private static EmployeeAccount employee;
     private static HashMap<String, String> accountTypes;
     private static HashMap<String, String> locations;
     private static HashMap<String, String> equipmentTypes;
@@ -128,18 +99,18 @@ public class OperatorSystemController extends Controller{
     @SuppressWarnings("Duplicates")
     public void initialize(){
         /* Initialise the tabButtons list and add all tab buttons to it */
-        tabButtons = new ArrayList<>();
-        tabButtons.add(accountsTabButton);
-        tabButtons.add(bikesTabButton);
-        tabButtons.add(locationsTabButton);
-        tabButtons.add(userTabButton);
+        super.tabButtons = new ArrayList<>();
+        super.tabButtons.add(accountsTabButton);
+        super.tabButtons.add(bikesTabButton);
+        super.tabButtons.add(locationsTabButton);
+        super.tabButtons.add(userTabButton);
 
         /* Initialise the tabs list and add all tabs to it */
-        tabs = new ArrayList<>();
-        tabs.add(accountsTab);
-        tabs.add(bikesTab);
-        tabs.add(locationsTab);
-        tabs.add(userTab);
+        super.tabs = new ArrayList<>();
+        super.tabs.add(accountsTab);
+        super.tabs.add(bikesTab);
+        super.tabs.add(locationsTab);
+        super.tabs.add(userTab);
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
@@ -156,22 +127,6 @@ public class OperatorSystemController extends Controller{
         bikeTypes = DataFetcher.getDropdownValues("bikeTypes");
 
         setDropdownOptions();
-    }
-
-    @SuppressWarnings("Duplicates")
-    public void setEmployee(EmployeeAccount e) {
-        this.employee = e;
-
-        //set account labels
-        userAccountID.setText("" + employee.getEmployeeID());
-        userAccountUsername.setText(employee.getUsername());
-        userAccountName.setText(employee.getFirstName() + " " + employee.getLastName());
-        userAccountEmail.setText(employee.getEmail());
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhone.setText(employee.getPhoneNumber());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-        userAccountType.setText(employee.getAccType());
-        userAccountLocation.setText(employee.getLocationName());
     }
 
     /**
@@ -199,20 +154,6 @@ public class OperatorSystemController extends Controller{
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
-    }
-
-    /**
-     * Enable the window
-     */
-    public void enable(){
-        parentPane.setDisable(false);
-    }
-
-    /**
-     * Disable the window
-     */
-    public void disable(){
-        parentPane.setDisable(true);
     }
 
     /**
@@ -386,7 +327,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddAccount", "Add Account", false);
 
-        this.disable();
+        super.disable();
 
         AddAccountController controller = (AddAccountController) loader.getController();
         controller.setParentController(this);
@@ -408,7 +349,7 @@ public class OperatorSystemController extends Controller{
             JavaFXLoader loader = new JavaFXLoader();
             loader.loadNewFXWindow("EditAccount", "Edit Account", false);
 
-            this.disable();
+            super.disable();
 
             EditAccountController controller = (EditAccountController) loader.getController();
             controller.setParentController(this);
@@ -432,7 +373,7 @@ public class OperatorSystemController extends Controller{
             JavaFXLoader loader = new JavaFXLoader();
             loader.loadNewFXWindow("DeletionConfirmation", "Delete Account", false);
 
-            this.disable();
+            super.disable();
 
             DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
             controller.setParentController(this);
@@ -630,7 +571,7 @@ public class OperatorSystemController extends Controller{
                 new PropertyValueFactory<Equipment, String>("LocationName"));
 
         equipmentPrice.setCellValueFactory(
-                new PropertyValueFactory<Equipment, String>("Price"));
+                new PropertyValueFactory<Equipment, String>("FormattedPrice"));
 
         equipmentStatus.setCellValueFactory(
                 new PropertyValueFactory<Equipment, String>("Status"));
@@ -647,7 +588,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEquipment", "Add Equipment", false);
 
-        this.disable();
+        super.disable();
 
         AddEquipmentController controller = (AddEquipmentController) loader.getController();
         controller.setParentController(this);
@@ -664,7 +605,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("EditEquipment", "Edit Equipment", false);
 
-        this.disable();
+        super.disable();
 
         EditEquipmentController controller = (EditEquipmentController) loader.getController();
         controller.setParentController(this);
@@ -685,7 +626,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("DeletionConfirmation", "Delete Equipment", false);
 
-        this.disable();
+        super.disable();
 
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
         controller.setParentController(this);
@@ -851,7 +792,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditLocation", "Add Location", false);
 
-        this.disable();
+        super.disable();
 
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
         controller.setParentController(this);
@@ -867,7 +808,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditLocation", "Edit Location", false);
 
-        this.disable();
+        super.disable();
 
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
         controller.setParentController(this);
@@ -884,7 +825,7 @@ public class OperatorSystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("DeletionConfirmation", "Delete Location", false);
 
-        this.disable();
+        super.disable();
 
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
         controller.setParentController(this);
@@ -964,28 +905,6 @@ public class OperatorSystemController extends Controller{
     }
 
     /**
-     * Handles switching the view of the user's contact details, between editable and non editable
-     * @param e
-     */
-    @FXML
-    @SuppressWarnings("Duplicates")
-    protected void switchContactDetailsView(ActionEvent e){
-        if(e.getSource() == contactDetailsViewBtn){
-            contactDetailsNonEditable.setVisible(false);
-            changeContactContainer.setVisible(false);
-
-            contactDetailsEditable.setVisible(true);
-            confirmContactContainer.setVisible(true);
-        }else{
-            contactDetailsNonEditable.setVisible(true);
-            changeContactContainer.setVisible(true);
-
-            contactDetailsEditable.setVisible(false);
-            confirmContactContainer.setVisible(false);
-        }
-    }
-
-    /**
      * Changes the logged in user's contact details, then switches back to non-editable view
      * @param e
      */
@@ -1026,43 +945,10 @@ public class OperatorSystemController extends Controller{
                 filterAndSearchAccounts();
 
                 /* Switch back to non-editable view */
-                switchContactDetailsView(e);
+                super.switchContactDetailsView(e);
             }catch(InsertFailedException e1){
                 return;
             }
         }
-    }
-
-    /**
-     * Cancels changing the logged in user's contact details, setting the textboxes back to the stored value and switching back to non-editable view
-     * @param e
-     */
-    @FXML
-    protected void cancelChangeContact(ActionEvent e){
-        userAccountEmailTextbox.setText(employee.getEmail());
-        userAccountPhoneTextbox.setText(employee.getPhoneNumber());
-
-        switchContactDetailsView(e);
-    }
-
-    /**
-     * Handles switching between tabs
-     * @param e the ActionEvent from the button click
-     */
-    @FXML
-    protected void switchTab(ActionEvent e){
-        ToggleButton clickedButton = (ToggleButton) e.getSource();
-        TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
-    }
-
-    /**
-     * Logs the user out
-     */
-    @FXML
-    protected void logout(ActionEvent e) {
-        new JavaFXLoader().loadNewFXWindow("LogIn", "Wheely Good Bikes", false);
-
-        this.employee = null;
-        this.stage.close();
     }
 }

@@ -86,10 +86,11 @@ public class AddEquipmentController extends PopupController{
             equipment.setStatus("Available");
 
             /* Pass back to Operator system */
+            OperatorSystemController controller = (OperatorSystemController) super.parentController;
             if(categoryName.equals("Bike")) {
-                super.parentController.addBike(equipment);
+                controller.addBike(equipment);
             }else{
-                super.parentController.addEquipment(equipment);
+                controller.addEquipment(equipment);
             }
 
             super.close();

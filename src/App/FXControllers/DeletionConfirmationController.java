@@ -17,18 +17,20 @@ public class DeletionConfirmationController extends PopupController{
 
     @FXML
     protected void confirm(){
+        OperatorSystemController controller = (OperatorSystemController) super.parentController;
+
         switch(thingToDelete){
             case "account":
-                super.parentController.deleteAccount();
+                controller.deleteAccount();
                 break;
             case "bike":
-                super.parentController.deleteBike();
+                controller.deleteBike();
                 break;
             case "equipment":
-                super.parentController.deleteEquipment();
+                controller.deleteEquipment();
                 break;
             case "location":
-                super.parentController.deleteLocation();
+                controller.deleteLocation();
                 break;
             default:
                 break;

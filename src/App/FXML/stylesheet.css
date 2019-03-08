@@ -68,7 +68,7 @@
 	-fx-graphic: url("Profile_Round_White_Small.png");
 }
 
-.account-button-inactive:hover, .account-button-inactive:pressed, .account-button-active{
+.account-button-inactive:hover, .account-button-inactive:pressed, .account-button-active {
 	-fx-graphic: url("Profile_Round_Black_Small.png");
 }
 
@@ -83,4 +83,8 @@
 .warningLabel{
 	-fx-text-fill: #FFFF00;
 	-fx-font-weight: bold;
+}
+
+.price-column{
+	-fx-alignment: CENTER-RIGHT;
 }

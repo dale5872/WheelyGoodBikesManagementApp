@@ -83,7 +83,8 @@ public class EditAccountController extends AccountPopupController{
             newAccount.setLocation(chosenLocation, locationIndex);
 
             /* Pass newAccount back to parent form */
-            super.parentController.updateAccount(existingAccount, newAccount, accountTypeIndex);
+            OperatorSystemController controller = (OperatorSystemController) super.parentController;
+            controller.updateAccount(existingAccount, newAccount, accountTypeIndex);
 
             super.close();
         }

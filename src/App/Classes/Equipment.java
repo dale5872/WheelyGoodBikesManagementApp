@@ -1,5 +1,7 @@
 package App.Classes;
 
+import java.text.NumberFormat;
+
 public class Equipment {
 
     private int id;
@@ -87,5 +89,9 @@ public class Equipment {
 
     public void setCategory(String category) { this.category = category; }
 
+    public String getFormattedPrice(){
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        return formatter.format(this.price);
+    }
 }
 

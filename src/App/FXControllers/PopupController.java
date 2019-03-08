@@ -3,13 +3,13 @@ package App.FXControllers;
 import javafx.fxml.FXML;
 
 public class PopupController extends Controller{
-    protected OperatorSystemController parentController;
+    protected SystemController parentController;
 
     /**
      * Passes the parent controller in
      * @param controller
      */
-    public void setParentController(OperatorSystemController controller){
+    public void setParentController(SystemController controller){
         this.parentController = controller;
     }
 

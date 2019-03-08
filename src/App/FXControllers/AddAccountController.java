@@ -83,7 +83,8 @@ public class AddAccountController extends AccountPopupController{
             }
 
             /* Pass newAccount back to parent form */
-            super.parentController.addAccount(newAccount, password.getText(), accountTypeIndex);
+            OperatorSystemController controller = (OperatorSystemController) super.parentController;
+            controller.addAccount(newAccount, password.getText(), accountTypeIndex);
 
             super.close();
         }

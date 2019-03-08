@@ -11,30 +11,22 @@
    <children>
       <BorderPane layoutX="290.0" layoutY="207.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane prefHeight="60.0" prefWidth="200.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
+            <AnchorPane styleClass="nav-bar" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane alignment="TOP_RIGHT" layoutY="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
+                  <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="1600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0">
                            <children>
-                              <Label text="Wheely Good Bikes" textFill="WHITE" textOverrun="CLIP">
+                              <Label minWidth="-Infinity" prefWidth="230.0" text="Wheely Good Bikes" textFill="WHITE" textOverrun="CLIP">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
                            </children>
-                        </VBox>
-                        <HBox alignment="BOTTOM_CENTER" prefHeight="800.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        </HBox>
+                        <HBox alignment="BOTTOM_CENTER" layoutX="300.0" maxHeight="-Infinity" prefHeight="60.0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                            <children>
-                              <ToggleButton fx:id="accountsTabButton" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Accounts" textOverrun="CLIP">
+                              <ToggleButton fx:id="accountsTabButton" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Accounts" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -46,7 +38,7 @@
                                     <String fx:value="nav-bar-tab-active" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="bikesTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Equipment" textOverrun="CLIP">
+                              <ToggleButton fx:id="bikesTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Equipment" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -55,7 +47,7 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                               </ToggleButton>
-                              <ToggleButton fx:id="locationsTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Locations" textOverrun="CLIP">
+                              <ToggleButton fx:id="locationsTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Locations" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -66,9 +58,9 @@
                               </ToggleButton>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+                        <HBox alignment="CENTER" layoutX="1300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" GridPane.columnIndex="2">
                            <children>
-                              <ToggleButton fx:id="userTabButton" maxHeight="60.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="60.0" textOverrun="CLIP">
+                              <ToggleButton fx:id="userTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="60.0" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -84,7 +76,7 @@
                                     <Insets bottom="-4.0" left="-4.0" right="-4.0" top="-4.0" />
                                  </padding>
                               </ToggleButton>
-                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
+                              <ToggleButton fx:id="logoutButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -93,13 +85,16 @@
                                     <String fx:value="nav-bar-tab-inactive" />
                                  </styleClass>
                                  <HBox.margin>
-                                    <Insets left="5.0" />
+                                    <Insets />
                                  </HBox.margin>
                               </ToggleButton>
                            </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
                         </HBox>
                      </children>
-                  </GridPane>
+                  </HBox>
                </children>
             </AnchorPane>
          </top>
@@ -174,7 +169,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="bikesTab" visible="false">
+                  <AnchorPane fx:id="bikesTab">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -212,7 +207,7 @@
                                     <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
                                     <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
                                     <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
-                                    <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" text="Price" />
+                                    <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" styleClass="price-column" text="Price" />
                                     <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
                                  </columns>
                                  <VBox.margin>
@@ -234,7 +229,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="locationsTab">
+                  <AnchorPane fx:id="locationsTab" visible="false">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -475,7 +470,7 @@
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                     </VBox>
-                                    <Button fx:id="changeContactDetails1" mnemonicParsing="false" prefWidth="200.0" styleClass="green-button" text="Change Password...">
+                                    <Button mnemonicParsing="false" onAction="#showChangePasswordDialog" prefWidth="200.0" styleClass="green-button" text="Change Password...">
                                        <VBox.margin>
                                           <Insets top="20.0" />
                                        </VBox.margin>

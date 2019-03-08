@@ -60,9 +60,9 @@ public class EditEquipmentController extends PopupController{
 
             /* Pass back to Operator System */
             if(equipment.getCategory().equals("Bike")){
-                super.parentController.updateBike(equipment);
+                ((OperatorSystemController) super.parentController).updateBike(equipment);
             }else{
-                super.parentController.updateEquipment(equipment);
+                ((OperatorSystemController) super.parentController).updateEquipment(equipment);
             }
 
             super.close();
