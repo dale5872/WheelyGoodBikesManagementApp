@@ -22,7 +22,9 @@ public class AddEquipmentController extends PopupController{
     @FXML private ComboBox category;
     @FXML private ComboBox type;
     @FXML private ComboBox equipmentLocation;
-    @FXML private TextField quantity;
+
+    @FXML private TextField quantityField;
+    @FXML private Label numberWarning;
 
     public void setDropdownValues(HashMap<String, String> bikeTypes, HashMap<String, String> equipmentTypes,
                                   HashMap<String, String> locations){
@@ -57,7 +59,7 @@ public class AddEquipmentController extends PopupController{
     }
 
     @FXML
-    protected void confirm() throws InvalidParametersException {
+    protected void confirm(){
         if(validateInput() == true){
             /* Get category */
             String categoryName = (String) category.getSelectionModel().getSelectedItem();
@@ -79,12 +81,8 @@ public class AddEquipmentController extends PopupController{
             int locID = Integer.parseInt(locations.get(locName));
             Location loc = new Location(locID, locName);
 
-            int quantity = 0;
-            try {
-                quantity = Integer.parseInt(this.quantity.getText());
-            } catch (NumberFormatException e) {
-                throw new InvalidParametersException("Quantity field must be a number");
-            }
+            /* Get quantity */
+            int quantity = Integer.parseInt(this.quantityField.getText());
 
             /* Create new equipment object */
             Equipment equipment = new Equipment();
@@ -109,12 +107,13 @@ public class AddEquipmentController extends PopupController{
     }
 
     /**
-     * Checks that no fields are blank, and highlight warning label if there are
+     * Checks that no fields are blank and that the quantity is numeric, highlight warning labels as appropriate
      * @return
      */
     @SuppressWarnings("Duplicates")
     private boolean validateInput(){
         boolean hasBlankFields = checkForBlankFields();
+        boolean quantityIsNumeric = checkQuantityIsNumeric();
 
         /* Highlight "All fields required" label if there are blank fields, set to normal otherwise */
         if(hasBlankFields){
@@ -123,13 +122,18 @@ public class AddEquipmentController extends PopupController{
             allFieldsWarning.getStyleClass().remove("warningLabel");
         }
 
-        return !hasBlankFields;
+        if(quantityIsNumeric){
+            numberWarning.setVisible(false);
+        }else{
+            numberWarning.setVisible(true);
+        }
+
+        return !hasBlankFields && quantityIsNumeric;
     }
 
     /**
      * Checks for any blank fields
-     * Returns TRUE if there are blank fields, FALSE if there are none
-     * @return
+     * @return TRUE if there are blank fields, FALSE if there are none
      */
     @SuppressWarnings("Duplicates")
     private boolean checkForBlankFields(){
@@ -145,6 +149,23 @@ public class AddEquipmentController extends PopupController{
             return true;
         }
 
+        if(quantityField.getText().equals("")){
+            return true;
+        }
+
         return false;
+    }
+
+    /**
+     * Checks that the value entered into the quantity field is numeric
+     * @return TRUE if the quantity is numeric, FALSE if not
+     */
+    private boolean checkQuantityIsNumeric(){
+        try{
+            Integer.parseInt(this.quantityField.getText());
+            return true;
+        }catch(NumberFormatException e){
+            return false;
+        }
     }
 }

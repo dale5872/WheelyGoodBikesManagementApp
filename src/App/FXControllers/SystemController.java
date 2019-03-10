@@ -119,6 +119,7 @@ public class SystemController extends Controller{
         ChangePasswordController controller = (ChangePasswordController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setAccount(this.employee);
     }
 

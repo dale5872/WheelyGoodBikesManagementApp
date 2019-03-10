@@ -332,6 +332,7 @@ public class OperatorSystemController extends SystemController{
         AddAccountController controller = (AddAccountController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setDropdownValues(accountTypes, locations);
     }
 
@@ -354,6 +355,7 @@ public class OperatorSystemController extends SystemController{
             EditAccountController controller = (EditAccountController) loader.getController();
             controller.setParentController(this);
             controller.setOnCloseAction();
+            controller.setAlwaysOnTop(true);
             controller.setDropdownValues(accountTypes, locations);
 
             /* Pass the selected account to edit dialog */
@@ -378,6 +380,7 @@ public class OperatorSystemController extends SystemController{
             DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
             controller.setParentController(this);
             controller.setOnCloseAction();
+            controller.setAlwaysOnTop(true);
             controller.setThingToDelete("account");
         }
     }
@@ -593,6 +596,7 @@ public class OperatorSystemController extends SystemController{
         AddEquipmentController controller = (AddEquipmentController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
     }
 
@@ -610,6 +614,7 @@ public class OperatorSystemController extends SystemController{
         EditEquipmentController controller = (EditEquipmentController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setDropdownValues(locations);
 
         /* Get the selected equipment and pass it to the controller */
@@ -631,6 +636,7 @@ public class OperatorSystemController extends SystemController{
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
 
         if(equipmentView.getSelectionModel().getSelectedItem().equals("Bikes")){
             controller.setThingToDelete("bike");
@@ -797,6 +803,7 @@ public class OperatorSystemController extends SystemController{
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
     }
 
     /**
@@ -813,6 +820,7 @@ public class OperatorSystemController extends SystemController{
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setLocation(getSelectedLocation());
     }
 
@@ -830,6 +838,7 @@ public class OperatorSystemController extends SystemController{
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
         controller.setThingToDelete("location");
     }
 

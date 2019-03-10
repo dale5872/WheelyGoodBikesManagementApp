@@ -60,12 +60,28 @@
                         </VBox>
                   <VBox>
                      <children>
-                        <Label text="Quantity" textFill="WHITE">
+                        <HBox>
+                           <children>
+                              <Label text="Quantity" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="numberWarning" alignment="CENTER_RIGHT" styleClass="warningLabel" text="Must be a number" textAlignment="RIGHT" textFill="WHITE" visible="false">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <TextField fx:id="quantityField" alignment="CENTER_RIGHT" prefHeight="30.0" text="1">
                            <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="quantity" />
+                              <Font size="14.0" />
+                           </font></TextField>
                      </children>
                   </VBox>
                     </children>

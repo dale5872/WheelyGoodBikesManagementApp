@@ -21,6 +21,10 @@ public class PopupController extends Controller{
         super.stage.setOnCloseRequest(e -> close());
     }
 
+    public void setAlwaysOnTop(boolean b){
+        super.stage.setAlwaysOnTop(b);
+    }
+
     /**
      * Closes the form without making changes
      */
