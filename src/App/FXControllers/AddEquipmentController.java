@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ public class AddEquipmentController extends PopupController{
     @FXML private ComboBox category;
     @FXML private ComboBox type;
     @FXML private ComboBox equipmentLocation;
+    @FXML private TextField quantity;
 
     public void setDropdownValues(HashMap<String, String> bikeTypes, HashMap<String, String> equipmentTypes,
                                   HashMap<String, String> locations){
@@ -55,7 +57,7 @@ public class AddEquipmentController extends PopupController{
     }
 
     @FXML
-    protected void confirm(){
+    protected void confirm() throws InvalidParametersException {
         if(validateInput() == true){
             /* Get category */
             String categoryName = (String) category.getSelectionModel().getSelectedItem();
@@ -77,6 +79,13 @@ public class AddEquipmentController extends PopupController{
             int locID = Integer.parseInt(locations.get(locName));
             Location loc = new Location(locID, locName);
 
+            int quantity = 0;
+            try {
+                quantity = Integer.parseInt(this.quantity.getText());
+            } catch (NumberFormatException e) {
+                throw new InvalidParametersException("Quantity field must be a number");
+            }
+
             /* Create new equipment object */
             Equipment equipment = new Equipment();
             equipment.setCategory(categoryName);
@@ -85,12 +94,14 @@ public class AddEquipmentController extends PopupController{
             equipment.setLocation(loc);
             equipment.setStatus("Available");
 
-            /* Pass back to Operator system */
-            OperatorSystemController controller = (OperatorSystemController) super.parentController;
-            if(categoryName.equals("Bike")) {
-                controller.addBike(equipment);
-            }else{
-                controller.addEquipment(equipment);
+            for(int counter = 0; counter < quantity; counter++) {
+                /* Pass back to Operator system */
+                OperatorSystemController controller = (OperatorSystemController) super.parentController;
+                if (categoryName.equals("Bike")) {
+                    controller.addBike(equipment);
+                } else {
+                    controller.addEquipment(equipment);
+                }
             }
 
             super.close();
