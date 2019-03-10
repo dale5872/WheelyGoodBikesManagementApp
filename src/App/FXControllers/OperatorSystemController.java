@@ -851,8 +851,9 @@ public class OperatorSystemController extends SystemController{
         try{
             DataFetcher.addLocation(name);
 
-            //Update table
+            //Update table and hashmap
             filterAndSearchLocations();
+            locations = DataFetcher.getDropdownValues("getLocations");
         }catch(InsertFailedException exc){
             return;
         }
@@ -868,6 +869,7 @@ public class OperatorSystemController extends SystemController{
 
             //Update table
             filterAndSearchLocations();
+            locations = DataFetcher.getDropdownValues("getLocations");
         }catch(InsertFailedException exc){
             return;
         }
@@ -882,6 +884,7 @@ public class OperatorSystemController extends SystemController{
 
             //Update table
             filterAndSearchLocations();
+            locations = DataFetcher.getDropdownValues("getLocations");
         } catch(InsertFailedException exc){
             return;
         }
