@@ -4,7 +4,6 @@ import App.Classes.EmployeeAccount;
 import DatabaseConnector.Authenticate;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.LoginFailedException;
-import App.FXControllers.DataFetcher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -23,12 +22,7 @@ public class ChangePasswordController extends PopupController{
     @FXML private Label confirmationWarning;
 
     /**
-     * TODO: Set ChangePasswordBox to be at the front
-     * BODY: Change the dialog box to be at the front of all windows so the dialog cannot be lost behind the main window
-     */
-
-    /**
-     * Passes in the username of the account to change
+     * Passes in the account to change
      * @param account
      */
     public void setAccount(EmployeeAccount account){
