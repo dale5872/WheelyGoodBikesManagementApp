@@ -60,13 +60,10 @@ public class Query {
         } catch (IOException exc) {
             lgr.log(Level.SEVERE, "IOException Occured");
             exc.printStackTrace();
-        } catch (HTTPErrorException exc) {
-            //prints error
-        } catch (JSONErrorException exc) {
-            //prints error
-        } catch (TimeoutException exc) {
+        } catch (HTTPErrorException | JSONErrorException | TimeoutException exc) {
             //prints error
         }
+
         lgr.log(Level.SEVERE, "Query failed");
         return null;
     }
