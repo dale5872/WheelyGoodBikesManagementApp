@@ -1,13 +1,18 @@
 package App.FXControllers;
 
+import App.Classes.EmployeeAccount;
 import DatabaseConnector.Authenticate;
+import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.LoginFailedException;
+import App.FXControllers.DataFetcher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 
+import static App.FXControllers.DataFetcher.updateEmployeePassword;
+
 public class ChangePasswordController extends PopupController{
-    private String username;
+    private EmployeeAccount account;
 
     /* Controls */
     @FXML private PasswordField currentPwordField;
@@ -18,11 +23,16 @@ public class ChangePasswordController extends PopupController{
     @FXML private Label confirmationWarning;
 
     /**
-     * Passes in the username of the account to change
-     * @param username
+     * TODO: Set ChangePasswordBox to be at the front
+     * BODY: Change the dialog box to be at the front of all windows so the dialog cannot be lost behind the main window
      */
-    public void setUsername(String username){
-        this.username = username;
+
+    /**
+     * Passes in the username of the account to change
+     * @param account
+     */
+    public void setAccount(EmployeeAccount account){
+        this.account = account;
     }
 
     /**
@@ -33,21 +43,20 @@ public class ChangePasswordController extends PopupController{
         String currentPassword = currentPwordField.getText();
 
         try{
-            Authenticate.authorize(username, currentPassword);
+            Authenticate.authorize(account.getUsername(), currentPassword);
             incorrectWarning.setVisible(false);
 
             if(passwordsMatch()){
                 String newPassword = newPwordField.getText();
 
-                /**
-                 *
-                 * TODO: Change the logged in user's password
-                 */
+                updateEmployeePassword(this.account, newPassword);
 
                 super.close();
             }
         }catch(LoginFailedException e){
             incorrectWarning.setVisible(true);
+        } catch (InsertFailedException e) {
+            //do nothing
         }
     }
 

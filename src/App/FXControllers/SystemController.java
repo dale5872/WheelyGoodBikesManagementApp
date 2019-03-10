@@ -119,7 +119,7 @@ public class SystemController extends Controller{
         ChangePasswordController controller = (ChangePasswordController) loader.getController();
         controller.setParentController(this);
         controller.setOnCloseAction();
-        controller.setUsername(employee.getUsername());
+        controller.setAccount(this.employee);
     }
 
     /**

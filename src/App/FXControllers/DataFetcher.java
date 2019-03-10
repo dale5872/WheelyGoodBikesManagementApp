@@ -174,6 +174,13 @@ public class DataFetcher {
         }
     }
 
+    static void updateEmployeePassword(EmployeeAccount acc, String password) throws InsertFailedException {
+        Query q = new Query("update", "updateEmployeePassword", "user_id=" + acc.getUserID() + "&password=" + password);
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to update " + acc.getUsername() + "'s password.");
+        }
+    }
+
     /**
      * Deletes a given user with the user ID and employeeID provided
      * @param userID ID of the user account
