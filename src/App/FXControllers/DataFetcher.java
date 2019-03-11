@@ -289,7 +289,6 @@ public class DataFetcher {
     static Equipment getBike(int id) throws EmptyDatasetException {
         Query q = new Query();
 
-
         //get query based on location
         q.updateQuery("read", "fetchBike", "bike_id=" + id);
 
@@ -336,6 +335,19 @@ public class DataFetcher {
     }
 
     /**
+     * Adds new bikeType with the data entered in the params parameter
+     * @param params parameter containing the data to be inserted
+     * @throws InsertFailedException if insert failed
+     */
+    static void addBikeType(String params) throws InsertFailedException {
+        Query q = new Query("create", "addBikeType", params);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to create new equipment type");
+        }
+    }
+
+    /**
      * Updates the bike in the database
      * @param e Equipment class to update in the database
      * @throws InsertFailedException if failed to update
@@ -374,6 +386,19 @@ public class DataFetcher {
             }
         } else {
             throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+        }
+    }
+
+    /**
+     * Deletes an Bike with the ID number passed into the function
+     * @param id ID number of the Bike type
+     * @throws InsertFailedException If the deletion failed
+     */
+    static void deleteBikeType(int id) throws InsertFailedException {
+        Query q = new Query("delete", "deleteBikeType", "bike_type="+ id);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to delete bike with the ID: " + id);
         }
     }
 
@@ -441,6 +466,19 @@ public class DataFetcher {
     }
 
     /**
+     * Adds new equipmentType with the data entered in the params parameter
+     * @param params parameter containing the data to be inserted
+     * @throws InsertFailedException if insert failed
+     */
+    static void addEquipmentType(String params) throws InsertFailedException {
+        Query q = new Query("create", "addEquipmentType", params);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to create new equipment type");
+        }
+    }
+
+    /**
      * Updates the equipment in the database
      * @param e Equipment class to update in the database
      * @throws InsertFailedException if failed to update
@@ -479,6 +517,19 @@ public class DataFetcher {
             }
         } else {
             throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+        }
+    }
+
+    /**
+     * Deletes an equipment with the ID number passed into the function
+     * @param id ID number of the equipment type
+     * @throws InsertFailedException If the deletion failed
+     */
+    static void deleteEquipmentType(int id) throws InsertFailedException {
+        Query q = new Query("delete", "deleteEquipmentType", "equipment_type="+ id);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to delete equipment with the ID: " + id);
         }
     }
 
