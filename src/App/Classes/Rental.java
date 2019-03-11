@@ -1,12 +1,14 @@
 package App.Classes;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Rental {
 
     private int id;
-    private float cost;
+    private double cost;
     private Date startTime;
     private Date returnTime;
     private String status;
@@ -17,7 +19,7 @@ public class Rental {
         this.id = id;
     }
 
-    public void setCost(float cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -51,20 +53,25 @@ public class Rental {
         return this.id;
     }
 
-    public float getCost() {
-        return this.cost;
+    public double getCost() { return this.cost; }
+
+    public String getFormattedCost() {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        return formatter.format(this.cost);
     }
 
-    public Date getStartTime() {
-        return this.startTime;
+    public String getStartTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        return dateFormat.format(this.startTime);
     }
 
-    public Date getReturnTime() {
-        return this.returnTime;
+    public String getReturnTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        return dateFormat.format(this.returnTime);
     }
 
     public String getStatus() {
-        return this.getStatus();
+        return this.status;
     }
 
     public Account getUser() {
@@ -74,5 +81,14 @@ public class Rental {
     public Equipment getEquipment() {
         return this.equipment;
     }
+
+    public int getEquipmentID() { return this.equipment.getID(); }
+
+    public String getEquipmentName() { return this.equipment.getTypeName(); }
+
+    public String getEquipmentPrice() { return this.equipment.getFormattedPrice(); }
+
+    public String getLocationName() { return this.equipment.getLocationName(); }
+
 
 }

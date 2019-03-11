@@ -3,7 +3,9 @@ package App.FXControllers;
 import App.Classes.EmployeeAccount;
 import App.Classes.Equipment;
 
+import App.Classes.Rental;
 import DatabaseConnector.InsertFailedException;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 
+import javax.security.auth.callback.Callback;
 import java.util.*;
 
 /**
@@ -103,7 +106,11 @@ public class ManagerSystemController extends SystemController{
     public void setEmployee(EmployeeAccount e) {
         super.setEmployee(e);
 
-        loadBikes("");
+        try {
+            loadBikes("");
+            loadRentals("");
+        } catch(Exception exc) {
+        }
     }
 
     @SuppressWarnings("Duplicates")
@@ -228,6 +235,57 @@ public class ManagerSystemController extends SystemController{
                 new PropertyValueFactory<Equipment, String>("Status"));
 
         equipmentTable.setItems(equipment);
+    }
+
+    protected void loadRentals(String params) throws ErrorException {
+        try {
+            ObservableList<Rental> rental = DataFetcher.getRentals(this.employee.getLocation(), "search=" + params);
+
+            //fill table
+            rentalsID.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("ID")
+            );
+
+            rentalsEquipmentID.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("equipmentID")
+            );
+
+            rentalsEquipmentName.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("equipmentName")
+            );
+
+            rentalsEquipmentPrice.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("equipmentPrice")
+            );
+
+            rentalsStartTime.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("startTime")
+            );
+
+            rentalsReturnTime.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("returnTime")
+            );
+
+            rentalsTotalPrice.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("formattedCost")
+            );
+
+            rentalsLocation.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("locationName")
+            );
+
+            rentalsStatus.setCellValueFactory(
+                    new PropertyValueFactory<Rental, String>("status")
+            );
+
+            rentalsTable.setItems(rental);
+
+        } catch (EmptyDatasetException | InvalidParametersException exc) {
+            return;
+        } catch (Exception e) {
+            throw new ErrorException("An error has occured, check the log for details", true, e);
+        }
+
     }
 
     /**

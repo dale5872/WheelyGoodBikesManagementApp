@@ -1,4 +1,3 @@
-/** TODO: Implement fetching rentals */
 /** TODO: Make memory more efficient, dont store a NEW location object per field. */
 package App.FXControllers;
 
@@ -9,6 +8,10 @@ import DatabaseConnector.Results;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.swing.plaf.InsetsUIResource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class DataFetcher {
@@ -89,6 +92,34 @@ public class DataFetcher {
         }
 
         return accounts;
+    }
+
+    /**
+     * Returns a single user account information by their ID
+     * @param id userID
+     * @return Account object with the users data
+     * @throws EmptyDatasetException if the user cannot be found
+     */
+    static Account getUser(int id) throws EmptyDatasetException {
+        Query q = new Query("read", "fetchUserAccounts", "user_id=" + id);
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty dataset", false);
+        } else {
+            //add data
+            Account acc = new Account();
+
+            acc.setUserID(Integer.parseInt((String)res.getElement(0,"userID")));
+            acc.setUsername((String)res.getElement(0,"username"));
+            acc.setFirstName((String)res.getElement(0,"firstName"));
+            acc.setLastName((String)res.getElement(0,"lastName"));
+            acc.setEmail((String)res.getElement(0,"email"));
+            acc.setPhoneNumber((String)res.getElement(0,"telNumber"));
+            acc.setAccType("User");
+            return acc;
+        }
     }
 
     /**
@@ -250,6 +281,39 @@ public class DataFetcher {
     }
 
     /**
+     * Returns a single Equipment object containing all the information of a selected bike
+     * @param id the bikeID
+     * @return Equipment object with all the bikes information
+     * @throws EmptyDatasetException if the bike cannot be found
+     */
+    static Equipment getBike(int id) throws EmptyDatasetException {
+        Query q = new Query();
+
+
+        //get query based on location
+        q.updateQuery("read", "fetchBike", "bike_id=" + id);
+
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
+        } else {
+            Equipment e = new Equipment();
+            e.setID(Integer.parseInt((String) res.getElement(0, "bikeID")));
+            e.setTypeID(Integer.parseInt((String)res.getElement(0,"bikeType")));
+            e.setTypeName((String)res.getElement(0,"bikeName"));
+            Location loc = new Location(Integer.parseInt((String)res.getElement(0,"location")), (String)res.getElement(0,"name"));
+            e.setLocation(loc);
+            e.setStatus((String)res.getElement(0,"bikeStatus"));
+            e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
+            e.setCategory("Bike");
+            return e;
+        }
+
+    }
+
+    /**
      * Adds a new bike with the specified location to the database
      * @param e Equipment object to be added
      * @throws InsertFailedException if failed to be added to the database
@@ -312,7 +376,6 @@ public class DataFetcher {
             throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
         }
     }
-
 
     /**
      * Return all the equipment data from the database with the given query
@@ -499,13 +562,57 @@ public class DataFetcher {
         }
     }
 
+    static ObservableList<Rental> getRentals(Location managerLoc, String params) throws EmptyDatasetException, InvalidParametersException {
+        ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
-    /**
-     *
-     * TODO Implement retrieving rentals
-     */
-    protected static ObservableList<Rental> rentals() {
-        return null;
+        String searchParameters = "location_id=" + managerLoc.getLocationID();
+        Query q = new Query("read", "fetchBikeRentals", searchParameters);
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: Could not list of getLocations", false);
+        } else {
+            for(int r = 0; r < res.getRows(); r++) {
+                Rental newRental = new Rental();
+                //fill data
+                newRental.setID(Integer.parseInt((String) res.getElement(r, "bikeRentalID")));
+                newRental.setUser(getUser(Integer.parseInt((String)res.getElement(r, "userID"))));
+                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID"))));
+                newRental.setStatus((String)res.getElement(r, "status"));
+                //Get start and return times
+                try {
+                    String date = (String) res.getElement(r, "startTime");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date start = dateFormat.parse(date);
+                    newRental.setStartTime(start);
+                } catch (ParseException e) {
+                    throw new InvalidParametersException("Could not parse start time!");
+                }
+
+                try {
+                    String date = (String) res.getElement(r, "returnTime");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date start = dateFormat.parse(date);
+                    newRental.setReturnTime(start);
+                } catch (ParseException e) {
+                    throw new InvalidParametersException("Could not parse return time!");
+                }
+
+                //check if cost has been calculated, if so add it
+                if(res.getElement(r, "cost") == null || (res.getElement(r, "cost")).equals("")) {
+                    newRental.calculateCost();
+                } else {
+                    newRental.setCost(Double.parseDouble((String)res.getElement(r, "cost")));
+                }
+
+                //Get equipment / bike that was rented
+                rentals.add(newRental);
+            }
+        }
+
+        return rentals;
+
     }
 
     /**

@@ -892,7 +892,7 @@
                                     </TextField>
                                  </children>
                               </HBox>
-                                      <TableView fx:id="rentalTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                      <TableView fx:id="rentalsTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                                           <columns>
                                               <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
                                               <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
