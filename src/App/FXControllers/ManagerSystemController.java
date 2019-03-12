@@ -5,17 +5,23 @@ import App.Classes.Equipment;
 
 import App.Classes.Rental;
 import DatabaseConnector.InsertFailedException;
+import DatabaseConnector.Results;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 
 import javax.security.auth.callback.Callback;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -69,8 +75,23 @@ public class ManagerSystemController extends SystemController{
     @FXML private TableColumn rentalsStatus;
     @FXML private TableView rentalsTable;
 
+    /** Reports Table **/
+    @FXML private BarChart barChart;
+
+    /** General Report **/
+    @FXML private DatePicker generalDatePicker;
+    @FXML private ComboBox generalReportFilter;
+
+    @FXML private LineChart revenueGraph;
+    @FXML private DatePicker revenueFromDate;
+    @FXML private DatePicker revenueToDate;
+    @FXML private ComboBox revenueReportFilter;
+    @FXML private CategoryAxis rentalXAxis;
+    @FXML private NumberAxis rentalYAxis;
+
     private static HashMap<String, String> equipmentTypes;
     private static HashMap<String, String> bikeTypes;
+    private static HashMap<String, String> savedReports;
 
     /**
      * The initialise method is called when the form first loads
@@ -98,6 +119,7 @@ public class ManagerSystemController extends SystemController{
 
         equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
         bikeTypes = DataFetcher.getDropdownValues("bikeTypes");
+        savedReports = DataFetcher.getFilenameDropdownValues();
 
         setDropdownOptions();
     }
@@ -130,6 +152,11 @@ public class ManagerSystemController extends SystemController{
         ObservableList<String> options = FXCollections.observableArrayList("Unsolved Penalties", "Solved Penalties");
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
+
+        //Set saved reports dropdown
+        ObservableList<String> reports = OptionsListCreator.createList(savedReports);
+        generalReportFilter.setItems(reports);
+        equipmentFilter.getSelectionModel().selectFirst();
     }
 
     /**
@@ -346,4 +373,114 @@ public class ManagerSystemController extends SystemController{
             solvedPenalties.setVisible(true);
         }
     }
+
+    /** REPORTS METHODS **/
+
+    @FXML
+    protected void loadGeneralReport(Event e) throws ErrorException {
+        barChart.getData().clear();
+
+        String dateString = convertDate(generalDatePicker.getValue());
+
+        //get the data
+        String report = "generateDailyGeneralReport";
+        String params = "location=1&date=" + dateString;
+
+        try {
+            insertDataToBarChart(DataFetcher.getReport(report, params));
+            setDropdownOptions();
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+    }
+
+    @FXML
+    protected void loadSavedGeneralReport(Event e) throws ErrorException {
+        barChart.getData().clear();
+
+        String filename = (String) generalReportFilter.getSelectionModel().getSelectedItem();
+
+        try {
+            insertDataToBarChart(DataFetcher.getSavedReport(filename));
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+    }
+
+    private void insertDataToBarChart(Results res) {
+        String[] headers;
+        headers = res.getHeaders();
+
+        //input data into chart
+        for(int i = 0; i < res.getCols(); i++) {
+            XYChart.Series series = new XYChart.Series();
+            series.setName(headers[i]);
+            series.getData().add(new XYChart.Data(headers[i], Integer.parseInt((String)res.getElement(0, i))));
+            barChart.getData().add(series);
+        }
+    }
+
+    @FXML
+    protected void loadRevenueReport(Event e) throws ErrorException {
+        revenueGraph.getData().clear();
+
+        //get From and To dates
+        String fromDate = convertDate(revenueFromDate.getValue());
+        String toDate = convertDate(revenueToDate.getValue());
+
+        //get the data
+        String report = "generateRevenueReport";
+        String params = "location=1&fromDate=" + fromDate + "&toDate=" + toDate;
+
+        try {
+            insertDataToLineGraph(DataFetcher.getReport(report, params));
+            setDropdownOptions();
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+    }
+
+    @FXML
+    protected void loadSavedRevenueReport(Event e) throws ErrorException {
+        revenueGraph.getData().clear();
+
+        String filename = (String) generalReportFilter.getSelectionModel().getSelectedItem();
+
+        try {
+            insertDataToLineGraph(DataFetcher.getSavedReport(filename));
+        } catch (EmptyDatasetException exc) {
+            return;
+        }
+    }
+
+    private void insertDataToLineGraph(Results res) {
+        String[] headers;
+        headers = res.getHeaders();
+
+        rentalXAxis.setLabel("Dates");
+        rentalYAxis.setLabel("Revenue in £");
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Revenue");
+
+        //input data into chart
+        for(int i = 0; i < res.getCols(); i++) {
+            series.getData().add(new XYChart.Data((String)res.getElement(i, 1), Double.parseDouble((String)res.getElement(i, 0))));
+        }
+        revenueGraph.getData().add(series);
+
+    }
+
+    private String convertDate(LocalDate d) throws ErrorException {
+        //get the date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date convertedDate;
+        try {
+            convertedDate = dateFormat.parse(d.toString());
+        } catch (ParseException exc) {
+            throw new ErrorException("Could not parse date!", true);
+        }
+        return dateFormat.format(convertedDate);
+    }
+
 }

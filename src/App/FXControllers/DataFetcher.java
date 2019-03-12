@@ -46,6 +46,7 @@ public class DataFetcher {
                 acc.setEmail((String)res.getElement(r,"workEmail"));
                 acc.setPhoneNumber((String)res.getElement(r,"workTel"));
                 acc.setAccType((String)res.getElement(r,"type"));
+                /** Get reference of location object **/
                 Location loc = new Location(Integer.parseInt((String)res.getElement(r,"locationID")), (String)res.getElement(r,"locationName"));
                 acc.setLocation(loc);
                 acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
@@ -268,6 +269,7 @@ public class DataFetcher {
                 e.setID(Integer.parseInt((String) res.getElement(r, "bikeID")));
                 e.setTypeID(Integer.parseInt((String)res.getElement(r,"bikeType")));
                 e.setTypeName((String)res.getElement(r,"bikeName"));
+                /** Get reference of location object **/
                 Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
                 e.setLocation(loc);
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
@@ -302,6 +304,7 @@ public class DataFetcher {
             e.setID(Integer.parseInt((String) res.getElement(0, "bikeID")));
             e.setTypeID(Integer.parseInt((String)res.getElement(0,"bikeType")));
             e.setTypeName((String)res.getElement(0,"bikeName"));
+            /** Get reference of location object **/
             Location loc = new Location(Integer.parseInt((String)res.getElement(0,"location")), (String)res.getElement(0,"name"));
             e.setLocation(loc);
             e.setStatus((String)res.getElement(0,"bikeStatus"));
@@ -458,6 +461,7 @@ public class DataFetcher {
                 e.setID(Integer.parseInt((String) res.getElement(r, "equipmentID")));
                 e.setTypeID(Integer.parseInt((String)res.getElement(r,"equipmentType")));
                 e.setTypeName((String)res.getElement(r,"equipmentName"));
+                /** Get reference of location object **/
                 Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
                 e.setLocation(loc);
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
@@ -602,6 +606,7 @@ public class DataFetcher {
             throw new EmptyDatasetException("Empty Dataset: Could not list of getLocations", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
+                /** Get reference of location object **/
                 locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
             }
         }
@@ -718,6 +723,28 @@ public class DataFetcher {
 
     }
 
+    static Results getReport(String report, String params) throws EmptyDatasetException {
+        Query q = new Query("reports", report, params);
+        Results res = q.executeQuery();
+
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("No report to fetch", true);
+        } else {
+            return res;
+        }
+    }
+
+    static Results getSavedReport(String filename) throws EmptyDatasetException {
+        Query q = new Query("reports", "fetchStoredReport", "filename=" + filename);
+        Results res = q.executeQuery();
+
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("No report to fetch", true);
+        } else {
+            return res;
+        }
+    }
+
     /**
      * Returns a HashMap of the values needed for the dropdown values in the
      * add / edit forms
@@ -771,5 +798,22 @@ public class DataFetcher {
         }
 
         return accountTypes;
+    }
+
+    static HashMap<String, String> getFilenameDropdownValues() {
+        HashMap<String, String> filenames = new HashMap<>();
+
+        Query q = new Query();
+        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "");
+
+        String[] headers = res.getHeaders();
+
+        if(!res.isEmpty()) {
+            for(int r = 0; r < res.getCols(); r++) {
+                filenames.put((String)res.getElement(0, r), headers[r]);
+            }
+        }
+
+        return filenames;
     }
 }
