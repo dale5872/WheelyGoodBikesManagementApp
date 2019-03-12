@@ -1,13 +1,11 @@
 package App.FXControllers;
 
-import App.Classes.Account;
-import App.Classes.EmployeeAccount;
-import App.Classes.Equipment;
-import App.Classes.Location;
+import App.Classes.*;
 
 import App.JavaFXLoader;
 import DatabaseConnector.InsertFailedException;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -77,6 +75,14 @@ public class OperatorSystemController extends SystemController{
     //Types toggle
     @FXML private Button toggleTypes;
 
+    /** Equipment Types Table **/
+    @FXML private TableView typesTable;
+
+    @FXML private TableColumn typeID;
+    @FXML private TableColumn typeName;
+    @FXML private TableColumn typePrice;
+    @FXML private TableColumn typeImageURL;
+
     /** Types tab */
     @FXML private AnchorPane typesTab;
 
@@ -130,6 +136,7 @@ public class OperatorSystemController extends SystemController{
         loadBikes("");
         loadTypes("");
         loadLocations("");
+        loadBikeTypes();
 
         //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
@@ -595,6 +602,56 @@ public class OperatorSystemController extends SystemController{
                 new PropertyValueFactory<Equipment, String>("Status"));
 
         equipmentTable.setItems(equipment);
+    }
+
+    @FXML
+    protected void changeEquipmentTypesView(ActionEvent e) {
+        Boolean isBike = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
+
+        if(isBike) {
+            loadBikeTypes();
+        } else {
+            //equipment selected
+            loadEquipmentTypes();
+        }
+    }
+
+    private void loadBikeTypes() {
+        try {
+            ObservableList<Type> types = DataFetcher.getBikeTypes();
+            fillTypeTable(types);
+        } catch (EmptyDatasetException e) {
+            return;
+        }
+    }
+
+    private void loadEquipmentTypes() {
+        try {
+            ObservableList<Type> types = DataFetcher.getEquipmentTypes();
+            fillTypeTable(types);
+        } catch (EmptyDatasetException e) {
+            return;
+        }
+    }
+
+    private void fillTypeTable(ObservableList<Type> type) {
+        typeID.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("ID")
+        );
+
+        typeName.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("name")
+        );
+
+        typePrice.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("FormattedPrice")
+        );
+
+        typeImageURL.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("image")
+        );
+
+        typesTable.setItems(type);
     }
 
     /**

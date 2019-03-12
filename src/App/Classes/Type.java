@@ -5,7 +5,9 @@ import java.text.NumberFormat;
 public class Type{
     private String id;
     private String name;
-    private float price;
+    private double price;
+    private String image;
+    private boolean isBike;
 
     public Type(String id){
         this.id = id;
@@ -15,9 +17,13 @@ public class Type{
         this.name = name;
     }
 
-    public void setPrice(float price){
+    public void setPrice(double price){
         this.price = price;
     }
+
+    public void setImage(String url) { this.image = url; }
+
+    public void setIsBike(boolean isBike) { this.isBike = isBike; }
 
     public String getID(){
         return this.id;
@@ -27,7 +33,7 @@ public class Type{
         return this.name;
     }
 
-    public float getPrice(){
+    public double getPrice(){
         return this.price;
     }
 
@@ -35,4 +41,10 @@ public class Type{
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         return formatter.format(this.price);
     }
+
+    public boolean isBike() {
+        return this.isBike;
+    }
+
+    public String getImage() { return this.image; }
 }

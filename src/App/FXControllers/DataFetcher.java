@@ -313,6 +313,32 @@ public class DataFetcher {
     }
 
     /**
+     * Gets all the bike types currently in operation in the system
+     * @return ObservableList of all the types
+     * @throws EmptyDatasetException if there are no types in operation
+     */
+    static ObservableList<Type> getBikeTypes() throws EmptyDatasetException {
+        ObservableList<Type> type = FXCollections.observableArrayList();
+
+        Query q = new Query();
+        Results res = q.executeQuery("read", "fetchBikeTypes", "return_type=table");
+
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No bike types to return", false);
+        } else {
+            for(int r = 0; r < res.getRows(); r++) {
+                Type t = new Type((String)res.getElement(r, "bikeTypeID"));
+                t.setName((String)res.getElement(r, "bikeType"));
+                t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
+                t.setImage((String)res.getElement(r, "image"));
+                t.setIsBike(true); //false means its an equipment
+                type.add(t);
+            }
+        }
+        return type;
+    }
+
+    /**
      * Adds a new bike with the specified location to the database
      * @param e Equipment object to be added
      * @throws InsertFailedException if failed to be added to the database
@@ -442,6 +468,32 @@ public class DataFetcher {
         }
 
         return equipment;
+    }
+
+    /**
+     * Gets all the equipment types currently in operation in the system
+     * @return ObservableList of all the types
+     * @throws EmptyDatasetException if there are no types in operation
+     */
+    static ObservableList<Type> getEquipmentTypes() throws EmptyDatasetException {
+        ObservableList<Type> type = FXCollections.observableArrayList();
+
+        Query q = new Query();
+        Results res = q.executeQuery("read", "fetchEquipmentTypes", "return_type=table");
+
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No equipment types to return", false);
+        } else {
+            for(int r = 0; r < res.getRows(); r++) {
+                Type t = new Type((String)res.getElement(r, "equipmentTypeID"));
+                t.setName((String)res.getElement(r, "equipmentType"));
+                t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
+                t.setImage((String)res.getElement(r, "image"));
+                t.setIsBike(false); //false means its an equipment
+                type.add(t);
+            }
+        }
+        return type;
     }
 
 
@@ -696,12 +748,12 @@ public class DataFetcher {
                 name = "name";
                 break;
             case "equipmentTypes":
-                q.updateQuery("read", "fetchEquipmentTypes", "");
+                q.updateQuery("read", "fetchEquipmentTypes", "return_type=dropdown");
                 id = "equipmentTypeID";
                 name = "equipmentType";
                 break;
             case "bikeTypes":
-                q.updateQuery("read", "fetchBikeTypes", "");
+                q.updateQuery("read", "fetchBikeTypes", "return_type=dropdown");
                 id = "bikeTypeID";
                 name = "bikeType";
                 break;
