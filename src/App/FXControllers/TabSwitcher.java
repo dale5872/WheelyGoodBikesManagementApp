@@ -13,22 +13,28 @@ public class TabSwitcher {
      * Switches between a given list of tabs, based on a given list of tab buttons and the button which has been clicked.
      * The clicked button has its CSS style class changed to active, and is disabled. All other buttons have their CSS style class changed to inactive and are enabled.
      * The tab associated with the clicked button is made visible, and all others tabs are made invisible.
+     * Any hidden tabs are set to not visible
      * @param tabButtons A list of all tab buttons
      * @param tabs A list of all tabs
      * @param clickedButton The tab button that has been clicked
      */
     public static void switchTab(List<ToggleButton> tabButtons, List<AnchorPane> tabs, ToggleButton clickedButton){
-        for(int i = 0; i < tabButtons.size(); i++){
-            if(tabButtons.get(i) == clickedButton){
-                activateTab(tabButtons.get(i), tabs.get(i));
-            }else{
-                deactivateTab(tabButtons.get(i), tabs.get(i));
+        for(int i = 0; i < tabs.size(); i++){
+            if(i < tabButtons.size()) {
+                if (tabButtons.get(i) == clickedButton) {
+                    activateTab(tabButtons.get(i), tabs.get(i));
+                } else {
+                    deactivateTab(tabButtons.get(i), tabs.get(i));
+                }
+            }else{ //Hidden tab
+                tabs.get(i).setVisible(false);
             }
         }
     }
 
     /**
      * Switches to the first tab
+     * The first tab cannot be a hidden tab
      * @param tabButtons A list of all tab buttons
      * @param tabs A list of all tabs
      */
@@ -36,8 +42,12 @@ public class TabSwitcher {
         ToggleButton firstButton = tabButtons.get(0);
         AnchorPane firstTab = tabs.get(0);
 
-        for(int i = 0; i < tabButtons.size(); i++){
-            deactivateTab(tabButtons.get(i), tabs.get(i));
+        for(int i = 0; i < tabs.size(); i++){
+            if(i < tabButtons.size()){
+                deactivateTab(tabButtons.get(i), tabs.get(i));
+            }else{
+                tabs.get(i).setVisible(false);
+            }
         }
 
         activateTab(firstButton, firstTab);

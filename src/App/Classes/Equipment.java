@@ -12,6 +12,7 @@ public class Equipment {
     private String image;
     private Location location;
     private String category; //Bike or Equipment
+    private Type type;
 
     public Equipment(int id, int typeID, String typeName, String status, float price, String image, Location location) {
         this.id = id;
@@ -92,6 +93,14 @@ public class Equipment {
     public String getFormattedPrice(){
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         return formatter.format(this.price);
+    }
+
+    public void setType(Type type){
+        this.type = type;
+    }
+
+    public Type getType(){
+        return this.type;
     }
 }
 

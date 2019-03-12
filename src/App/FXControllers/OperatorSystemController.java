@@ -25,7 +25,7 @@ import java.util.*;
 public class OperatorSystemController extends SystemController{
     @FXML private ToggleButton accountsTabButton; //Gets the accounts tab button object
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
-    @FXML private ToggleButton locationsTabButton; //Gets locations yellow tab button object
+    @FXML private ToggleButton locationsTabButton; //Gets locations tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button
 
     @FXML private AnchorPane accountsTab; //Gets the accounts tab object
@@ -74,6 +74,15 @@ public class OperatorSystemController extends SystemController{
     @FXML private Button editEquip;
     @FXML private Button deleteEquip;
 
+    //Types toggle
+    @FXML private Button toggleTypes;
+
+    /** Types tab */
+    @FXML private AnchorPane typesTab;
+
+    //Filter and search
+    @FXML private ComboBox typesView;
+
     /** Locations Tab **/
     //Table
     @FXML private TableColumn locationsID;
@@ -111,6 +120,7 @@ public class OperatorSystemController extends SystemController{
         super.tabs.add(bikesTab);
         super.tabs.add(locationsTab);
         super.tabs.add(userTab);
+        super.tabs.add(typesTab);
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
@@ -118,6 +128,7 @@ public class OperatorSystemController extends SystemController{
         //Load data into tables
         loadEmployeeAccounts("");
         loadBikes("");
+        loadTypes("");
         loadLocations("");
 
         //Load in account types, locations and equipment types
@@ -145,9 +156,13 @@ public class OperatorSystemController extends SystemController{
         employeesFilter.getSelectionModel().selectFirst();
 
         //Set the equipment view dropdown
-        ObservableList<String> equipmentViewOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
-        equipmentView.setItems(equipmentViewOptions);
+        ObservableList<String> typeOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
+        equipmentView.setItems(typeOptions);
         equipmentView.getSelectionModel().selectFirst();
+
+        //Set the types view dropdown
+        typesView.setItems(typeOptions);
+        typesView.getSelectionModel().selectFirst();
 
         //Set the equipment filter for bikes (default view option)
         ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
@@ -757,6 +772,50 @@ public class OperatorSystemController extends SystemController{
             editEquip.setDisable(true);
             deleteEquip.setDisable(true);
         }
+    }
+
+    /**
+     * Toggles the bikes/equipment tab between showing equipment and showing types
+     * @param e ActionEvent
+     */
+    @FXML
+    protected void toggleEquipmentTab(ActionEvent e){
+        if(e.getSource() == toggleTypes){
+            bikesTab.setVisible(false);
+            typesTab.setVisible(true);
+        }else{
+            bikesTab.setVisible(true);
+            typesTab.setVisible(false);
+        }
+    }
+
+    @FXML
+    protected void filterAndSearchTypes(){
+
+    }
+
+    private void loadTypes(String params){
+        
+    }
+
+    @FXML
+    protected void showAddTypeDialog(){
+
+    }
+
+    @FXML
+    protected void showEditTypeDialog(){
+
+    }
+
+    @FXML
+    protected void showDeleteTypeDialog(){
+
+    }
+
+    @FXML
+    protected void setEditDeleteTypeButtons(){
+
     }
 
     /**
