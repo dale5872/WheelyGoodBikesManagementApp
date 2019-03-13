@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -106,7 +107,7 @@
             <center>
                 <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane fx:id="bikesTab">
+                        <AnchorPane fx:id="bikesTab" visible="false">
                             <children>
                                 <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
@@ -912,7 +913,33 @@
                         </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="reportsTab" visible="false" />
+                        <AnchorPane fx:id="reportsTab">
+                     <children>
+                        <Label text="General Report" />
+                        <DatePicker fx:id="generalDatePicker" layoutY="34.0" onAction="#loadGeneralReport" prefHeight="27.0" prefWidth="315.0" />
+                        <ComboBox fx:id="generalReportFilter" layoutY="75.0" onAction="#loadSavedGeneralReport" prefHeight="27.0" prefWidth="315.0" />
+                        <BarChart fx:id="barChart" layoutX="374.0" layoutY="34.0" prefHeight="304.0" prefWidth="485.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                        <Label layoutX="7.0" layoutY="362.0" text="Revenue" />
+                        <DatePicker fx:id="revenueFromDate" layoutX="7.0" layoutY="404.0" prefHeight="27.0" prefWidth="197.0" />
+                        <DatePicker fx:id="revenueToDate" layoutX="218.0" layoutY="404.0" prefHeight="27.0" prefWidth="194.0" />
+                        <LineChart fx:id="revenueGraph" layoutX="420.0" layoutY="345.0" prefHeight="307.0" prefWidth="531.0">
+                          <xAxis>
+                            <CategoryAxis fx:id="rentalXAxis" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="rentalYAxis" side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <ComboBox fx:id="revenueReportFilter" layoutX="7.0" layoutY="475.0" onAction="#loadSavedRevenueReport" prefHeight="27.0" prefWidth="315.0" />
+                        <Button layoutX="7.0" layoutY="439.0" mnemonicParsing="false" onAction="#loadRevenueReport" text="Button" />
+                     </children></AnchorPane>
                         <AnchorPane fx:id="userTab" visible="false">
                             <children>
                                 <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
