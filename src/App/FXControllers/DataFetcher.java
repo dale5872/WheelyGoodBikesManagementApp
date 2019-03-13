@@ -331,7 +331,6 @@ public class DataFetcher {
                 t.setName((String)res.getElement(r, "bikeType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
-                t.setIsBike(true); //false means its an equipment
                 type.add(t);
             }
         }
@@ -362,11 +361,13 @@ public class DataFetcher {
 
     /**
      * Adds new bikeType with the data entered in the params parameter
-     * @param params parameter containing the data to be inserted
+     * @param type The Type to be added
      * @throws InsertFailedException if insert failed
      */
-    static void addBikeType(String params) throws InsertFailedException {
-        Query q = new Query("create", "addBikeType", params);
+    static void addBikeType(Type type) throws InsertFailedException {
+        Query q = new Query("create", "addBikeType", "bike_type=" + type.getName()
+                + "&pricePerHour=" + type.getPrice()
+                + "&image=" + type.getImage());
 
         if(!q.insertQuery()) {
             throw new InsertFailedException("Failed to create new equipment type");
@@ -395,6 +396,16 @@ public class DataFetcher {
     }
 
     /**
+     * Updates the selected bike type in the database
+     * @param type The type to update
+     */
+    static void updateBikeType(Type type) throws InsertFailedException{
+        /**
+         * TODO: Updating bike & equipment types
+         */
+    }
+
+    /**
      * Deletes the selected equipment from the database
      * @param e Equipment object to delete
      * @throws InsertFailedException if failed to delete
@@ -417,14 +428,14 @@ public class DataFetcher {
 
     /**
      * Deletes an Bike with the ID number passed into the function
-     * @param id ID number of the Bike type
+     * @param type Type to delete
      * @throws InsertFailedException If the deletion failed
      */
-    static void deleteBikeType(int id) throws InsertFailedException {
-        Query q = new Query("delete", "deleteBikeType", "bike_type="+ id);
+    static void deleteBikeType(Type type) throws InsertFailedException {
+        Query q = new Query("delete", "deleteBikeType", "bike_type="+ type.getID());
 
         if(!q.insertQuery()) {
-            throw new InsertFailedException("Failed to delete bike with the ID: " + id);
+            throw new InsertFailedException("Failed to delete bike type with the ID: " + type.getID());
         }
     }
 
@@ -482,14 +493,13 @@ public class DataFetcher {
         Results res = q.executeQuery("read", "fetchEquipmentTypes", "return_type=table");
 
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: No equipment types to return", false);
+            throw new EmptyDatasetException("Empty Dataset: No equipment types to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Type t = new Type((String)res.getElement(r, "equipmentTypeID"));
                 t.setName((String)res.getElement(r, "equipmentType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
-                t.setIsBike(false); //false means its an equipment
                 type.add(t);
             }
         }
@@ -519,11 +529,13 @@ public class DataFetcher {
 
     /**
      * Adds new equipmentType with the data entered in the params parameter
-     * @param params parameter containing the data to be inserted
+     * @param type The type to add
      * @throws InsertFailedException if insert failed
      */
-    static void addEquipmentType(String params) throws InsertFailedException {
-        Query q = new Query("create", "addEquipmentType", params);
+    static void addEquipmentType(Type type) throws InsertFailedException {
+        Query q = new Query("create", "addEquipmentType", "equipment_type=" + type.getName()
+                + "&pricePerHour=" + type.getPrice()
+                + "&image=" + type.getImage());
 
         if(!q.insertQuery()) {
             throw new InsertFailedException("Failed to create new equipment type");
@@ -552,6 +564,16 @@ public class DataFetcher {
     }
 
     /**
+     * Updates the selected equipment type in the database
+     * @param type The type to update
+     */
+    static void updateEquipmentType(Type type) throws InsertFailedException{
+        /**
+         * TODO: Updating bike & equipment types
+         */
+    }
+
+    /**
      * Deletes the selected equipment from the database
      * @param e Equipment object to delete
      * @throws InsertFailedException if failed to delete
@@ -574,14 +596,14 @@ public class DataFetcher {
 
     /**
      * Deletes an equipment with the ID number passed into the function
-     * @param id ID number of the equipment type
+     * @param type The type to delete
      * @throws InsertFailedException If the deletion failed
      */
-    static void deleteEquipmentType(int id) throws InsertFailedException {
-        Query q = new Query("delete", "deleteEquipmentType", "equipment_type="+ id);
+    static void deleteEquipmentType(Type type) throws InsertFailedException {
+        Query q = new Query("delete", "deleteEquipmentType", "bike_type="+ type.getID());
 
         if(!q.insertQuery()) {
-            throw new InsertFailedException("Failed to delete equipment with the ID: " + id);
+            throw new InsertFailedException("Failed to delete equipment with the ID: " + type.getID());
         }
     }
 
@@ -599,7 +621,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: Could not list of getLocations", false);
+            throw new EmptyDatasetException("Empty Dataset: Could not get list of locations", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
@@ -674,7 +696,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: Could not list of getLocations", false);
+            throw new EmptyDatasetException("Empty Dataset: Could not get list of rentals", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Rental newRental = new Rental();

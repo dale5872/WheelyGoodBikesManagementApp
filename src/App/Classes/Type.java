@@ -7,7 +7,8 @@ public class Type{
     private String name;
     private double price;
     private String image;
-    private boolean isBike;
+
+    public Type(){}
 
     public Type(String id){
         this.id = id;
@@ -22,8 +23,6 @@ public class Type{
     }
 
     public void setImage(String url) { this.image = url; }
-
-    public void setIsBike(boolean isBike) { this.isBike = isBike; }
 
     public String getID(){
         return this.id;
@@ -40,10 +39,6 @@ public class Type{
     public String getFormattedPrice(){
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         return formatter.format(this.price);
-    }
-
-    public boolean isBike() {
-        return this.isBike;
     }
 
     public String getImage() { return this.image; }

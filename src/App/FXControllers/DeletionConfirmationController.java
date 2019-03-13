@@ -32,6 +32,12 @@ public class DeletionConfirmationController extends PopupController{
             case "location":
                 controller.deleteLocation();
                 break;
+            case "bike type":
+                controller.deleteBikeType();
+                break;
+            case "equipment type":
+                controller.deleteEquipmentType();
+                break;
             default:
                 break;
         }

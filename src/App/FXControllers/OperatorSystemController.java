@@ -5,7 +5,6 @@ import App.Classes.*;
 import App.JavaFXLoader;
 import DatabaseConnector.InsertFailedException;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -88,6 +87,11 @@ public class OperatorSystemController extends SystemController{
 
     //Filter and search
     @FXML private ComboBox typesView;
+    @FXML private TextField typeSearch;
+
+    //Edit and delete buttons
+    @FXML private Button editType;
+    @FXML private Button deleteType;
 
     /** Locations Tab **/
     //Table
@@ -95,7 +99,7 @@ public class OperatorSystemController extends SystemController{
     @FXML private TableColumn locationsName;
     @FXML private TableView locationsTable;
 
-    //Add, edit and delete buttons
+    //Edit and delete buttons
     @FXML private Button editLocation;
     @FXML private Button deleteLocation;
 
@@ -105,8 +109,11 @@ public class OperatorSystemController extends SystemController{
     //fields
     private static HashMap<String, String> accountTypes;
     private static HashMap<String, String> locations;
-    private static HashMap<String, String> equipmentTypes;
-    private static HashMap<String, String> bikeTypes;
+    private static HashMap<String, String> equipmentTypesMap;
+    private static HashMap<String, String> bikeTypesMap;
+
+    private static ObservableList<Type> bikeTypes;
+    private static ObservableList<Type> equipmentTypes;
 
     /**
      * The initialise method is called when the form first loads
@@ -134,17 +141,44 @@ public class OperatorSystemController extends SystemController{
         //Load data into tables
         loadEmployeeAccounts("");
         loadBikes("");
-        loadTypes("");
         loadLocations("");
-        loadBikeTypes();
 
         //Load in account types, locations and equipment types
         accountTypes = DataFetcher.getDropdownValues("accountTypes");
         locations = DataFetcher.getDropdownValues("getLocations");
-        equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
-        bikeTypes = DataFetcher.getDropdownValues("bikeTypes");
+        equipmentTypesMap = DataFetcher.getDropdownValues("equipmentTypes");
+        bikeTypesMap = DataFetcher.getDropdownValues("bikeTypes");
+
+        bikeTypes = loadBikeTypes();
+        equipmentTypes = loadEquipmentTypes();
+
+        fillTypesTable(bikeTypes);
 
         setDropdownOptions();
+    }
+
+    /**
+     * Loads the list of bike types from the database.
+     * @return An ObservableList of Type objects
+     */
+    private ObservableList<Type> loadBikeTypes(){
+        try{
+            return DataFetcher.getBikeTypes();
+        }catch(EmptyDatasetException e){
+            return null;
+        }
+    }
+
+    /**
+     * Loads the list of equipment types from the database.
+     * @return An ObservableList of Type objects
+     */
+    private ObservableList<Type> loadEquipmentTypes() {
+        try{
+            return DataFetcher.getEquipmentTypes();
+        }catch(EmptyDatasetException e){
+            return null;
+        }
     }
 
     /**
@@ -172,7 +206,7 @@ public class OperatorSystemController extends SystemController{
         typesView.getSelectionModel().selectFirst();
 
         //Set the equipment filter for bikes (default view option)
-        ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+        ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypesMap);
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
@@ -507,9 +541,9 @@ public class OperatorSystemController extends SystemController{
 
         /* Create options list for filter dropdown */
         if(showingBikes){
-            equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+            equipmentFilterOptions = OptionsListCreator.createList(bikeTypesMap);
         }else{ //Showing equipment
-            equipmentFilterOptions = OptionsListCreator.createList(equipmentTypes);
+            equipmentFilterOptions = OptionsListCreator.createList(equipmentTypesMap);
         }
 
         /* Add "All" option to list and add list to dropdown */
@@ -604,56 +638,6 @@ public class OperatorSystemController extends SystemController{
         equipmentTable.setItems(equipment);
     }
 
-    @FXML
-    protected void changeEquipmentTypesView(ActionEvent e) {
-        Boolean isBike = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
-
-        if(isBike) {
-            loadBikeTypes();
-        } else {
-            //equipment selected
-            loadEquipmentTypes();
-        }
-    }
-
-    private void loadBikeTypes() {
-        try {
-            ObservableList<Type> types = DataFetcher.getBikeTypes();
-            fillTypeTable(types);
-        } catch (EmptyDatasetException e) {
-            return;
-        }
-    }
-
-    private void loadEquipmentTypes() {
-        try {
-            ObservableList<Type> types = DataFetcher.getEquipmentTypes();
-            fillTypeTable(types);
-        } catch (EmptyDatasetException e) {
-            return;
-        }
-    }
-
-    private void fillTypeTable(ObservableList<Type> type) {
-        typeID.setCellValueFactory(
-                new PropertyValueFactory<Type, String>("ID")
-        );
-
-        typeName.setCellValueFactory(
-                new PropertyValueFactory<Type, String>("name")
-        );
-
-        typePrice.setCellValueFactory(
-                new PropertyValueFactory<Type, String>("FormattedPrice")
-        );
-
-        typeImageURL.setCellValueFactory(
-                new PropertyValueFactory<Type, String>("image")
-        );
-
-        typesTable.setItems(type);
-    }
-
     /**
      * Creates and shows the dialog for adding new equipment/bikes, also disabling the operator system screen
      */
@@ -669,7 +653,7 @@ public class OperatorSystemController extends SystemController{
         controller.setParentController(this);
         controller.setOnCloseAction();
         controller.setAlwaysOnTop(true);
-        controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
+        controller.setDropdownValues(bikeTypesMap, equipmentTypesMap, locations);
     }
 
     /**
@@ -846,33 +830,280 @@ public class OperatorSystemController extends SystemController{
         }
     }
 
+    /**
+     * Handles filtering and searching types.
+     * Bike/equipment types are shown in the table depending on what has been selected in the dropdown and any search terms entered.
+     */
     @FXML
     protected void filterAndSearchTypes(){
+        setEditDeleteTypeButtons();
 
+        String searchParams = typeSearch.getText();
+        boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
+
+        if(searchParams.equals("")){ //No search term - so showing all
+            if(showingBikes){
+                fillTypesTable(bikeTypes);
+            }else{
+                fillTypesTable(equipmentTypes);
+            }
+        }else{ //Searching
+            if(showingBikes){
+                searchBikeTypes(searchParams);
+            }else{
+                searchEquipmentTypes(searchParams);
+            }
+        }
     }
 
-    private void loadTypes(String params){
-        
+    /**
+     * Searches for bike types using a given search parameter.
+     * @param params Parameters to search by
+     */
+    private void searchBikeTypes(String params){
+        /**
+         * TODO: Type searching
+         * BODY: Code is commented out below, just needs DataFetcher method.
+         */
+
+        /*
+         * Store the search results in a new list and pass that to fillTypesTable.
+         * Do not override the global bikeTypes List, as this list is needed in full elsewhere in the program.
+         */
+        //ObservableList<Type> result = <DataFetcher method for searching bike types>
+        //fillTypesTable(result)
     }
 
+    /**
+     * Searches for equipment types using a given search parameter.
+     * @param params Parameters to search by
+     */
+    private void searchEquipmentTypes(String params){
+        /**
+         * TODO: Type searching
+         * BODY: Code is commented out below, just needs DataFetcher method.
+         */
+
+        /*
+         * Store the search results in a new list and pass that to fillTypesTable.
+         * Do not override the global equipmentTypes List, as this list is needed in full elsewhere in the program.
+         */
+        //ObservableList<Type> result = <DataFetcher method for searching equipment types>
+        //fillTypesTable(result)
+    }
+
+    /**
+     * Displays an ObservableList of Type objects in the types table.
+     * @param typesToDisplay The ObservableList to display
+     */
+    private void fillTypesTable(ObservableList<Type> typesToDisplay) {
+        typeID.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("ID")
+        );
+
+        typeName.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("name")
+        );
+
+        typePrice.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("FormattedPrice")
+        );
+
+        typeImageURL.setCellValueFactory(
+                new PropertyValueFactory<Type, String>("image")
+        );
+
+        typesTable.setItems(typesToDisplay);
+    }
+
+    /**
+     * Creates and shows the dialog for adding a new bike or equipment type, also disabling the operator system screen
+     */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void showAddTypeDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditType", "Add Type", false);
 
+        super.disable();
+
+        AddEditTypeController controller = (AddEditTypeController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
+
+        boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
+        controller.setIsBike(showingBikes);
     }
 
+    /**
+     * Creates and shows the dialog for editing an existing bike or equipment type, also disabling the operator system screen
+     */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void showEditTypeDialog(){
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("AddEditType", "Edit Type", false);
 
+        super.disable();
+
+        AddEditTypeController controller = (AddEditTypeController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
+        controller.setExistingType(getSelectedType());
+
+        boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
+        controller.setIsBike(showingBikes);
     }
 
+    /**
+     * Creates and shows the dialog for deleting an existing bike or equipment type, also disabling the operator system screen
+     */
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void showDeleteTypeDialog(){
+        boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
 
+        /* Load the popup */
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.loadNewFXWindow("DeletionConfirmation", "Delete Type", false);
+
+        super.disable();
+
+        DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
+        controller.setParentController(this);
+        controller.setOnCloseAction();
+        controller.setAlwaysOnTop(true);
+
+        if(showingBikes){
+            controller.setThingToDelete("bike type");
+        }else{
+            controller.setThingToDelete("equipment type");
+        }
     }
 
-    @FXML
-    protected void setEditDeleteTypeButtons(){
+    /**
+     * Gets the type selected in the table
+     * @return
+     */
+    private Type getSelectedType(){
+        int rowIndex = typesTable.getSelectionModel().selectedIndexProperty().get();
+        ObservableList<Type> rows = typesTable.getItems();
+        return rows.get(rowIndex);
+    }
 
+    /**
+     * Adds a new bike type to the database
+     * @param newType The new type to add
+     */
+    public void addBikeType(Type newType){
+        try{
+            DataFetcher.addBikeType(newType);
+
+            //Update table and list
+            bikeTypes = loadBikeTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Adds a new equipment type to the database
+     * @param newType The new type to add
+     */
+    public void addEquipmentType(Type newType){
+        try{
+            DataFetcher.addEquipmentType(newType);
+
+            //Update table and list
+            equipmentTypes = loadEquipmentTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Updates an existing bike type in the database
+     * @param type The updated type
+     */
+    public void updateBikeType(Type type){
+        try{
+            DataFetcher.updateBikeType(type);
+
+            //Update table and list
+            bikeTypes = loadBikeTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Updates an existing equipment type in the database
+     * @param type The updated type
+     */
+    public void updateEquipmentType(Type type){
+        try{
+            DataFetcher.updateEquipmentType(type);
+
+            //Update table and list
+            equipmentTypes = loadEquipmentTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Deletes the selected bike type and updates the table
+     */
+    public void deleteBikeType(){
+        try{
+            DataFetcher.deleteBikeType(getSelectedType());
+
+            //Update list, table and dropdowns
+            bikeTypes = loadBikeTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Deletes the selected equipment type and updates the table
+     */
+    public void deleteEquipmentType(){
+        try{
+            DataFetcher.deleteEquipmentType(getSelectedType());
+
+            //Update list, table and dropdowns
+            equipmentTypes = loadEquipmentTypes();
+            filterAndSearchTypes();
+        }catch(InsertFailedException e){
+            return;
+        }
+    }
+
+    /**
+     * Enables or disables the edit/delete type buttons depending on whether a type has been selected in the table.
+     */
+    @FXML
+    @SuppressWarnings("Duplicates")
+    protected void setEditDeleteTypeButtons(){
+        boolean typeSelected = !typesTable.getSelectionModel().isEmpty();
+
+        if(typeSelected){
+            editType.setDisable(false);
+            deleteType.setDisable(false);
+        }else{
+            editType.setDisable(true);
+            deleteType.setDisable(true);
+        }
     }
 
     /**

@@ -122,6 +122,7 @@ public class AddEquipmentController extends PopupController{
             allFieldsWarning.getStyleClass().remove("warningLabel");
         }
 
+        /* Show the "Quantity must be a number" warning if the quantity is not a number, hide otherwise */
         if(quantityIsNumeric){
             numberWarning.setVisible(false);
         }else{

@@ -27,7 +27,7 @@
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <ComboBox fx:id="category" minHeight="-Infinity" onAction="#changeCategory" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;" />
+                                <ComboBox fx:id="category" maxWidth="1.7976931348623157E308" minHeight="-Infinity" onAction="#changeCategory" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;" />
                             </children>
                         </VBox>
                         <VBox>
@@ -37,7 +37,7 @@
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <ComboBox fx:id="type" minHeight="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;">
+                                <ComboBox fx:id="type" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
@@ -51,7 +51,7 @@
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <ComboBox fx:id="equipmentLocation" minHeight="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;">
+                                <ComboBox fx:id="equipmentLocation" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Select..." style="-fx-font-size: 14px;">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
