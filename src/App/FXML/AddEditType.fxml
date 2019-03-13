@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane styleClass="main-background" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.FXControllers.AddEditTypeController">
    <children>
       <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -54,20 +53,23 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT">
+                        <StackPane alignment="CENTER_LEFT">
                            <children>
-                              <Label fx:id="allFieldsWarning1" text="£ " textFill="WHITE">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
                               <TextField fx:id="priceField" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="300.0">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </TextField>
+                              <Label fx:id="allFieldsWarning1" text="£ ">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <StackPane.margin>
+                                    <Insets left="5.0" />
+                                 </StackPane.margin>
+                              </Label>
                            </children>
-                        </HBox>
+                        </StackPane>
                      </children>
                   </VBox>
                </children>
