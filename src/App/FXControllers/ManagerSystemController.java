@@ -41,9 +41,14 @@ public class ManagerSystemController extends SystemController{
     @FXML private AnchorPane reportsTab; //Gets the reports tab object
     @FXML private AnchorPane userTab; //Gets the user tab object
 
+    /** Penalties tab */
     @FXML private ComboBox penaltiesViewOption;
-    @FXML private FlowPane unsolvedPenalties;
-    @FXML private FlowPane solvedPenalties;
+    @FXML private TextField penaltiesSearch;
+
+    @FXML private TableView penaltiesTable;
+
+    @FXML private Button solvePenalty;
+    @FXML private Button viewPenalty;
 
     /** Equipment Tab **/
     //Table
@@ -149,7 +154,7 @@ public class ManagerSystemController extends SystemController{
         equipmentFilter.getSelectionModel().selectFirst();
 
         //Set the penalties view dropdown
-        ObservableList<String> options = FXCollections.observableArrayList("Unsolved Penalties", "Solved Penalties");
+        ObservableList<String> options = FXCollections.observableArrayList("Solved", "Unsolved");
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
 
@@ -357,20 +362,73 @@ public class ManagerSystemController extends SystemController{
 
                 /* Switch back to non-editable view */
                 super.switchContactDetailsView(e);
-            }catch(InsertFailedException e1){
+            }catch(InsertFailedException ex){
                 return;
             }
         }
     }
 
+    /**
+     * Handles filtering a searching penalties in the table
+     */
     @FXML
-    protected void switchPenaltiesView(){
-        if(penaltiesViewOption.getSelectionModel().getSelectedIndex() == 0){
-            unsolvedPenalties.setVisible(true);
-            solvedPenalties.setVisible(false);
+    protected void filterAndSearchPenalties(){
+        setSolveViewPenaltyButtons();
+
+        boolean showingSolved = penaltiesViewOption.getSelectionModel().getSelectedItem().equals("Solved");
+        String searchParams = penaltiesSearch.getText();
+
+        /* Show appropriate button */
+        if(showingSolved){
+            solvePenalty.setVisible(false);
+            viewPenalty.setVisible(true);
         }else{
-            unsolvedPenalties.setVisible(false);
-            solvedPenalties.setVisible(true);
+            solvePenalty.setVisible(true);
+            viewPenalty.setVisible(false);
+        }
+
+        /**
+         * TODO: Implement loading/searching penalties
+         */
+    }
+
+    /**
+     * Load penalties from the database according to some parameters and display the results in the table
+     * @param params Parameters to load by
+     */
+    private void loadPenalties(String params){
+        /**
+         * TODO: Implement loading/searching penalties
+         */
+    }
+
+    @FXML
+    protected void showSolvePenaltyDialog(){
+
+    }
+
+    @FXML
+    protected void showViewPenaltyDialog(){
+
+    }
+
+    /**
+     * Enable the solve/view penalty buttons if an item in the table is selected, disable otherwise
+     */
+    @FXML
+    protected void setSolveViewPenaltyButtons(){
+        boolean itemSelected = !penaltiesTable.getSelectionModel().isEmpty();
+        boolean showingSolved = penaltiesViewOption.getSelectionModel().getSelectedItem().equals("Solved");
+
+        if(itemSelected){
+            if(showingSolved){
+                viewPenalty.setDisable(false);
+            }else{
+                solvePenalty.setDisable(false);
+            }
+        }else{
+            viewPenalty.setDisable(true);
+            solvePenalty.setDisable(true);
         }
     }
 

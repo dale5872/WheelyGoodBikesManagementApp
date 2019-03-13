@@ -16,17 +16,17 @@
             <top>
                 <AnchorPane prefHeight="60.0" prefWidth="200.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
                     <children>
-                  <HBox prefHeight="60.0" prefWidth="1600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0">
-                           <children>
+                        <HBox prefHeight="60.0" prefWidth="1600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0">
+                                    <children>
                                         <Label text="Wheely Good Bikes" textFill="WHITE" textOverrun="CLIP">
                                             <font>
                                                 <Font name="System Bold" size="25.0" />
                                             </font>
                                         </Label>
-                           </children>
-                        </HBox>
+                                    </children>
+                                </HBox>
                                 <HBox alignment="BOTTOM_CENTER" layoutX="300.0" maxHeight="-Infinity" prefHeight="60.0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                     <children>
                                         <ToggleButton fx:id="bikesTabButton" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Equipment" textOverrun="CLIP">
@@ -70,37 +70,37 @@
                                         </ToggleButton>
                                     </children>
                                 </HBox>
-                        <HBox alignment="CENTER" layoutX="1300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" GridPane.columnIndex="2">
-                           <children>
-                              <ToggleButton fx:id="userTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="60.0" textOverrun="CLIP">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <styleClass>
-                                    <String fx:value="nav-bar-tab" />
-                                    <String fx:value="nav-bar-tab-inactive" />
-                                    <String fx:value="account-button-inactive" />
-                                 </styleClass>
-                                 <padding>
-                                    <Insets bottom="-4.0" left="-4.0" right="-4.0" top="-4.0" />
-                                 </padding>
-                              </ToggleButton>
-                              <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <styleClass>
-                                    <String fx:value="nav-bar-tab" />
-                                    <String fx:value="nav-bar-tab-inactive" />
-                                 </styleClass>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </ToggleButton>
-                           </children>
+                                <HBox alignment="CENTER" layoutX="1300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" GridPane.columnIndex="2">
+                                    <children>
+                                        <ToggleButton fx:id="userTabButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="60.0" textOverrun="CLIP">
+                                            <font>
+                                                <Font size="20.0" />
+                                            </font>
+                                            <styleClass>
+                                                <String fx:value="nav-bar-tab" />
+                                                <String fx:value="nav-bar-tab-inactive" />
+                                                <String fx:value="account-button-inactive" />
+                                            </styleClass>
+                                            <padding>
+                                                <Insets bottom="-4.0" left="-4.0" right="-4.0" top="-4.0" />
+                                            </padding>
+                                        </ToggleButton>
+                                        <ToggleButton fx:id="logoutButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
+                                            <font>
+                                                <Font size="20.0" />
+                                            </font>
+                                            <styleClass>
+                                                <String fx:value="nav-bar-tab" />
+                                                <String fx:value="nav-bar-tab-inactive" />
+                                            </styleClass>
+                                            <HBox.margin>
+                                                <Insets />
+                                            </HBox.margin>
+                                        </ToggleButton>
+                                    </children>
+                                </HBox>
+                            </children>
                         </HBox>
-                     </children>
-                  </HBox>
                     </children>
                 </AnchorPane>
             </top>
@@ -160,786 +160,132 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="penaltiesTab" visible="false">
+                        <AnchorPane fx:id="penaltiesTab">
                             <children>
-                        <VBox layoutX="82.0" layoutY="65.0" prefHeight="1404.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <HBox alignment="CENTER_LEFT">
-                                 <children>
-                                    <Label text="Show:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <ComboBox fx:id="penaltiesViewOption" onAction="#switchPenaltiesView" prefHeight="25.0" prefWidth="300.0" style="-fx-font-size: 18px;" visibleRowCount="2">
-                                       <VBox.margin>
-                                          <Insets top="10.0" />
-                                       </VBox.margin>
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                    </ComboBox>
-                                 </children>
-                              </HBox>
-                              <StackPane>
-                                 <children>
-                                    <FlowPane fx:id="unsolvedPenalties" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <VBox layoutX="82.0" layoutY="65.0" prefHeight="1404.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #6">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
+                                                      <Label text="Show:" textFill="WHITE">
+                                                          <font>
+                                                              <Font name="System Bold" size="16.0" />
+                                                          </font>
                                                       </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="johnsmith">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Late Return">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Appealed">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="280.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #13">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="jbrown56">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Damaged Bike">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Not seen">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button disable="true" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets left="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #18">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="bobsmith42">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Late Return">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Not seen">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button disable="true" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets left="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #19">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="sgreene77">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Damaged Equipment">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Requesting more information">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets left="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #27">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="hp99">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Late Return">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Seen (No Action)">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button disable="true" mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets left="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #31">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="frank62">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Damaged Bike">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Appealed">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="Solve..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets top="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
+                                                      <ComboBox fx:id="penaltiesViewOption" onAction="#filterAndSearchPenalties" prefHeight="30.0" prefWidth="200.0" visibleRowCount="2">
+                                                          <VBox.margin>
+                                                              <Insets top="10.0" />
+                                                          </VBox.margin>
+                                                          <HBox.margin>
+                                                              <Insets />
+                                                          </HBox.margin>
+                                                      </ComboBox>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets top="50.0" />
-                                       </VBox.margin>
-                                       <GridPane.margin>
-                                          <Insets />
-                                       </GridPane.margin>
-                                       <StackPane.margin>
-                                          <Insets />
-                                       </StackPane.margin>
-                                    </FlowPane>
-                                    <FlowPane fx:id="solvedPenalties" visible="false">
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #9">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="dave11">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Late Return">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Accepted">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="280.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="View..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <VBox prefHeight="220.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <Label text="Penalty #10">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Username:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="nickm13">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets top="10.0" />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Reason:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Damaged Bike">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                      <HBox>
-                                                         <children>
-                                                            <Label text="Status:">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Solved">
-                                                               <font>
-                                                                  <Font size="16.0" />
-                                                               </font>
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="200.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="100.0" styleClass="green-button" text="View..." />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <FlowPane.margin>
-                                                <Insets left="50.0" />
-                                             </FlowPane.margin>
-                                          </AnchorPane>
+                                          <Label text="Search:" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="penaltiesSearch" onKeyTyped="#filterAndSearchPenalties" prefHeight="25.0" prefWidth="250.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
                                        </children>
-                                    </FlowPane>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="50.0" />
-                                 </VBox.margin>
-                              </StackPane>
-                           </children>
-                        </VBox>
+                                    </HBox>
+                                            </children>
+                                        </HBox>
+                                        <TableView fx:id="penaltiesTable" onMouseClicked="#setSolveViewPenaltyButtons" styleClass="table" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="penaltiesID" editable="false" prefWidth="75.0" text="ID" />
+                                                <TableColumn fx:id="penaltiesUsername" editable="false" prefWidth="200.0" text="Username" />
+                                                <TableColumn fx:id="penaltiesReason" editable="false" prefWidth="150.0" styleClass="price-column" text="Reason" />
+                                                <TableColumn fx:id="penaltiesStatus" editable="false" prefWidth="150.0" styleClass="price-column" text="Status" />
+                                            </columns>
+                                        </TableView>
+                                        <HBox alignment="CENTER_RIGHT">
+                                            <children>
+                                                <StackPane>
+                                                    <children>
+                                                        <Button fx:id="solvePenalty" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSolvePenaltyDialog" prefWidth="100.0" styleClass="green-button" text="Solve..." textOverrun="CLIP" />
+                                                        <Button fx:id="viewPenalty" minWidth="-Infinity" mnemonicParsing="false" onAction="#showViewPenaltyDialog" prefWidth="100.0" styleClass="green-button" text="View..." textOverrun="CLIP" />
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
                             </children>
                         </AnchorPane>
                         <AnchorPane fx:id="rentalsTab" visible="false">
                             <children>
-                        <VBox prefHeight="740.0" prefWidth="1500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
-                                 <children>
-                                    <Label text="Search:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="rentalSearch" prefHeight="25.0" prefWidth="250.0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </HBox>
-                                      <TableView fx:id="rentalsTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-                                          <columns>
-                                              <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
-                                              <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
-                                              <TableColumn fx:id="rentalsEquipmentName" prefWidth="300.0" text="Equipment Name" />
-                                              <TableColumn fx:id="rentalsEquipmentPrice" prefWidth="150.0" styleClass="price-column" text="Equipment Price" />
-                                              <TableColumn fx:id="rentalsStartTime" prefWidth="120.0" text="Start Time" />
-                                              <TableColumn fx:id="rentalsReturnTime" prefWidth="120.0" text="Return Time" />
-                                              <TableColumn fx:id="rentalsTotalPrice" prefWidth="100.0" text="Total Price" />
-                                              <TableColumn fx:id="rentalsLocation" prefWidth="250.0" text="Location" />
-                                              <TableColumn fx:id="rentalsStatus" prefWidth="150.0" text="Status" />
-                                          </columns>
-                                          <VBox.margin>
-                                              <Insets />
-                                          </VBox.margin>
-                                      </TableView>
-                           </children>
-                        </VBox>
+                                <VBox prefHeight="740.0" prefWidth="1500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                            <children>
+                                                <Label text="Search:" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="rentalSearch" prefHeight="25.0" prefWidth="250.0">
+                                                    <font>
+                                                        <Font size="14.0" />
+                                                    </font>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
+                                        <TableView fx:id="rentalsTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
+                                                <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
+                                                <TableColumn fx:id="rentalsEquipmentName" prefWidth="150.0" text="Equipment Name" />
+                                                <TableColumn fx:id="rentalsEquipmentPrice" prefWidth="150.0" styleClass="price-column" text="Equipment Price" />
+                                                <TableColumn fx:id="rentalsStartTime" prefWidth="200.0" text="Start Time" />
+                                                <TableColumn fx:id="rentalsReturnTime" prefWidth="200.0" text="Return Time" />
+                                                <TableColumn fx:id="rentalsTotalPrice" prefWidth="100.0" text="Total Price" />
+                                                <TableColumn fx:id="rentalsLocation" prefWidth="250.0" text="Location" />
+                                                <TableColumn fx:id="rentalsStatus" prefWidth="150.0" text="Status" />
+                                            </columns>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </TableView>
+                                    </children>
+                                </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="reportsTab">
-                     <children>
-                        <Label text="General Report" />
-                        <DatePicker fx:id="generalDatePicker" layoutY="34.0" onAction="#loadGeneralReport" prefHeight="27.0" prefWidth="315.0" />
-                        <ComboBox fx:id="generalReportFilter" layoutY="75.0" onAction="#loadSavedGeneralReport" prefHeight="27.0" prefWidth="315.0" />
-                        <BarChart fx:id="barChart" layoutX="374.0" layoutY="34.0" prefHeight="304.0" prefWidth="485.0">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                        </BarChart>
-                        <Label layoutX="7.0" layoutY="362.0" text="Revenue" />
-                        <DatePicker fx:id="revenueFromDate" layoutX="7.0" layoutY="404.0" prefHeight="27.0" prefWidth="197.0" />
-                        <DatePicker fx:id="revenueToDate" layoutX="218.0" layoutY="404.0" prefHeight="27.0" prefWidth="194.0" />
-                        <LineChart fx:id="revenueGraph" layoutX="420.0" layoutY="345.0" prefHeight="307.0" prefWidth="531.0">
-                          <xAxis>
-                            <CategoryAxis fx:id="rentalXAxis" side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis fx:id="rentalYAxis" side="LEFT" />
-                          </yAxis>
-                        </LineChart>
-                        <ComboBox fx:id="revenueReportFilter" layoutX="7.0" layoutY="475.0" onAction="#loadSavedRevenueReport" prefHeight="27.0" prefWidth="315.0" />
-                        <Button layoutX="7.0" layoutY="439.0" mnemonicParsing="false" onAction="#loadRevenueReport" text="Button" />
-                     </children></AnchorPane>
+                        <AnchorPane fx:id="reportsTab" visible="false">
+                            <children>
+                                <Label text="General Report" />
+                                <DatePicker fx:id="generalDatePicker" layoutY="34.0" onAction="#loadGeneralReport" prefHeight="27.0" prefWidth="315.0" />
+                                <ComboBox fx:id="generalReportFilter" layoutY="75.0" onAction="#loadSavedGeneralReport" prefHeight="27.0" prefWidth="315.0" />
+                                <BarChart fx:id="barChart" layoutX="374.0" layoutY="34.0" prefHeight="304.0" prefWidth="485.0">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
+                                <Label layoutX="7.0" layoutY="362.0" text="Revenue" />
+                                <DatePicker fx:id="revenueFromDate" layoutX="7.0" layoutY="404.0" prefHeight="27.0" prefWidth="197.0" />
+                                <DatePicker fx:id="revenueToDate" layoutX="218.0" layoutY="404.0" prefHeight="27.0" prefWidth="194.0" />
+                                <LineChart fx:id="revenueGraph" layoutX="420.0" layoutY="345.0" prefHeight="307.0" prefWidth="531.0">
+                                    <xAxis>
+                                        <CategoryAxis fx:id="rentalXAxis" side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis fx:id="rentalYAxis" side="LEFT" />
+                                    </yAxis>
+                                </LineChart>
+                                <ComboBox fx:id="revenueReportFilter" layoutX="7.0" layoutY="475.0" onAction="#loadSavedRevenueReport" prefHeight="27.0" prefWidth="315.0" />
+                                <Button layoutX="7.0" layoutY="439.0" mnemonicParsing="false" onAction="#loadRevenueReport" text="Button" />
+                            </children></AnchorPane>
                         <AnchorPane fx:id="userTab" visible="false">
                             <children>
                                 <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -1151,9 +497,9 @@
                             </children>
                         </AnchorPane>
                     </children>
-               <padding>
-                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-               </padding>
+                    <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                    </padding>
                 </StackPane>
             </center>
         </BorderPane>
