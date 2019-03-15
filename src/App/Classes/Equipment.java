@@ -37,6 +37,7 @@ public class Equipment {
        // return this.typeName;
         return this.type.getName();
     }
+
     /**
      * DO NOT DELETE
      * Legacy accessor from before Type object was used.
@@ -82,12 +83,15 @@ public class Equipment {
         return this.location;
     }
 
+    /**
+     * DO NOT DELETE
+     * Legacy accessor from before Location list was fully implemented.
+     * This accessor is still used to display the location name in tables.
+     * @return
+     */
+    @Deprecated
     public String getLocationName() {
         return this.location.getName();
-    }
-
-    public int getLocationID() {
-        return this.location.getLocationID();
     }
 
     public String getCategory() { return this.category; }

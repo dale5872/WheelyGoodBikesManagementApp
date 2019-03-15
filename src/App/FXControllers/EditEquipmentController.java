@@ -9,11 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
-import java.util.HashMap;
-
 public class EditEquipmentController extends PopupController{
     private Equipment equipment;
-    private HashMap<String, String> locations;
+    private ObservableList<Location> locations;
 
     /* Controls */
     @FXML private Label equipmentInfo;
@@ -22,11 +20,11 @@ public class EditEquipmentController extends PopupController{
     @FXML private ComboBox equipmentLocation;
     @FXML private ComboBox statusCombo;
 
-    public void setDropdownValues(HashMap<String, String> locations){
+    public void setDropdownValues(ObservableList<Location> locations){
         this.locations = locations;
 
         /* Set the location dropdown */
-        ObservableList<String> locationOptions = OptionsList.createList(this.locations);
+        ObservableList<String> locationOptions = OptionsList.createLocationNameList(this.locations);
         equipmentLocation.setItems(locationOptions);
 
         /* Set the status dropdown */
@@ -41,7 +39,7 @@ public class EditEquipmentController extends PopupController{
                 + "\nCategory: " + this.equipment.getCategory()
                 + "\nType: " + this.equipment.getType().getName());
 
-        equipmentLocation.setValue(this.equipment.getLocationName());
+        equipmentLocation.setValue(this.equipment.getLocation().getName());
         statusCombo.setValue(this.equipment.getStatus());
     }
 
@@ -50,8 +48,7 @@ public class EditEquipmentController extends PopupController{
         if(validateInput() == true){
             /* Set location */
             String locName = (String) equipmentLocation.getSelectionModel().getSelectedItem();
-            int locID = Integer.parseInt(locations.get(locName));
-            Location loc = new Location(locID, locName);
+            Location loc = OptionsList.findLocationByName(locations, locName);
             equipment.setLocation(loc);
 
             /* Set status */

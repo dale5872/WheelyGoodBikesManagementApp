@@ -3,6 +3,7 @@ package App.FXControllers;
 import App.Classes.Equipment;
 import App.Classes.Location;
 import App.Classes.Type;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,12 +11,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.util.HashMap;
 
 public class AddEquipmentController extends PopupController{
-    private static ObservableList<Type> bikeTypes;
-    private static ObservableList<Type> equipmentTypes;
-    private HashMap<String, String> locations;
+    private ObservableList<Type> bikeTypes;
+    private ObservableList<Type> equipmentTypes;
+    private ObservableList<Location> locations;
 
     /* Controls */
     @FXML private Label allFieldsWarning;
@@ -28,7 +28,7 @@ public class AddEquipmentController extends PopupController{
     @FXML private Label numberWarning;
 
     public void setDropdownValues(ObservableList<Type> bikeTypes, ObservableList<Type> equipmentTypes,
-                                  HashMap<String, String> locations){
+                                  ObservableList<Location> locations){
         this.bikeTypes = bikeTypes;
         this.equipmentTypes = equipmentTypes;
         this.locations = locations;
@@ -39,7 +39,7 @@ public class AddEquipmentController extends PopupController{
         category.getSelectionModel().selectFirst();
 
         /* Set the location dropdown */
-        ObservableList<String> locationOptions = OptionsList.createList(this.locations);
+        ObservableList<String> locationOptions = OptionsList.createLocationNameList(this.locations);
         equipmentLocation.setItems(locationOptions);
     }
 
@@ -79,8 +79,7 @@ public class AddEquipmentController extends PopupController{
 
             /* Get location */
             String locName = (String) equipmentLocation.getSelectionModel().getSelectedItem();
-            int locID = Integer.parseInt(locations.get(locName));
-            Location loc = new Location(locID, locName);
+            Location loc = OptionsList.findLocationByName(locations, locName);
 
             /* Get quantity */
             int quantity = Integer.parseInt(this.quantityField.getText());

@@ -2,30 +2,19 @@ package App.FXControllers;
 
 import App.Classes.Account;
 import App.Classes.EmployeeAccount;
+import App.Classes.Location;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
 public class AddAccountController extends AccountPopupController{
     /* Controls */
-    @FXML private Label allFieldsWarning;
-
-    @FXML private TextField username;
-    @FXML private TextField firstName;
-    @FXML private TextField lastName;
-    @FXML private TextField email;
-    @FXML private TextField phoneNumber;
-
-    @FXML private ComboBox accountTypeCombo;
-
     @FXML private VBox workLocationBox;
-    @FXML private ComboBox workLocationCombo;
 
     @FXML private Label passwordWarning;
     @FXML private PasswordField password;
@@ -36,8 +25,8 @@ public class AddAccountController extends AccountPopupController{
      * @param accountTypes
      * @param locations
      */
-    public void setDropdownValues(HashMap<String, String> accountTypes, HashMap<String, String> locations){
-        super.setDropdownValues(accountTypeCombo, workLocationCombo, accountTypes, locations);
+    public void setDropdownValues(HashMap<String, String> accountTypes, ObservableList<Location> locations){
+        super.setDropdownValues(accountTypes, locations);
     }
 
     /**
@@ -71,15 +60,15 @@ public class AddAccountController extends AccountPopupController{
 
             if (chosenAccountType.equals("User")) {
                 newAccount = new Account();
-                super.setCommonValues(newAccount, username, firstName, lastName, email, phoneNumber, accountTypeCombo);
+                super.setCommonValues(newAccount);
             } else {
                 newAccount = new EmployeeAccount();
-                super.setCommonValues(newAccount, username, firstName, lastName, email, phoneNumber, accountTypeCombo);
+                super.setCommonValues(newAccount);
 
-                /* Get the chosen location, map it to its system index, and set location attribute of newAccount */
-                String chosenLocation = (String) workLocationCombo.getValue();
-                int locationIndex = Integer.parseInt(locations.get(chosenLocation));
-                ((EmployeeAccount) newAccount).setLocation(chosenLocation, locationIndex);
+                /* Get location */
+                String locationName = (String) workLocationCombo.getValue();
+                Location loc = OptionsList.findLocationByName(locations, locationName);
+                ((EmployeeAccount) newAccount).setLocation(loc);
             }
 
             /* Pass newAccount back to parent form */
@@ -117,36 +106,10 @@ public class AddAccountController extends AccountPopupController{
     }
 
     /**
-     * Checks for any blank fields
-     * Returns TRUE if there are blank fields, FALSE if there are none
-     * @return
+     * Checks for any blank controls
+     * @return TRUE if there are blank fields, FALSE if there are none
      */
-    @SuppressWarnings("Duplicates")
     private boolean checkForBlankFields(){
-        if(username.getText().equals("")){
-            return true;
-        }
-
-        if(firstName.getText().equals("")){
-            return true;
-        }
-
-        if(lastName.getText().equals("")){
-            return true;
-        }
-
-        if(email.getText().equals("")){
-            return true;
-        }
-
-        if(phoneNumber.getText().equals("")){
-            return true;
-        }
-
-        if(accountTypeCombo.getSelectionModel().isEmpty()){
-            return true;
-        }
-
         if(!accountTypeCombo.getValue().equals("User")) { //Only need to check this if the account is not a user account
             if (workLocationCombo.getSelectionModel().isEmpty()) {
                 return true;
@@ -161,6 +124,6 @@ public class AddAccountController extends AccountPopupController{
             return true;
         }
 
-        return false;
+        return checkCommonControlsForBlanks();
     }
 }

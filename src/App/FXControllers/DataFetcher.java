@@ -1,4 +1,3 @@
-/** TODO: Make memory more efficient, dont store a NEW location object per field. */
 package App.FXControllers;
 
 import App.Classes.*;
@@ -25,7 +24,7 @@ public class DataFetcher {
      * @return A list of Accounts filled with the data in each account
      * Scope: Package-private (No modifier)
      */
-    static ObservableList<EmployeeAccount> getEmployeeAccounts(String params) throws EmptyDatasetException{
+    static ObservableList<EmployeeAccount> getEmployeeAccounts(String params, ObservableList<Location> locations) throws EmptyDatasetException{
         ObservableList<EmployeeAccount> accounts = FXCollections.observableArrayList();
 
         Query q = new Query("read", "fetchEmployeeAccounts", params);
@@ -46,9 +45,12 @@ public class DataFetcher {
                 acc.setEmail((String)res.getElement(r,"workEmail"));
                 acc.setPhoneNumber((String)res.getElement(r,"workTel"));
                 acc.setAccType((String)res.getElement(r,"type"));
-                /** Get reference of location object **/
-                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"locationID")), (String)res.getElement(r,"locationName"));
+
+                /* Get location */
+                String locationName = (String) res.getElement(r,"locationName");
+                Location loc = OptionsList.findLocationByName(locations, locationName);
                 acc.setLocation(loc);
+
                 acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
 
                 accounts.add(acc);
@@ -136,7 +138,7 @@ public class DataFetcher {
             String params = "username=" + acc.getUsername()
                     + "&password=" + password
                     + "&account_type=" + accountType
-                    + "&location_id=" + ((EmployeeAccount) acc).getLocationID()
+                    + "&location_id=" + ((EmployeeAccount) acc).getLocation().getLocationID()
                     + "&first_name=" + acc.getFirstName()
                     + "&last_name=" + acc.getLastName()
                     + "&email=" + acc.getEmail()
@@ -178,7 +180,7 @@ public class DataFetcher {
             //update employees
             String params = "username=" + newAcc.getUsername()
                     + "&account_type=" + accountType
-                    + "&location_id=" + ((EmployeeAccount) newAcc).getLocationID()
+                    + "&location_id=" + ((EmployeeAccount) newAcc).getLocation().getLocationID()
                     + "&first_name=" + newAcc.getFirstName()
                     + "&last_name=" + newAcc.getLastName()
                     + "&email=" + newAcc.getEmail()
@@ -249,7 +251,7 @@ public class DataFetcher {
      */
     @SuppressWarnings("Duplicates")
     static ObservableList<Equipment> getBikes(Location managerLoc, String searchParameters,
-                                              ObservableList<Type> types) throws EmptyDatasetException {
+                                              ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
@@ -276,9 +278,11 @@ public class DataFetcher {
                 Type type = OptionsList.findTypeByName(types, typeName);
                 e.setType(type);
 
-                /** Get reference of location object **/
-                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
+                /* Get location */
+                String locationName = (String) res.getElement(r,"name");
+                Location loc = OptionsList.findLocationByName(locations, locationName);
                 e.setLocation(loc);
+
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 e.setCategory("Bike");
@@ -295,7 +299,7 @@ public class DataFetcher {
      * @return Equipment object with all the bikes information
      * @throws EmptyDatasetException if the bike cannot be found
      */
-    static Equipment getBike(int id, ObservableList<Type> types) throws EmptyDatasetException {
+    static Equipment getBike(int id, ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException {
         Query q = new Query();
 
         //get query based on location
@@ -315,9 +319,11 @@ public class DataFetcher {
             Type type = OptionsList.findTypeByName(types, typeName);
             e.setType(type);
 
-            /** Get reference of location object **/
-            Location loc = new Location(Integer.parseInt((String)res.getElement(0,"location")), (String)res.getElement(0,"name"));
+            /* Get location */
+            String locationName = (String) res.getElement(0,"name");
+            Location loc = OptionsList.findLocationByName(locations, locationName);
             e.setLocation(loc);
+
             e.setStatus((String)res.getElement(0,"bikeStatus"));
             e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
             e.setCategory("Bike");
@@ -361,7 +367,7 @@ public class DataFetcher {
     static void addBike(Equipment e) throws InsertFailedException, EmptyDatasetException {
         if(e.getCategory().equals("Bike")) {
             Query q = new Query("create", "addBike", "bike_type=" + e.getType().getID() +
-                    "&location_id=" + e.getLocationID() +
+                    "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus());
 
             if (q.insertQuery()) {
@@ -398,7 +404,7 @@ public class DataFetcher {
     static void updateBike(Equipment e) throws InsertFailedException {
         if(e.getCategory().equals("Bike")) {
             Query q = new Query("update", "updateBike", "bike_type=" + e.getType().getID() +
-                    "&location_id=" + e.getLocationID() +
+                    "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus() +
                     "&equipment_id=" + e.getID());
 
@@ -462,7 +468,8 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     @SuppressWarnings("Duplicates")
-    static ObservableList<Equipment> getEquipment(Location managerLoc, String searchParameters, ObservableList<Type> types) throws EmptyDatasetException {
+    static ObservableList<Equipment> getEquipment(Location managerLoc, String searchParameters,
+                                                  ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
@@ -489,9 +496,11 @@ public class DataFetcher {
                 Type type = OptionsList.findTypeByName(types, typeName);
                 e.setType(type);
 
-                /** Get reference of location object **/
-                Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
+                /* Get location */
+                String locationName = (String) res.getElement(r,"name");
+                Location loc = OptionsList.findLocationByName(locations, locationName);
                 e.setLocation(loc);
+
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 e.setCategory("Equipment");
@@ -538,7 +547,7 @@ public class DataFetcher {
     static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
         if(e.getCategory().equals("Equipment")) {
             Query q = new Query("create", "addEquipment", "equipment_type=" + e.getType().getID() +
-                    "&location_id=" + e.getLocationID() +
+                    "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus());
 
             if (q.insertQuery()) {
@@ -573,7 +582,7 @@ public class DataFetcher {
     static void updateEquipment(Equipment e) throws InsertFailedException {
         if(e.getCategory().equals("Equipment")) {
             Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getType().getID() +
-                    "&location_id=" + e.getLocationID() +
+                    "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus() +
                     "&equipment_id=" + e.getID());
 
@@ -646,8 +655,12 @@ public class DataFetcher {
             throw new EmptyDatasetException("Empty Dataset: Could not get list of locations", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
-                /** Get reference of location object **/
-                locations.add(new Location(Integer.parseInt((String)res.getElement(r, "locationID")), (String)res.getElement(r,"name")));
+                Location loc = new Location();
+
+                loc.setLocationID(Integer.parseInt((String) res.getElement(r, "locationID")));
+                loc.setName((String) res.getElement(r,"name"));
+
+                locations.add(loc);
             }
         }
 
@@ -710,7 +723,8 @@ public class DataFetcher {
         }
     }
 
-    static ObservableList<Rental> getBikeRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
+    static ObservableList<Rental> getRentals(Location managerLoc, String params,
+                                             ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
         String searchParameters = "location_id=" + managerLoc.getLocationID() + "&search=" + params;
@@ -726,7 +740,7 @@ public class DataFetcher {
                 //fill data
                 newRental.setID(Integer.parseInt((String) res.getElement(r, "bikeRentalID")));
                 newRental.setUser(getUser(Integer.parseInt((String)res.getElement(r, "userID"))));
-                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID")), types));
+                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID")), types, locations));
                 newRental.setStatus((String)res.getElement(r, "status"));
                 //Get start and return times
                 try {
@@ -790,54 +804,24 @@ public class DataFetcher {
     }
 
     /**
-     * Returns a HashMap of the values needed for the dropdown values in the
-     * add / edit forms
-     * @param dropdown "accountTypes" or "locations" are acceptable inputs
-     * @return HashMap of the names of each dropdown values and their corresponding
+     * Returns a HashMap of account types
+     * @return HashMap of the name of each account type and its corresponding
      * ID numbers in the database (ID, Name)
      * Scope: Package-private (No modifier)
      */
-    static HashMap<String, String> getDropdownValues(String dropdown) {
-
-
+    static HashMap<String, String> getAccountTypes() {
         HashMap<String, String> accountTypes = new HashMap<>();
 
         Query q = new Query();
+        q.updateQuery("read", "fetchAccountTypes", "");
+
         Results res;
-        String id;
-        String name;
-
-        switch (dropdown) {
-            case "accountTypes":
-                q.updateQuery("read", "fetchAccountTypes", "");
-                id = "accountTypeID";
-                name = "type";
-                break;
-            case "getLocations":
-                q.updateQuery("read", "fetchLocations", "");
-                id = "locationID";
-                name = "name";
-                break;
-            case "equipmentTypes":
-                q.updateQuery("read", "fetchEquipmentTypes", "return_type=dropdown");
-                id = "equipmentTypeID";
-                name = "equipmentType";
-                break;
-            case "bikeTypes":
-                q.updateQuery("read", "fetchBikeTypes", "return_type=dropdown");
-                id = "bikeTypeID";
-                name = "bikeType";
-                break;
-            default:
-                return null;
-        }
-
         res = q.executeQuery();
 
         //check if we have results
         if(!res.isEmpty()) {
             for(int r = 0; r < res.getRows(); r++) {
-                accountTypes.put((String)res.getElement(r, name), (String)res.getElement(r, id));
+                accountTypes.put((String)res.getElement(r, "type"), (String)res.getElement(r, "accountTypeID"));
             }
         }
 

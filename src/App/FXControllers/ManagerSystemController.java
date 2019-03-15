@@ -382,7 +382,7 @@ public class ManagerSystemController extends SystemController{
                 newAcc.setEmail(newEmail);
 
                 /* Get the account type index */
-                HashMap<String, String> accountTypes = DataFetcher.getDropdownValues("accountTypes");
+                HashMap<String, String> accountTypes = DataFetcher.getAccountTypes();
                 int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
 
                 /* Update the account ion the database */

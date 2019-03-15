@@ -1,5 +1,6 @@
 package App.FXControllers;
 
+import App.Classes.Location;
 import App.Classes.Type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +32,7 @@ public class OptionsList {
      * @param types A list of types
      * @return A list of type names
      */
+    @SuppressWarnings("Duplicates")
     public static ObservableList<String> createTypeNameList(ObservableList<Type> types){
         ObservableList<String> names = FXCollections.observableArrayList();
 
@@ -58,5 +60,40 @@ public class OptionsList {
         }
 
         return type;
+    }
+
+    /**
+     * Crates an ObservableList of location names given a list of locations
+     * @param locations A list of locations
+     * @return A list of location names
+     */
+    @SuppressWarnings("Duplicates")
+    public static ObservableList<String> createLocationNameList(ObservableList<Location> locations){
+        ObservableList<String> names = FXCollections.observableArrayList();
+
+        for(int i = 0; i < locations.size(); i++){
+            names.add(locations.get(i).getName());
+        }
+
+        return names;
+    }
+
+    /**
+     * Searches for a locations in a list by the locations's name
+     * @param list The list of locations to search
+     * @param nameToFind The location name to search for
+     * @return The location if found, null otherwise (unsafe)
+     */
+    public static Location findLocationByName(ObservableList<Location> list, String nameToFind){
+        Location location = null;
+
+        for(int i = 0; i < list.size(); i++){
+            Location l = list.get(i);
+            if(l.getName().equals(nameToFind)){
+                location = l;
+            }
+        }
+
+        return location;
     }
 }

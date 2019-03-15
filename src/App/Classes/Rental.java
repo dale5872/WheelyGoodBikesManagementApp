@@ -88,7 +88,7 @@ public class Rental {
 
     public String getEquipmentPrice() { return this.equipment.getFormattedPrice(); }
 
-    public String getLocationName() { return this.equipment.getLocationName(); }
+    public String getLocationName() { return this.equipment.getLocation().getName(); }
 
 
 }
