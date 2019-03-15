@@ -2,9 +2,6 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -27,6 +24,20 @@
                            </font>
                         </Label>
                         <TextField fx:id="nameField" prefHeight="30.0" prefWidth="300.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Image URL" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="imageUrlField" prefHeight="30.0" prefWidth="300.0">
                            <font>
                               <Font size="14.0" />
                            </font>
