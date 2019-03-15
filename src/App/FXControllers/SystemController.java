@@ -1,7 +1,9 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+import App.Classes.Type;
 import App.JavaFXLoader;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +18,9 @@ import java.util.List;
 
 public class SystemController extends Controller{
     protected EmployeeAccount employee;
+
+    protected static ObservableList<Type> bikeTypes;
+    protected static ObservableList<Type> equipmentTypes;
 
     /* Controls */
     protected List<ToggleButton> tabButtons; //List to store all tab buttons
@@ -42,6 +47,37 @@ public class SystemController extends Controller{
     @FXML protected Button contactDetailsViewBtn;
 
     @FXML protected HBox confirmContactContainer;
+
+    public SystemController(){
+        super();
+
+        bikeTypes = loadBikeTypes();
+        equipmentTypes = loadEquipmentTypes();
+    }
+
+    /**
+     * Loads the list of bike types from the database.
+     * @return An ObservableList of Type objects
+     */
+    protected ObservableList<Type> loadBikeTypes(){
+        try{
+            return DataFetcher.getBikeTypes();
+        }catch(EmptyDatasetException e){
+            return null;
+        }
+    }
+
+    /**
+     * Loads the list of equipment types from the database.
+     * @return An ObservableList of Type objects
+     */
+    protected ObservableList<Type> loadEquipmentTypes() {
+        try{
+            return DataFetcher.getEquipmentTypes();
+        }catch(EmptyDatasetException e){
+            return null;
+        }
+    }
 
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;

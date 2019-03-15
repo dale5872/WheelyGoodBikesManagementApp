@@ -109,11 +109,6 @@ public class OperatorSystemController extends SystemController{
     //fields
     private static HashMap<String, String> accountTypes;
     private static HashMap<String, String> locations;
-    private static HashMap<String, String> equipmentTypesMap;
-    private static HashMap<String, String> bikeTypesMap;
-
-    private static ObservableList<Type> bikeTypes;
-    private static ObservableList<Type> equipmentTypes;
 
     /**
      * The initialise method is called when the form first loads
@@ -138,47 +133,18 @@ public class OperatorSystemController extends SystemController{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
+        //Load in account types, locations and equipment types
+        accountTypes = DataFetcher.getDropdownValues("accountTypes");
+        locations = DataFetcher.getDropdownValues("getLocations");
+
         //Load data into tables
         loadEmployeeAccounts("");
         loadBikes("");
         loadLocations("");
 
-        //Load in account types, locations and equipment types
-        accountTypes = DataFetcher.getDropdownValues("accountTypes");
-        locations = DataFetcher.getDropdownValues("getLocations");
-        equipmentTypesMap = DataFetcher.getDropdownValues("equipmentTypes");
-        bikeTypesMap = DataFetcher.getDropdownValues("bikeTypes");
-
-        bikeTypes = loadBikeTypes();
-        equipmentTypes = loadEquipmentTypes();
-
         fillTypesTable(bikeTypes);
 
         setDropdownOptions();
-    }
-
-    /**
-     * Loads the list of bike types from the database.
-     * @return An ObservableList of Type objects
-     */
-    private ObservableList<Type> loadBikeTypes(){
-        try{
-            return DataFetcher.getBikeTypes();
-        }catch(EmptyDatasetException e){
-            return null;
-        }
-    }
-
-    /**
-     * Loads the list of equipment types from the database.
-     * @return An ObservableList of Type objects
-     */
-    private ObservableList<Type> loadEquipmentTypes() {
-        try{
-            return DataFetcher.getEquipmentTypes();
-        }catch(EmptyDatasetException e){
-            return null;
-        }
     }
 
     /**
@@ -189,13 +155,25 @@ public class OperatorSystemController extends SystemController{
         //Set the accounts table view option
         ObservableList<String> accountsTableViewOptions = FXCollections.observableArrayList("Employees", "Users");
         accountsView.setItems(accountsTableViewOptions);
-        accountsView.getSelectionModel().selectFirst();
 
         //Set the accounts table employees filter
         ObservableList<String> employeesFilterOptions = FXCollections.observableArrayList("All", "Managers", "Operators");
         employeesFilter.setItems(employeesFilterOptions);
-        employeesFilter.getSelectionModel().selectFirst();
 
+        setEquipmentDropdownOptions();
+
+        /* Set all dropdowns to their first option */
+        accountsView.getSelectionModel().selectFirst();
+        employeesFilter.getSelectionModel().selectFirst();
+        typesView.getSelectionModel().selectFirst();
+        equipmentFilter.getSelectionModel().selectFirst();
+    }
+
+    /**
+     * Sets the values for all equipment and equipment type dropdowns
+     */
+    @SuppressWarnings("Duplicates")
+    private void setEquipmentDropdownOptions(){
         //Set the equipment view dropdown
         ObservableList<String> typeOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
         equipmentView.setItems(typeOptions);
@@ -203,13 +181,11 @@ public class OperatorSystemController extends SystemController{
 
         //Set the types view dropdown
         typesView.setItems(typeOptions);
-        typesView.getSelectionModel().selectFirst();
 
         //Set the equipment filter for bikes (default view option)
-        ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypesMap);
+        ObservableList<String> equipmentFilterOptions = OptionsList.createTypeNameList(bikeTypes);
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
-        equipmentFilter.getSelectionModel().selectFirst();
     }
 
     /**
@@ -536,20 +512,26 @@ public class OperatorSystemController extends SystemController{
     @FXML
     @SuppressWarnings("Duplicates")
     protected void changeEquipmentView(){
-        boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
-        ObservableList<String> equipmentFilterOptions;
+        /*
+         * This method is called by the system every time the items in the equipmentView combo box are changed.
+         * This causes a NullPointerException to be thrown as no item is selected at that point, so only act if an item is selected.
+         */
+        if(!(equipmentView.getSelectionModel().isEmpty())) {
+            boolean showingBikes = equipmentView.getSelectionModel().getSelectedItem().equals("Bikes");
+            ObservableList<String> equipmentFilterOptions;
 
-        /* Create options list for filter dropdown */
-        if(showingBikes){
-            equipmentFilterOptions = OptionsListCreator.createList(bikeTypesMap);
-        }else{ //Showing equipment
-            equipmentFilterOptions = OptionsListCreator.createList(equipmentTypesMap);
+            /* Create options list for filter dropdown */
+            if (showingBikes) {
+                equipmentFilterOptions = OptionsList.createTypeNameList(bikeTypes);
+            } else { //Showing equipment
+                equipmentFilterOptions = OptionsList.createTypeNameList(equipmentTypes);
+            }
+
+            /* Add "All" option to list and add list to dropdown */
+            equipmentFilterOptions.add(0, "All");
+            equipmentFilter.setItems(equipmentFilterOptions);
+            equipmentFilter.getSelectionModel().selectFirst();
         }
-
-        /* Add "All" option to list and add list to dropdown */
-        equipmentFilterOptions.add(0, "All");
-        equipmentFilter.setItems(equipmentFilterOptions);
-        equipmentFilter.getSelectionModel().selectFirst();
     }
 
     /**
@@ -559,7 +541,7 @@ public class OperatorSystemController extends SystemController{
     @SuppressWarnings("Duplicates")
     protected void filterAndSearchEquipment(){
         /*
-         * This method is called by the system every time the items in the combo box are changed.
+         * This method is called by the system every time the items in the equipmentFilter combo box are changed.
          * This causes a NullPointerException to be thrown as no item is selected at that point, so only act if an item is selected.
          */
         if(!(equipmentFilter.getSelectionModel().isEmpty())){
@@ -594,7 +576,7 @@ public class OperatorSystemController extends SystemController{
      */
     private void loadBikes(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(null, "search=" + params);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(null, params, bikeTypes);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -607,7 +589,7 @@ public class OperatorSystemController extends SystemController{
      */
     private void loadEquipment(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, params);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, params, equipmentTypes);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -653,7 +635,7 @@ public class OperatorSystemController extends SystemController{
         controller.setParentController(this);
         controller.setOnCloseAction();
         controller.setAlwaysOnTop(true);
-        controller.setDropdownValues(bikeTypesMap, equipmentTypesMap, locations);
+        controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
     }
 
     /**
@@ -836,22 +818,28 @@ public class OperatorSystemController extends SystemController{
      */
     @FXML
     protected void filterAndSearchTypes(){
-        setEditDeleteTypeButtons();
+        /*
+         * This method is called by the system every time the items in the typesView combo box are changed.
+         * This causes a NullPointerException to be thrown as no item is selected at that point, so only act if an item is selected.
+         */
+        if(!(typesView.getSelectionModel().isEmpty())) {
+            setEditDeleteTypeButtons();
 
-        String searchParams = typeSearch.getText();
-        boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
+            String searchParams = typeSearch.getText();
+            boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
 
-        if(searchParams.equals("")){ //No search term - so showing all
-            if(showingBikes){
-                fillTypesTable(bikeTypes);
-            }else{
-                fillTypesTable(equipmentTypes);
-            }
-        }else{ //Searching
-            if(showingBikes){
-                searchBikeTypes(searchParams);
-            }else{
-                searchEquipmentTypes(searchParams);
+            if (searchParams.equals("")) { //No search term - so showing all
+                if (showingBikes) {
+                    fillTypesTable(bikeTypes);
+                } else {
+                    fillTypesTable(equipmentTypes);
+                }
+            } else { //Searching
+                if (showingBikes) {
+                    searchBikeTypes(searchParams);
+                } else {
+                    searchEquipmentTypes(searchParams);
+                }
             }
         }
     }
@@ -1006,6 +994,7 @@ public class OperatorSystemController extends SystemController{
             //Update table and list
             bikeTypes = loadBikeTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }
@@ -1020,8 +1009,9 @@ public class OperatorSystemController extends SystemController{
             DataFetcher.addEquipmentType(newType);
 
             //Update table and list
-            equipmentTypes = loadEquipmentTypes();
+            equipmentTypes = super.loadEquipmentTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }
@@ -1036,8 +1026,9 @@ public class OperatorSystemController extends SystemController{
             DataFetcher.updateBikeType(type);
 
             //Update table and list
-            bikeTypes = loadBikeTypes();
+            bikeTypes = super.loadBikeTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }
@@ -1052,8 +1043,9 @@ public class OperatorSystemController extends SystemController{
             DataFetcher.updateEquipmentType(type);
 
             //Update table and list
-            equipmentTypes = loadEquipmentTypes();
+            equipmentTypes = super.loadEquipmentTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }
@@ -1067,8 +1059,9 @@ public class OperatorSystemController extends SystemController{
             DataFetcher.deleteBikeType(getSelectedType());
 
             //Update list, table and dropdowns
-            bikeTypes = loadBikeTypes();
+            bikeTypes = super.loadBikeTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }
@@ -1082,8 +1075,9 @@ public class OperatorSystemController extends SystemController{
             DataFetcher.deleteEquipmentType(getSelectedType());
 
             //Update list, table and dropdowns
-            equipmentTypes = loadEquipmentTypes();
+            equipmentTypes = super.loadEquipmentTypes();
             filterAndSearchTypes();
+            setEquipmentDropdownOptions();
         }catch(InsertFailedException e){
             return;
         }

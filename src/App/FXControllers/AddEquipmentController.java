@@ -2,6 +2,7 @@ package App.FXControllers;
 
 import App.Classes.Equipment;
 import App.Classes.Location;
+import App.Classes.Type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,8 +13,8 @@ import javafx.scene.control.TextField;
 import java.util.HashMap;
 
 public class AddEquipmentController extends PopupController{
-    private static HashMap<String, String> bikeTypes;
-    private static HashMap<String, String> equipmentTypes;
+    private static ObservableList<Type> bikeTypes;
+    private static ObservableList<Type> equipmentTypes;
     private HashMap<String, String> locations;
 
     /* Controls */
@@ -26,7 +27,7 @@ public class AddEquipmentController extends PopupController{
     @FXML private TextField quantityField;
     @FXML private Label numberWarning;
 
-    public void setDropdownValues(HashMap<String, String> bikeTypes, HashMap<String, String> equipmentTypes,
+    public void setDropdownValues(ObservableList<Type> bikeTypes, ObservableList<Type> equipmentTypes,
                                   HashMap<String, String> locations){
         this.bikeTypes = bikeTypes;
         this.equipmentTypes = equipmentTypes;
@@ -38,7 +39,7 @@ public class AddEquipmentController extends PopupController{
         category.getSelectionModel().selectFirst();
 
         /* Set the location dropdown */
-        ObservableList<String> locationOptions = OptionsListCreator.createList(this.locations);
+        ObservableList<String> locationOptions = OptionsList.createList(this.locations);
         equipmentLocation.setItems(locationOptions);
     }
 
@@ -49,9 +50,9 @@ public class AddEquipmentController extends PopupController{
         ObservableList<String> typeOptions;
 
         if(showingBikes){
-            typeOptions = OptionsListCreator.createList(bikeTypes);
+            typeOptions = OptionsList.createTypeNameList(bikeTypes);
         }else { //Showing other equipment
-            typeOptions = OptionsListCreator.createList(equipmentTypes);
+            typeOptions = OptionsList.createTypeNameList(equipmentTypes);
         }
 
         type.setItems(typeOptions);
@@ -67,13 +68,13 @@ public class AddEquipmentController extends PopupController{
                 categoryName = "Equipment";
             }
 
-            /* Get type name and ID */
+            /* Get type */
             String typeName = (String) type.getSelectionModel().getSelectedItem();
-            int typeID;
+            Type type;
             if(categoryName.equals("Bike")){
-                typeID = Integer.parseInt(bikeTypes.get(type.getValue()));
+                type = OptionsList.findTypeByName(bikeTypes, typeName);
             }else{
-                typeID = Integer.parseInt(equipmentTypes.get(type.getValue()));
+                type = OptionsList.findTypeByName(equipmentTypes, typeName);
             }
 
             /* Get location */
@@ -87,8 +88,7 @@ public class AddEquipmentController extends PopupController{
             /* Create new equipment object */
             Equipment equipment = new Equipment();
             equipment.setCategory(categoryName);
-            equipment.setTypeName(typeName);
-            equipment.setTypeID(typeID);
+            equipment.setType(type);
             equipment.setLocation(loc);
             equipment.setStatus("Available");
 

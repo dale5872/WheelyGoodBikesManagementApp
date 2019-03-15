@@ -5,8 +5,6 @@ import java.text.NumberFormat;
 public class Equipment {
 
     private int id;
-    private int typeID;
-    private String typeName;
     private String status;
     private float price;
     private String image;
@@ -14,10 +12,8 @@ public class Equipment {
     private String category; //Bike or Equipment
     private Type type;
 
-    public Equipment(int id, int typeID, String typeName, String status, float price, String image, Location location) {
+    public Equipment(int id, String status, float price, String image, Location location) {
         this.id = id;
-        this.typeID = typeID;
-        this.typeName = typeName;
         this.status = status;
         this.price = price;
         this.image = image;
@@ -30,11 +26,25 @@ public class Equipment {
         return this.id;
     }
 
+    /**
+     * DO NOT DELETE
+     * Legacy accessor from before Type object was used.
+     * This accessor is still used to display the type name in tables.
+     * @return
+     */
+    @Deprecated
     public String getTypeName() {
-        return this.typeName;
+       // return this.typeName;
+        return this.type.getName();
     }
-
-    public int getTypeID() { return this.typeID; }
+    /**
+     * DO NOT DELETE
+     * Legacy accessor from before Type object was used.
+     * This accessor is still used to display the type ID in tables.
+     * @return
+     */
+    @Deprecated
+    public int getTypeID() { return this.type.getID(); }
 
     public String getStatus() {
         return this.status;
@@ -51,12 +61,6 @@ public class Equipment {
     public void setID(int id) {
         this.id = id;
     }
-
-    public void setTypeName(String type) {
-        this.typeName = type;
-    }
-
-    public void setTypeID(int id) { this.typeID = id; }
 
     public void setStatus(String status) {
         this.status = status;

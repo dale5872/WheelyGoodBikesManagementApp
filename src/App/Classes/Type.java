@@ -3,14 +3,14 @@ package App.Classes;
 import java.text.NumberFormat;
 
 public class Type{
-    private String id;
+    private int id;
     private String name;
     private double price;
     private String image;
 
     public Type(){}
 
-    public Type(String id){
+    public Type(int id){
         this.id = id;
     }
 
@@ -24,7 +24,7 @@ public class Type{
 
     public void setImage(String url) { this.image = url; }
 
-    public String getID(){
+    public int getID(){
         return this.id;
     }
 

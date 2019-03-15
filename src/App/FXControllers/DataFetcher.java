@@ -243,10 +243,13 @@ public class DataFetcher {
      * Fetches all the bikes from the database and returns this data as a list
      * @param managerLoc Location of the manager
      * @param searchParameters Any search parameters
+     * @param types A list of all types
      * @return List of Equipment objects (as bikes)
      * @throws EmptyDatasetException if empty
      */
-    static ObservableList<Equipment> getBikes(Location managerLoc, String searchParameters) throws EmptyDatasetException {
+    @SuppressWarnings("Duplicates")
+    static ObservableList<Equipment> getBikes(Location managerLoc, String searchParameters,
+                                              ObservableList<Type> types) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
@@ -267,8 +270,12 @@ public class DataFetcher {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
                 e.setID(Integer.parseInt((String) res.getElement(r, "bikeID")));
-                e.setTypeID(Integer.parseInt((String)res.getElement(r,"bikeType")));
-                e.setTypeName((String)res.getElement(r,"bikeName"));
+
+                /* Get type */
+                String typeName = (String) res.getElement(r,"bikeName");
+                Type type = OptionsList.findTypeByName(types, typeName);
+                e.setType(type);
+
                 /** Get reference of location object **/
                 Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
                 e.setLocation(loc);
@@ -288,7 +295,7 @@ public class DataFetcher {
      * @return Equipment object with all the bikes information
      * @throws EmptyDatasetException if the bike cannot be found
      */
-    static Equipment getBike(int id) throws EmptyDatasetException {
+    static Equipment getBike(int id, ObservableList<Type> types) throws EmptyDatasetException {
         Query q = new Query();
 
         //get query based on location
@@ -302,8 +309,12 @@ public class DataFetcher {
         } else {
             Equipment e = new Equipment();
             e.setID(Integer.parseInt((String) res.getElement(0, "bikeID")));
-            e.setTypeID(Integer.parseInt((String)res.getElement(0,"bikeType")));
-            e.setTypeName((String)res.getElement(0,"bikeName"));
+
+            /* Get type */
+            String typeName = (String)res.getElement(0,"bikeName");
+            Type type = OptionsList.findTypeByName(types, typeName);
+            e.setType(type);
+
             /** Get reference of location object **/
             Location loc = new Location(Integer.parseInt((String)res.getElement(0,"location")), (String)res.getElement(0,"name"));
             e.setLocation(loc);
@@ -330,7 +341,8 @@ public class DataFetcher {
             throw new EmptyDatasetException("Empty Dataset: No bike types to return", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
-                Type t = new Type((String)res.getElement(r, "bikeTypeID"));
+                int typeID = Integer.parseInt((String)res.getElement(r, "bikeTypeID"));
+                Type t = new Type(typeID);
                 t.setName((String)res.getElement(r, "bikeType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
@@ -348,17 +360,17 @@ public class DataFetcher {
      */
     static void addBike(Equipment e) throws InsertFailedException, EmptyDatasetException {
         if(e.getCategory().equals("Bike")) {
-            Query q = new Query("create", "addBike", "bike_type=" + e.getTypeID() +
+            Query q = new Query("create", "addBike", "bike_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus());
 
             if (q.insertQuery()) {
                 //success
             } else {
-                throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+                throw new InsertFailedException("Failed to add new equipment of type " + e.getType().getName());
             }
         } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getType().getName());
         }
     }
 
@@ -385,7 +397,7 @@ public class DataFetcher {
      */
     static void updateBike(Equipment e) throws InsertFailedException {
         if(e.getCategory().equals("Bike")) {
-            Query q = new Query("update", "updateBike", "bike_type=" + e.getTypeID() +
+            Query q = new Query("update", "updateBike", "bike_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus() +
                     "&equipment_id=" + e.getID());
@@ -394,7 +406,7 @@ public class DataFetcher {
                 throw new InsertFailedException("Failed to change getEquipment " + e.getID());
             }
         } else {
-            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getType().getName());
         }
     }
 
@@ -420,12 +432,12 @@ public class DataFetcher {
             if (!q.insertQuery()) {
                 throw new InsertFailedException("Deleting getEquipment " + e.getID() + " failed." +
                         "\n" +
-                        "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
+                        "Hints: There may still be an active rental using this " + e.getType().getName() + "" +
                         "\nWait for rental to complete, or mark rental as complete." +
                         "\nCannot remove until solved.");
             }
         } else {
-            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new getEquipment of type " + e.getType().getName());
         }
     }
 
@@ -449,7 +461,8 @@ public class DataFetcher {
      * @throws EmptyDatasetException if empty
      * Scope: Package-private (No modifier)
      */
-    static ObservableList<Equipment> getEquipment(Location managerLoc, String searchParameters) throws EmptyDatasetException {
+    @SuppressWarnings("Duplicates")
+    static ObservableList<Equipment> getEquipment(Location managerLoc, String searchParameters, ObservableList<Type> types) throws EmptyDatasetException {
         ObservableList<Equipment> equipment = FXCollections.observableArrayList();
 
         Query q = new Query();
@@ -470,8 +483,12 @@ public class DataFetcher {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
                 e.setID(Integer.parseInt((String) res.getElement(r, "equipmentID")));
-                e.setTypeID(Integer.parseInt((String)res.getElement(r,"equipmentType")));
-                e.setTypeName((String)res.getElement(r,"equipmentName"));
+
+                /* Get type */
+                String typeName = (String) res.getElement(r,"equipmentName");
+                Type type = OptionsList.findTypeByName(types, typeName);
+                e.setType(type);
+
                 /** Get reference of location object **/
                 Location loc = new Location(Integer.parseInt((String)res.getElement(r,"location")), (String)res.getElement(r,"name"));
                 e.setLocation(loc);
@@ -500,7 +517,8 @@ public class DataFetcher {
             throw new EmptyDatasetException("Empty Dataset: No equipment types to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
-                Type t = new Type((String)res.getElement(r, "equipmentTypeID"));
+                int typeID = Integer.parseInt((String)res.getElement(r, "equipmentTypeID"));
+                Type t = new Type(typeID);
                 t.setName((String)res.getElement(r, "equipmentType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
@@ -519,14 +537,14 @@ public class DataFetcher {
      */
     static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
         if(e.getCategory().equals("Equipment")) {
-            Query q = new Query("create", "addEquipment", "equipment_type=" + e.getTypeID() +
+            Query q = new Query("create", "addEquipment", "equipment_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus());
 
             if (q.insertQuery()) {
                 //success
             } else {
-                throw new InsertFailedException("Failed to add new getEquipment of type " + e.getTypeName());
+                throw new InsertFailedException("Failed to add new getEquipment of type " + e.getType().getName());
             }
         }
     }
@@ -554,7 +572,7 @@ public class DataFetcher {
      */
     static void updateEquipment(Equipment e) throws InsertFailedException {
         if(e.getCategory().equals("Equipment")) {
-            Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getTypeID() +
+            Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocationID() +
                     "&status=" + e.getStatus() +
                     "&equipment_id=" + e.getID());
@@ -563,7 +581,7 @@ public class DataFetcher {
                 throw new InsertFailedException("Failed to change equipment " + e.getID());
             }
         } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getType().getName());
         }
     }
 
@@ -589,12 +607,12 @@ public class DataFetcher {
             if (!q.insertQuery()) {
                 throw new InsertFailedException("Deleting equipment " + e.getID() + " failed." +
                         "\n" +
-                        "Hints: There may still be an active rental using this " + e.getTypeName() + "" +
+                        "Hints: There may still be an active rental using this " + e.getType().getName() + "" +
                         "\nWait for rental to complete, or mark rental as complete." +
                         "\nCannot remove until solved.");
             }
         } else {
-            throw new InsertFailedException("Failed to add new equipment of type " + e.getTypeName());
+            throw new InsertFailedException("Failed to add new equipment of type " + e.getType().getName());
         }
     }
 
@@ -692,7 +710,7 @@ public class DataFetcher {
         }
     }
 
-    static ObservableList<Rental> getRentals(Location managerLoc, String params) throws EmptyDatasetException, InvalidParametersException {
+    static ObservableList<Rental> getRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
         String searchParameters = "location_id=" + managerLoc.getLocationID();
@@ -708,7 +726,7 @@ public class DataFetcher {
                 //fill data
                 newRental.setID(Integer.parseInt((String) res.getElement(r, "bikeRentalID")));
                 newRental.setUser(getUser(Integer.parseInt((String)res.getElement(r, "userID"))));
-                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID"))));
+                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID")), types));
                 newRental.setStatus((String)res.getElement(r, "status"));
                 //Get start and return times
                 try {

@@ -2,6 +2,7 @@ package App.FXControllers;
 
 import App.Classes.Type;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -17,6 +18,8 @@ public class AddEditTypeController extends PopupController{
 
     @FXML private Label priceWarning;
 
+    @FXML private Button confirmBtn;
+
     public void setIsBike(Boolean isBikeType){
         this.isBikeType = isBikeType;
     }
@@ -26,6 +29,8 @@ public class AddEditTypeController extends PopupController{
 
         nameField.setText(this.existingType.getName());
         priceField.setText(Double.toString(this.existingType.getPrice()));
+
+        confirmBtn.setText("Update");
     }
 
     @FXML

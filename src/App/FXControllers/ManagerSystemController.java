@@ -6,7 +6,6 @@ import App.Classes.Equipment;
 import App.Classes.Rental;
 import DatabaseConnector.InsertFailedException;
 import DatabaseConnector.Results;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +15,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 
-import javax.security.auth.callback.Callback;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -94,8 +91,6 @@ public class ManagerSystemController extends SystemController{
     @FXML private CategoryAxis rentalXAxis;
     @FXML private NumberAxis rentalYAxis;
 
-    private static HashMap<String, String> equipmentTypes;
-    private static HashMap<String, String> bikeTypes;
     private static HashMap<String, String> savedReports;
 
     /**
@@ -122,8 +117,6 @@ public class ManagerSystemController extends SystemController{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        equipmentTypes = DataFetcher.getDropdownValues("equipmentTypes");
-        bikeTypes = DataFetcher.getDropdownValues("bikeTypes");
         savedReports = DataFetcher.getFilenameDropdownValues();
 
         setDropdownOptions();
@@ -148,7 +141,7 @@ public class ManagerSystemController extends SystemController{
         equipmentView.getSelectionModel().selectFirst();
 
         //Set the equipment filter for bikes (default view option)
-        ObservableList<String> equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+        ObservableList<String> equipmentFilterOptions = OptionsList.createTypeNameList(bikeTypes);
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
@@ -159,7 +152,7 @@ public class ManagerSystemController extends SystemController{
         penaltiesViewOption.getSelectionModel().selectFirst();
 
         //Set saved reports dropdown
-        ObservableList<String> reports = OptionsListCreator.createList(savedReports);
+        ObservableList<String> reports = OptionsList.createList(savedReports);
         generalReportFilter.setItems(reports);
         equipmentFilter.getSelectionModel().selectFirst();
     }
@@ -177,9 +170,9 @@ public class ManagerSystemController extends SystemController{
 
         /* Create options list for filter dropdown */
         if(showingBikes){
-            equipmentFilterOptions = OptionsListCreator.createList(bikeTypes);
+            equipmentFilterOptions = OptionsList.createTypeNameList(bikeTypes);
         }else{ //Showing equipment
-            equipmentFilterOptions = OptionsListCreator.createList(equipmentTypes);
+            equipmentFilterOptions = OptionsList.createTypeNameList(equipmentTypes);
         }
 
         /* Add "All" option to list and add list to dropdown */
@@ -225,7 +218,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadBikes(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + params);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + params, bikeTypes);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -238,7 +231,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadEquipment(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + params);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + params, equipmentTypes);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -271,7 +264,7 @@ public class ManagerSystemController extends SystemController{
 
     protected void loadRentals(String params) throws ErrorException {
         try {
-            ObservableList<Rental> rental = DataFetcher.getRentals(this.employee.getLocation(), "search=" + params);
+            ObservableList<Rental> rental = DataFetcher.getRentals(this.employee.getLocation(), "search=" + params, bikeTypes);
 
             //fill table
             rentalsID.setCellValueFactory(

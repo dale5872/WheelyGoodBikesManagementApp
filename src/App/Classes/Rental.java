@@ -84,7 +84,7 @@ public class Rental {
 
     public int getEquipmentID() { return this.equipment.getID(); }
 
-    public String getEquipmentName() { return this.equipment.getTypeName(); }
+    public String getEquipmentName() { return this.equipment.getType().getName(); }
 
     public String getEquipmentPrice() { return this.equipment.getFormattedPrice(); }
 

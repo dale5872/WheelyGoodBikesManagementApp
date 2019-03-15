@@ -26,7 +26,7 @@ public class EditEquipmentController extends PopupController{
         this.locations = locations;
 
         /* Set the location dropdown */
-        ObservableList<String> locationOptions = OptionsListCreator.createList(this.locations);
+        ObservableList<String> locationOptions = OptionsList.createList(this.locations);
         equipmentLocation.setItems(locationOptions);
 
         /* Set the status dropdown */
@@ -38,8 +38,8 @@ public class EditEquipmentController extends PopupController{
         this.equipment = equipment;
 
         equipmentInfo.setText("ID: " + this.equipment.getID()
-                + " | Category: " + this.equipment.getCategory()
-                + " | Type: " + this.equipment.getTypeName());
+                + "\nCategory: " + this.equipment.getCategory()
+                + "\nType: " + this.equipment.getType().getName());
 
         equipmentLocation.setValue(this.equipment.getLocationName());
         statusCombo.setValue(this.equipment.getStatus());

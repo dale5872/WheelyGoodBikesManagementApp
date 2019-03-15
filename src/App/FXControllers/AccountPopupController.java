@@ -22,10 +22,10 @@ public class AccountPopupController extends PopupController {
         this.accountTypes = accountTypes;
         this.locations = locations;
 
-        ObservableList<String> accountTypeOptions = OptionsListCreator.createList(this.accountTypes);
+        ObservableList<String> accountTypeOptions = OptionsList.createList(this.accountTypes);
         accountTypeCombo.setItems(accountTypeOptions);
 
-        ObservableList<String> locationOptions = OptionsListCreator.createList(this.locations);
+        ObservableList<String> locationOptions = OptionsList.createList(this.locations);
         workLocationCombo.setItems(locationOptions);
     }
 
