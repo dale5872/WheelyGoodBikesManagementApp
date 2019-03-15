@@ -52,7 +52,6 @@ public class OperatorSystemController extends SystemController{
     @FXML private Button accountsEditAccount;
     @FXML private Button accountsDeleteAccount;
 
-
     /** Equipment Tab **/
     //Table
     @FXML private TableColumn equipmentID;
@@ -108,7 +107,6 @@ public class OperatorSystemController extends SystemController{
 
     //fields
     private static HashMap<String, String> accountTypes;
-    private static HashMap<String, String> locations;
 
     /**
      * The initialise method is called when the form first loads
@@ -133,16 +131,15 @@ public class OperatorSystemController extends SystemController{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        //Load in account types, locations and equipment types
-        accountTypes = DataFetcher.getDropdownValues("accountTypes");
-        locations = DataFetcher.getDropdownValues("getLocations");
+        //Load in account types
+        accountTypes = DataFetcher.getAccountTypes();
 
         //Load data into tables
         loadEmployeeAccounts("");
         loadBikes("");
-        loadLocations("");
 
         fillTypesTable(bikeTypes);
+        fillLocationsTable(locations);
 
         setDropdownOptions();
     }
@@ -282,7 +279,7 @@ public class OperatorSystemController extends SystemController{
      */
     protected void loadEmployeeAccounts(String params){
         try{
-            ObservableList<EmployeeAccount> accounts = DataFetcher.getEmployeeAccounts(params);
+            ObservableList<EmployeeAccount> accounts = DataFetcher.getEmployeeAccounts(params, locations);
 
             if(accounts == null){
                 accountsTable.getItems().clear();
@@ -576,7 +573,7 @@ public class OperatorSystemController extends SystemController{
      */
     private void loadBikes(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(null, params, bikeTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(null, params, bikeTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -589,7 +586,7 @@ public class OperatorSystemController extends SystemController{
      */
     private void loadEquipment(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, params, equipmentTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(null, params, equipmentTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -1107,27 +1104,39 @@ public class OperatorSystemController extends SystemController{
     protected void filterAndSearchLocations(){
         locationsTable.getItems().clear();
         setEditDeleteLocationButtons();
-        loadLocations(locationSearch.getText());
+
+        if(locationSearch.equals("")){
+            fillLocationsTable(locations);
+        }else{
+            searchLocations(locationSearch.getText());
+        }
     }
 
     /**
-     * Loads data from the SQL database into the Locations table
+     * Searches for locations ion the SQL database
      * @param params Search parameters
      */
-    private void loadLocations(String params){
+    private void searchLocations(String params){
         try{
-            ObservableList<Location> locations = DataFetcher.getLocations("search=" + params);
-
-            locationsID.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("locationID"));
-
-            locationsName.setCellValueFactory(
-                    new PropertyValueFactory<Equipment, String>("Name"));
-
-            locationsTable.setItems(locations);
+            ObservableList<Location> result = DataFetcher.getLocations("search=" + params);
+            fillLocationsTable(result);
         }catch(EmptyDatasetException exc){
             return;
         }
+    }
+
+    /**
+     * Displays an ObservableList of locations in the locations table
+     * @param listToDisplay An ObservableList of Location objects
+     */
+    private void fillLocationsTable(ObservableList<Location> listToDisplay){
+        locationsID.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("locationID"));
+
+        locationsName.setCellValueFactory(
+                new PropertyValueFactory<Equipment, String>("Name"));
+
+        locationsTable.setItems(listToDisplay);
     }
 
     /**
@@ -1201,9 +1210,9 @@ public class OperatorSystemController extends SystemController{
         try{
             DataFetcher.addLocation(name);
 
-            //Update table and hashmap
+            //Update list and table
+            locations = super.loadLocations();
             filterAndSearchLocations();
-            locations = DataFetcher.getDropdownValues("getLocations");
         }catch(InsertFailedException exc){
             return;
         }
@@ -1217,9 +1226,11 @@ public class OperatorSystemController extends SystemController{
         try{
             DataFetcher.editLocation(location);
 
-            //Update table
+            //Update list and tables
+            locations = super.loadLocations();
             filterAndSearchLocations();
-            locations = DataFetcher.getDropdownValues("getLocations");
+            filterAndSearchAccounts();
+            filterAndSearchEquipment();
         }catch(InsertFailedException exc){
             return;
         }
@@ -1232,9 +1243,9 @@ public class OperatorSystemController extends SystemController{
         try{
             DataFetcher.deleteLocation(getSelectedLocation());
 
-            //Update table
+            //Update list and table
+            locations = super.loadLocations();
             filterAndSearchLocations();
-            locations = DataFetcher.getDropdownValues("getLocations");
         } catch(InsertFailedException exc){
             return;
         }

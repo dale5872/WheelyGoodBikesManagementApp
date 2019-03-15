@@ -1,6 +1,7 @@
 package App.FXControllers;
 
 import App.Classes.EmployeeAccount;
+import App.Classes.Location;
 import App.Classes.Type;
 import App.JavaFXLoader;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ public class SystemController extends Controller{
 
     protected static ObservableList<Type> bikeTypes;
     protected static ObservableList<Type> equipmentTypes;
+    protected static ObservableList<Location> locations;
 
     /* Controls */
     protected List<ToggleButton> tabButtons; //List to store all tab buttons
@@ -53,6 +55,7 @@ public class SystemController extends Controller{
 
         bikeTypes = loadBikeTypes();
         equipmentTypes = loadEquipmentTypes();
+        locations = loadLocations();
     }
 
     /**
@@ -79,6 +82,14 @@ public class SystemController extends Controller{
         }
     }
 
+    protected ObservableList<Location> loadLocations(){
+        try{
+            return DataFetcher.getLocations("search=");
+        }catch(EmptyDatasetException e){
+            return null;
+        }
+    }
+
     public void setEmployee(EmployeeAccount e) {
         this.employee = e;
 
@@ -91,7 +102,7 @@ public class SystemController extends Controller{
         userAccountPhone.setText(employee.getPhoneNumber());
         userAccountPhoneTextbox.setText(employee.getPhoneNumber());
         userAccountType.setText(employee.getAccType());
-        userAccountLocation.setText(employee.getLocationName());
+        userAccountLocation.setText(employee.getLocation().getName());
     }
 
     /**

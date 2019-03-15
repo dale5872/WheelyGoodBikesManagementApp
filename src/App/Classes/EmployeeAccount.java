@@ -25,28 +25,20 @@ public class EmployeeAccount extends Account{
         this.employeeID = employeeID;
     }
 
-
     public void setLocation(Location loc) {
         this.loc = loc;
     }
 
-    public void setLocation(String name, int id) {
-        this.loc = new Location(id, name);
-    }
-
+    /**
+     * DO NOT DELETE
+     * Legacy accessor from before Location list was fully implemented.
+     * This accessor is still used to display the location name in tables.
+     * @return
+     */
+    @Deprecated
     public String getLocationName() {
         return this.loc.getName();
     }
 
-    public int getLocationID() {
-        return this.loc.getLocationID();
-    }
-
     public Location getLocation() { return this.loc; }
-
-
-    public void close() {
-        this.employeeID = 0;
-        this.loc = null;
-    }
 }

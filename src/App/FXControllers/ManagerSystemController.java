@@ -218,7 +218,8 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadBikes(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + params, bikeTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(),
+                    "search=" + params, bikeTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -231,7 +232,8 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadEquipment(String params) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + params, equipmentTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(),
+                    "search=" + params, equipmentTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -264,7 +266,8 @@ public class ManagerSystemController extends SystemController{
 
     protected void loadRentals(String params) throws ErrorException {
         try {
-            ObservableList<Rental> rental = DataFetcher.getRentals(this.employee.getLocation(), "search=" + params, bikeTypes);
+            ObservableList<Rental> rental = DataFetcher.getRentals(this.employee.getLocation(),
+                    "search=" + params, bikeTypes, locations);
 
             //fill table
             rentalsID.setCellValueFactory(
@@ -344,7 +347,7 @@ public class ManagerSystemController extends SystemController{
                 newAcc.setEmail(newEmail);
 
                 /* Get the account type index */
-                HashMap<String, String> accountTypes = DataFetcher.getDropdownValues("accountTypes");
+                HashMap<String, String> accountTypes = DataFetcher.getAccountTypes();
                 int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
 
                 /* Update the account ion the database */
