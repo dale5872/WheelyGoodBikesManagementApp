@@ -47,9 +47,10 @@ public class OptionsList {
      * Searches for a type in a list by the type's name
      * @param list The list of types to search
      * @param nameToFind The type name to search for
-     * @return The type if found, null otherwise (unsafe)
+     * @return The type if found
+     * @throws ListItemNotFoundException if type cannot be found
      */
-    public static Type findTypeByName(ObservableList<Type> list, String nameToFind){
+    public static Type findTypeByName(ObservableList<Type> list, String nameToFind) throws ListItemNotFoundException{
         Type type = null;
 
         for(int i = 0; i < list.size(); i++){
@@ -59,7 +60,11 @@ public class OptionsList {
             }
         }
 
-        return type;
+        if(type == null){
+            throw new ListItemNotFoundException();
+        }else {
+            return type;
+        }
     }
 
     /**
@@ -79,21 +84,26 @@ public class OptionsList {
     }
 
     /**
-     * Searches for a locations in a list by the locations's name
+     * Searches for a location in a list by the location's name
      * @param list The list of locations to search
      * @param nameToFind The location name to search for
-     * @return The location if found, null otherwise (unsafe)
+     * @return The location if found
+     * @throws ListItemNotFoundException if location cannot be found
      */
-    public static Location findLocationByName(ObservableList<Location> list, String nameToFind){
-        Location location = null;
+    public static Location findLocationByName(ObservableList<Location> list, String nameToFind) throws ListItemNotFoundException{
+        Location loc = null;
 
         for(int i = 0; i < list.size(); i++){
             Location l = list.get(i);
             if(l.getName().equals(nameToFind)){
-                location = l;
+                loc = l;
             }
         }
 
-        return location;
+        if(loc == null){
+            throw new ListItemNotFoundException();
+        }else {
+            return loc;
+        }
     }
 }

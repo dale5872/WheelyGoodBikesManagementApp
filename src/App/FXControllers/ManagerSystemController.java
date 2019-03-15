@@ -62,7 +62,8 @@ public class ManagerSystemController extends SystemController{
     @FXML private TextField equipmentSearch;
 
     /** Rentals Tab **/
-    //Search
+    //Filter and search
+    @FXML private ComboBox rentalsFilter;
     @FXML private TextField rentalSearch;
 
     //Table
@@ -120,7 +121,7 @@ public class ManagerSystemController extends SystemController{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        savedReports = DataFetcher.getFilenameDropdownValues();
+        //savedReports = DataFetcher.getFilenameDropdownValues();
 
         setDropdownOptions();
 
@@ -158,10 +159,15 @@ public class ManagerSystemController extends SystemController{
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
 
+        //Set the rentals filter dropdown
+        ObservableList<String> rentalsOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
+        rentalsFilter.setItems(rentalsOptions);
+        rentalsFilter.getSelectionModel().selectFirst();
+
         //Set saved reports dropdown
-        ObservableList<String> reports = OptionsList.createList(savedReports);
+        /*ObservableList<String> reports = OptionsList.createList(savedReports);
         savedReportName.setItems(reports);
-        equipmentFilter.getSelectionModel().selectFirst();
+        equipmentFilter.getSelectionModel().selectFirst();*/
 
         //Set report type dropdowns
         ObservableList<String> reportTypes = FXCollections.observableArrayList();
@@ -234,7 +240,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadBikes(String type, String search) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + search + "&type=" + type, bikeTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + search + "&type=" + type, bikeTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -248,7 +254,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadEquipment(String type, String search) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + search + "&type=" + type, equipmentTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + search + "&type=" + type, equipmentTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -281,15 +287,21 @@ public class ManagerSystemController extends SystemController{
 
     @FXML
     protected void filterAndSearchRentals(Event e) {
+        //rentalsTable.getItems().clear();
+
         String search = rentalSearch.getText();
 
-        loadBikeRentals(search);
-
+        boolean showingBikes = rentalsFilter.getSelectionModel().getSelectedItem().equals("Bikes");
+        if(showingBikes){
+            loadBikeRentals(search);
+        }else{
+            loadEquipmentRentals(search);
+        }
     }
 
     private void loadBikeRentals(String search) {
         try {
-            ObservableList<Rental> rental = DataFetcher.getBikeRentals(this.employee.getLocation(), "search=" + search, bikeTypes);
+            ObservableList<Rental> rental = DataFetcher.getBikeRentals(this.employee.getLocation(), "search=" + search, bikeTypes, locations);
             fillRentalsTable(rental);
         } catch (EmptyDatasetException | InvalidParametersException | ErrorException e) {
             return;

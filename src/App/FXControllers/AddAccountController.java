@@ -67,7 +67,13 @@ public class AddAccountController extends AccountPopupController{
 
                 /* Get location */
                 String locationName = (String) workLocationCombo.getValue();
-                Location loc = OptionsList.findLocationByName(locations, locationName);
+                Location loc;
+                try{
+                    loc = OptionsList.findLocationByName(locations, locationName);
+                }catch(ListItemNotFoundException ex){
+                    new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Account could not be added.");
+                    return;
+                }
                 ((EmployeeAccount) newAccount).setLocation(loc);
             }
 
