@@ -268,9 +268,15 @@
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
                               </Label>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="110.0" text="Report Type:" />
+                                    <ComboBox fx:id="generateReportType" onAction="#checkDisabledControls" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
                               <HBox prefHeight="40.0" prefWidth="467.0">
                                  <children>
-                                    <Label prefWidth="100.0" text="Start Date:">
+                                    <Label prefWidth="110.0" text="Start Date:">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -280,18 +286,12 @@
                               </HBox>
                               <HBox prefHeight="40.0" prefWidth="200.0">
                                  <children>
-                                    <Label prefWidth="100.0" text="End Date:">
+                                    <Label prefWidth="110.0" text="End Date:">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
                                     </Label>
                                             <DatePicker fx:id="generateEndDate" prefHeight="27.0" prefWidth="300.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="40.0" prefWidth="200.0">
-                                 <children>
-                                    <Label prefWidth="100.0" text="Report Type:" />
-                                    <ComboBox fx:id="generateReportType" onAction="#checkDisabledControls" prefWidth="300.0" />
                                  </children>
                               </HBox>
                               <VBox prefHeight="200.0" prefWidth="100.0">
@@ -335,13 +335,19 @@
                               </Label>
                               <HBox prefHeight="40.0" prefWidth="200.0">
                                  <children>
-                                    <Label prefWidth="100.0" text="Report Type:" />
-                                            <ComboBox fx:id="savedReportType" prefWidth="300.0" />
+                                    <Label prefWidth="110.0" text="Report Type:" />
+                                            <ComboBox fx:id="savedReportType" onAction="#setGeneratedDate" prefWidth="300.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="40.0" prefWidth="200.0">
                                  <children>
-                                    <Label prefWidth="100.0" text="Report Name:" />
+                                    <Label prefWidth="110.0" text="Date Generated:" />
+                                    <DatePicker fx:id="savedReportDate" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="110.0" text="Report Name:" />
                                             <ComboBox fx:id="savedReportName" prefWidth="300.0" />
                                  </children>
                               </HBox>

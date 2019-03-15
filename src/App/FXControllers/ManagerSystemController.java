@@ -93,8 +93,7 @@ public class ManagerSystemController extends SystemController{
     /** Load Saved Report **/
     @FXML private ComboBox savedReportType;
     @FXML private ComboBox savedReportName;
-
-    private static HashMap<String, String> savedReports;
+    @FXML private DatePicker savedReportDate;
 
     /**
      * The initialise method is called when the form first loads
@@ -120,13 +119,12 @@ public class ManagerSystemController extends SystemController{
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
 
-        savedReports = DataFetcher.getFilenameDropdownValues();
-
         setDropdownOptions();
 
         //hide the graphs
         barChart.setVisible(false);
         lineChart.setVisible(false);
+        savedReportName.setDisable(true);
     }
 
     @Override
@@ -157,11 +155,6 @@ public class ManagerSystemController extends SystemController{
         ObservableList<String> options = FXCollections.observableArrayList("Solved", "Unsolved");
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
-
-        //Set saved reports dropdown
-        ObservableList<String> reports = OptionsList.createList(savedReports);
-        savedReportName.setItems(reports);
-        equipmentFilter.getSelectionModel().selectFirst();
 
         //Set report type dropdowns
         ObservableList<String> reportTypes = FXCollections.observableArrayList();
@@ -234,7 +227,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadBikes(String type, String search) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + search + "&type=" + type, bikeTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getBikes(this.employee.getLocation(), "search=" + search + "&type=" + type, bikeTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -248,7 +241,7 @@ public class ManagerSystemController extends SystemController{
      */
     private void loadEquipment(String type, String search) {
         try {
-            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + search + "&type=" + type, equipmentTypes);
+            ObservableList<Equipment> equipment = DataFetcher.getEquipment(this.employee.getLocation(), "search=" + search + "&type=" + type, equipmentTypes, locations);
             fillEquipmentTable(equipment);
         } catch (EmptyDatasetException exc) {
             return;
@@ -289,7 +282,7 @@ public class ManagerSystemController extends SystemController{
 
     private void loadBikeRentals(String search) {
         try {
-            ObservableList<Rental> rental = DataFetcher.getBikeRentals(this.employee.getLocation(), "search=" + search, bikeTypes);
+            ObservableList<Rental> rental = DataFetcher.getBikeRentals(this.employee.getLocation(), "search=" + search, bikeTypes, locations);
             fillRentalsTable(rental);
         } catch (EmptyDatasetException | InvalidParametersException | ErrorException e) {
             return;
@@ -471,10 +464,10 @@ public class ManagerSystemController extends SystemController{
         String reportType = (String)generateReportType.getSelectionModel().getSelectedItem();
         switch(reportType) {
             case "General":
-                generateGeneralReport(e);
+                generateGeneralReport();
                 break;
             case "Revenue":
-                loadSavedGeneralReport(e);
+                generateRevenueReport();
                 break;
             default:
                 throw new ErrorException("Unknown error has occurred. Check the logfile", true);
@@ -482,7 +475,22 @@ public class ManagerSystemController extends SystemController{
     }
 
     @FXML
-    protected void loadSavedReport(Event e) throws ErrorException {
+    protected void loadSavedReport(Event e) throws ErrorException, EmptyDatasetException {
+        clearAndHideGraphs();
+
+        String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
+        String filename = (String) savedReportName.getSelectionModel().getSelectedItem();
+
+        switch(reportType) {
+            case "General":
+                barChart.setVisible(true);
+                insertDataToBarChart(DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename));
+                break;
+            case "Revenue":
+                lineChart.setVisible(true);
+                insertDataToLineGraph(DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename));
+                break;
+        }
 
     }
 
@@ -491,16 +499,30 @@ public class ManagerSystemController extends SystemController{
         String reportType = (String)generateReportType.getSelectionModel().getSelectedItem();
         switch(reportType) {
             case "General":
-                /** DOESNT DO ANYTHING **/
-                generateEndDate.setDisable(true);
+                generateEndDate.setVisible(false);
+                break;
             case "Revenue":
-                generateEndDate.setDisable(false);
+                generateEndDate.setVisible(true);
+                break;
 
         }
     }
 
     @FXML
-    protected void generateGeneralReport(Event e) throws ErrorException {
+    protected void setGeneratedDate(Event e) {
+            savedReportName.setDisable(false);
+
+            String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
+
+            //Set saved reports dropdown
+            HashMap<String, String> savedReports = DataFetcher.getFilenameDropdownValues(reportType, this.employee.getLocation().getLocationID());
+            ObservableList<String> reports = OptionsList.createList(savedReports);
+            savedReportName.setItems(reports);
+            equipmentFilter.getSelectionModel().selectFirst();
+    }
+
+
+    private void generateGeneralReport() throws ErrorException {
         clearAndHideGraphs();
         barChart.setVisible(true);
 
@@ -508,7 +530,7 @@ public class ManagerSystemController extends SystemController{
 
         //get the data
         String report = "generateDailyGeneralReport";
-        String params = "location=1&date=" + dateString;
+        String params = "location_id=" + this.employee.getLocation().getLocationID() + "&date=" + dateString;
 
         try {
             insertDataToBarChart(DataFetcher.getReport(report, params));
@@ -518,15 +540,21 @@ public class ManagerSystemController extends SystemController{
         }
     }
 
-    @FXML
-    protected void loadSavedGeneralReport(Event e) throws ErrorException {
+    protected void generateRevenueReport() throws ErrorException {
         clearAndHideGraphs();
-        barChart.setVisible(true);
+        lineChart.setVisible(true);
 
-        String filename = (String) savedReportName.getSelectionModel().getSelectedItem();
+        //get From and To dates
+        String fromDate = convertDate(generateStartDate.getValue());
+        String toDate = convertDate(generateStartDate.getValue());
+
+        //get the data
+        String report = "generateRevenueReport";
+        String params = "location_id=1&fromDate=" + fromDate + "&toDate=" + toDate;
 
         try {
-            insertDataToBarChart(DataFetcher.getSavedReport(filename));
+            insertDataToLineGraph(DataFetcher.getReport(report, params));
+            setDropdownOptions();
         } catch (EmptyDatasetException exc) {
             return;
         }
@@ -545,41 +573,6 @@ public class ManagerSystemController extends SystemController{
         }
     }
 
-    @FXML
-    protected void generateRevenueReport(Event e) throws ErrorException {
-        clearAndHideGraphs();
-        lineChart.setVisible(true);
-
-        //get From and To dates
-        String fromDate = convertDate(generateStartDate.getValue());
-        String toDate = convertDate(generateStartDate.getValue());
-
-        //get the data
-        String report = "generateRevenueReport";
-        String params = "location=1&fromDate=" + fromDate + "&toDate=" + toDate;
-
-        try {
-            insertDataToLineGraph(DataFetcher.getReport(report, params));
-            setDropdownOptions();
-        } catch (EmptyDatasetException exc) {
-            return;
-        }
-    }
-
-    @FXML
-    protected void loadSavedRevenueReport(Event e) throws ErrorException {
-        clearAndHideGraphs();
-        lineChart.setVisible(true);
-
-        String filename = (String) savedReportName.getSelectionModel().getSelectedItem();
-
-        try {
-            insertDataToLineGraph(DataFetcher.getSavedReport(filename));
-        } catch (EmptyDatasetException exc) {
-            return;
-        }
-    }
-
     private void insertDataToLineGraph(Results res) {
         String[] headers;
         headers = res.getHeaders();
@@ -591,7 +584,7 @@ public class ManagerSystemController extends SystemController{
         series.setName("Revenue");
 
         //input data into chart
-        for(int i = 0; i < res.getCols(); i++) {
+        for(int i = 0; i < res.getRows(); i++) {
             series.getData().add(new XYChart.Data((String)res.getElement(i, 1), Double.parseDouble((String)res.getElement(i, 0))));
         }
         lineChart.getData().add(series);

@@ -723,7 +723,7 @@ public class DataFetcher {
         }
     }
 
-    static ObservableList<Rental> getRentals(Location managerLoc, String params,
+    static ObservableList<Rental> getBikeRentals(Location managerLoc, String params,
                                              ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
@@ -792,8 +792,8 @@ public class DataFetcher {
         }
     }
 
-    static Results getSavedReport(String filename) throws EmptyDatasetException {
-        Query q = new Query("reports", "fetchStoredReport", "filename=" + filename);
+    static Results getSavedReport(String report, int location, String filename) throws EmptyDatasetException {
+        Query q = new Query("reports", "fetchStoredReport", "report=" + report + "&location_id=" + location + "&filename=" + filename);
         Results res = q.executeQuery();
 
         if(res == null || res.isEmpty()) {
@@ -828,11 +828,11 @@ public class DataFetcher {
         return accountTypes;
     }
 
-    static HashMap<String, String> getFilenameDropdownValues() {
+    static HashMap<String, String> getFilenameDropdownValues(String report, int location) {
         HashMap<String, String> filenames = new HashMap<>();
 
         Query q = new Query();
-        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "");
+        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "report=" + report + "&location_id=" + location);
 
         String[] headers = res.getHeaders();
 
