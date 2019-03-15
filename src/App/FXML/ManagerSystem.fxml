@@ -160,7 +160,7 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="penaltiesTab">
+                        <AnchorPane fx:id="penaltiesTab" visible="false">
                             <children>
                                 <VBox layoutX="82.0" layoutY="65.0" prefHeight="1404.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
@@ -232,7 +232,7 @@
                                                         <Font name="System Bold" size="16.0" />
                                                     </font>
                                                 </Label>
-                                                <TextField fx:id="rentalSearch" prefHeight="25.0" prefWidth="250.0">
+                                                <TextField fx:id="rentalSearch" onKeyTyped="#filterAndSearchRentals" prefHeight="25.0" prefWidth="250.0">
                                                     <font>
                                                         <Font size="14.0" />
                                                     </font>
@@ -259,32 +259,116 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="reportsTab" visible="false">
+                        <AnchorPane fx:id="reportsTab">
                             <children>
-                                <Label text="General Report" />
-                                <DatePicker fx:id="generalDatePicker" layoutY="34.0" onAction="#loadGeneralReport" prefHeight="27.0" prefWidth="315.0" />
-                                <ComboBox fx:id="generalReportFilter" layoutY="75.0" onAction="#loadSavedGeneralReport" prefHeight="27.0" prefWidth="315.0" />
-                                <BarChart fx:id="barChart" layoutX="374.0" layoutY="34.0" prefHeight="304.0" prefWidth="485.0">
-                                    <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                    </yAxis>
-                                </BarChart>
-                                <Label layoutX="7.0" layoutY="362.0" text="Revenue" />
-                                <DatePicker fx:id="revenueFromDate" layoutX="7.0" layoutY="404.0" prefHeight="27.0" prefWidth="197.0" />
-                                <DatePicker fx:id="revenueToDate" layoutX="218.0" layoutY="404.0" prefHeight="27.0" prefWidth="194.0" />
-                                <LineChart fx:id="revenueGraph" layoutX="420.0" layoutY="345.0" prefHeight="307.0" prefWidth="531.0">
-                                    <xAxis>
-                                        <CategoryAxis fx:id="rentalXAxis" side="BOTTOM" />
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis fx:id="rentalYAxis" side="LEFT" />
-                                    </yAxis>
-                                </LineChart>
-                                <ComboBox fx:id="revenueReportFilter" layoutX="7.0" layoutY="475.0" onAction="#loadSavedRevenueReport" prefHeight="27.0" prefWidth="315.0" />
-                                <Button layoutX="7.0" layoutY="439.0" mnemonicParsing="false" onAction="#loadRevenueReport" text="Button" />
+                        <VBox prefHeight="502.0" prefWidth="467.0">
+                           <children>
+                                      <Label text="Generate New Report">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox prefHeight="40.0" prefWidth="467.0">
+                                 <children>
+                                    <Label prefWidth="100.0" text="Start Date:">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                            <DatePicker fx:id="generateStartDate" prefHeight="27.0" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="100.0" text="End Date:">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                            <DatePicker fx:id="generateEndDate" prefHeight="27.0" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="100.0" text="Report Type:" />
+                                    <ComboBox fx:id="generateReportType" onAction="#checkDisabledControls" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </CheckBox>
+                                    <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </CheckBox>
+                                    <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </CheckBox>
+                                    <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </CheckBox>
+                                    <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </CheckBox>
+                                 </children>
+                              </VBox>
+                              <Button fx:id="generateReport" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Generate" textOverrun="CLIP" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="1.0" layoutY="511.0" prefHeight="326.0" prefWidth="463.0">
+                           <children>
+                                      <Label text="Load Saved Report">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="100.0" text="Report Type:" />
+                                            <ComboBox fx:id="savedReportType" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefWidth="100.0" text="Report Name:" />
+                                            <ComboBox fx:id="savedReportName" prefWidth="300.0" />
+                                 </children>
+                              </HBox>
+                              <Button fx:id="generateReport1" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadSavedReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
+                           </children>
+                        </VBox>
+                        <Separator layoutX="460.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="845.0" prefWidth="16.0" />
+                        <AnchorPane layoutX="473.0" layoutY="8.0" prefHeight="828.0" prefWidth="1024.0">
+                           <children>
+                                      <BarChart fx:id="barChart" prefHeight="635.0" prefWidth="1011.0">
+                                          <xAxis>
+                                              <CategoryAxis fx:id="barXAxis" side="BOTTOM" />
+                                          </xAxis>
+                                          <yAxis>
+                                              <NumberAxis fx:id="barYAxis" side="LEFT" />
+                                          </yAxis>
+                                      </BarChart>
+                                      <LineChart fx:id="lineChart" prefHeight="633.0" prefWidth="1015.0">
+                                          <xAxis>
+                                              <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
+                                          </xAxis>
+                                          <yAxis>
+                                              <NumberAxis fx:id="lineYAxis" side="LEFT" />
+                                          </yAxis>
+                                      </LineChart>
+                           </children>
+                        </AnchorPane>
                             </children></AnchorPane>
                         <AnchorPane fx:id="userTab" visible="false">
                             <children>

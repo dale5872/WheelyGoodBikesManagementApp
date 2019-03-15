@@ -710,10 +710,10 @@ public class DataFetcher {
         }
     }
 
-    static ObservableList<Rental> getRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
+    static ObservableList<Rental> getBikeRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
-        String searchParameters = "location_id=" + managerLoc.getLocationID();
+        String searchParameters = "location_id=" + managerLoc.getLocationID() + "&search=" + params;
         Query q = new Query("read", "fetchBikeRentals", searchParameters);
         Results res = q.executeQuery();
 
@@ -761,6 +761,10 @@ public class DataFetcher {
 
         return rentals;
 
+    }
+
+    static ObservableList<Rental> getEquipmentRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
+        return null;
     }
 
     static Results getReport(String report, String params) throws EmptyDatasetException {
