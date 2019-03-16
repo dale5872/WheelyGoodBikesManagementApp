@@ -8,6 +8,7 @@ public class Account {
     private String email;
     private String phoneNumber;
     private String accType;
+    private String profilePicture;
 
     public Account(int userID, String username, String firstName, String lastName, String email, String phoneNumber, String accType) {
         this.userID = userID;
@@ -46,6 +47,8 @@ public class Account {
         return this.accType;
     }
 
+    public String getProfilePicture() { return this.profilePicture; }
+
     public void setUserID (int userID) {
         this.userID = userID;
     }
@@ -71,5 +74,7 @@ public class Account {
     public void setAccType(String accType) {
         this.accType = accType;
     }
+
+    public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
 
 }

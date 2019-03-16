@@ -32,6 +32,7 @@ public class Authenticate {
             acc.setEmail((String) results.getElement(0, "workEmail"));
             acc.setPhoneNumber((String) results.getElement(0, "workTel"));
             acc.setAccType((String) results.getElement(0, "type"));
+            acc.setProfilePicture((String) results.getElement(0, "profilePicture"));
             return acc;
 
         } else {
