@@ -786,7 +786,7 @@ public class DataFetcher {
                 //Get start and return times
                 try {
                     String date = (String) res.getElement(r, "startTime");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date start = dateFormat.parse(date);
                     newRental.setStartTime(start);
                 } catch (ParseException e) {
@@ -795,7 +795,7 @@ public class DataFetcher {
 
                 try {
                     String date = (String) res.getElement(r, "returnTime");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date start = dateFormat.parse(date);
                     newRental.setReturnTime(start);
                 } catch (ParseException e) {
