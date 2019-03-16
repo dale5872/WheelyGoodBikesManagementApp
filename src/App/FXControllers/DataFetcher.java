@@ -280,7 +280,7 @@ public class DataFetcher {
                 e.setID(Integer.parseInt((String) res.getElement(r, "bikeID")));
 
                 /* Get type */
-                String typeName = (String) res.getElement(r,"bikeName") + "blah";
+                String typeName = (String) res.getElement(r,"bikeName");
                 Type type;
                 try{
                     type = OptionsList.findTypeByName(types, typeName);
