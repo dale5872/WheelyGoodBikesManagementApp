@@ -451,9 +451,12 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateBikeType(Type type) throws InsertFailedException{
-        /**
-         * TODO: Updating bike & equipment types
-         */
+        String params = "bike_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&bike_type_id=" + type.getID();
+        Query q = new Query("update", "updateBikeType", params);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Could not update bike type with ID: " + type.getID());
+        }
     }
 
     /**
@@ -641,9 +644,12 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateEquipmentType(Type type) throws InsertFailedException{
-        /**
-         * TODO: Updating bike & equipment types
-         */
+        String params = "equipment_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&equipment_type_id=" + type.getID();
+        Query q = new Query("update", "updateEquipmentType", params);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Could not update equipment type with ID: " + type.getID());
+        }
     }
 
     /**
