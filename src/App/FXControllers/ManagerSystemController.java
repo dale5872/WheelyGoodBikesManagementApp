@@ -522,7 +522,7 @@ public class ManagerSystemController extends SystemController{
     }
 
     @FXML
-    protected void setGeneratedDate(Event e) {
+    protected void getReportNames(Event e) {
             savedReportName.setDisable(false);
 
             String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
@@ -547,7 +547,7 @@ public class ManagerSystemController extends SystemController{
 
         try {
             insertDataToBarChart(DataFetcher.getReport(report, params));
-            setDropdownOptions();
+            //setDropdownOptions();
         } catch (EmptyDatasetException exc) {
             return;
         }
@@ -559,15 +559,15 @@ public class ManagerSystemController extends SystemController{
 
         //get From and To dates
         String fromDate = convertDate(generateStartDate.getValue());
-        String toDate = convertDate(generateStartDate.getValue());
+        String toDate = convertDate(generateEndDate.getValue());
 
         //get the data
         String report = "generateRevenueReport";
-        String params = "location_id=1&fromDate=" + fromDate + "&toDate=" + toDate;
+        String params = "location_id=" + this.employee.getLocation().getLocationID() + "&fromDate=" + fromDate + "&toDate=" + toDate;
 
         try {
             insertDataToLineGraph(DataFetcher.getReport(report, params));
-            setDropdownOptions();
+            //setDropdownOptions();
         } catch (EmptyDatasetException exc) {
             return;
         }
@@ -577,13 +577,18 @@ public class ManagerSystemController extends SystemController{
         String[] headers;
         headers = res.getHeaders();
 
+        ObservableList<String> categories = FXCollections.observableArrayList();
+
+        XYChart.Series series = new XYChart.Series();
         //input data into chart
         for(int i = 0; i < res.getCols(); i++) {
-            XYChart.Series series = new XYChart.Series();
             series.setName(headers[i]);
-            series.getData().add(new XYChart.Data(headers[i], Integer.parseInt((String)res.getElement(0, i))));
-            barChart.getData().add(series);
+            series.getData().add(new XYChart.Data<String, Integer>(headers[i], Integer.parseInt((String)res.getElement(0, i))));
+            categories.add(headers[i]);
         }
+
+        barXAxis.setCategories(categories);
+        barChart.getData().add(series);
     }
 
     private void insertDataToLineGraph(Results res) {
@@ -596,10 +601,14 @@ public class ManagerSystemController extends SystemController{
         XYChart.Series series = new XYChart.Series();
         series.setName("Revenue");
 
+        ObservableList<String> categories = FXCollections.observableArrayList();
+
         //input data into chart
         for(int i = 0; i < res.getRows(); i++) {
-            series.getData().add(new XYChart.Data((String)res.getElement(i, 1), Double.parseDouble((String)res.getElement(i, 0))));
+            series.getData().add(new XYChart.Data<String, Double>((String)res.getElement(i, "Date"), Double.parseDouble((String)res.getElement(i, "Revenue"))));
+            categories.add((String)res.getElement(i, "Date"));
         }
+        lineXAxis.setCategories(categories);
         lineChart.getData().add(series);
 
     }
@@ -607,9 +616,11 @@ public class ManagerSystemController extends SystemController{
     private void clearAndHideGraphs() {
         barChart.getData().clear();
         barChart.setVisible(false);
+        barXAxis.getCategories().clear();
 
         lineChart.getData().clear();
         lineChart.setVisible(false);
+        lineXAxis.getCategories().clear();
     }
 
     private String convertDate(LocalDate d) throws ErrorException {

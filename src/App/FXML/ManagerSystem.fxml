@@ -219,7 +219,7 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="rentalsTab">
+                        <AnchorPane fx:id="rentalsTab" visible="false">
                             <children>
                                 <VBox prefHeight="740.0" prefWidth="1500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
@@ -271,7 +271,7 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="reportsTab" visible="false">
+                        <AnchorPane fx:id="reportsTab">
                             <children>
                                 <VBox prefHeight="502.0" prefWidth="467.0">
                                     <children>
@@ -348,7 +348,7 @@
                                         <HBox prefHeight="40.0" prefWidth="200.0">
                                             <children>
                                                 <Label prefWidth="100.0" text="Report Type:" />
-                                                <ComboBox fx:id="savedReportType" prefWidth="300.0" />
+                                                <ComboBox fx:id="savedReportType" onAction="#getReportNames" prefWidth="300.0" />
                                             </children>
                                         </HBox>
                                         <HBox prefHeight="40.0" prefWidth="200.0">
@@ -371,7 +371,7 @@
                                                 <NumberAxis fx:id="barYAxis" side="LEFT" />
                                             </yAxis>
                                         </BarChart>
-                                        <LineChart fx:id="lineChart" prefHeight="633.0" prefWidth="1015.0">
+                                        <LineChart fx:id="lineChart" prefHeight="633.0" prefWidth="1019.0">
                                             <xAxis>
                                                 <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
                                             </xAxis>
