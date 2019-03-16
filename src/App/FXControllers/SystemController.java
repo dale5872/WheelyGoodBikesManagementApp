@@ -64,7 +64,7 @@ public class SystemController extends Controller{
      */
     protected ObservableList<Type> loadBikeTypes(){
         try{
-            return DataFetcher.getBikeTypes();
+            return DataFetcher.getBikeTypes("");
         }catch(EmptyDatasetException e){
             return null;
         }
@@ -76,7 +76,7 @@ public class SystemController extends Controller{
      */
     protected ObservableList<Type> loadEquipmentTypes() {
         try{
-            return DataFetcher.getEquipmentTypes();
+            return DataFetcher.getEquipmentTypes("");
         }catch(EmptyDatasetException e){
             return null;
         }

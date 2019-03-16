@@ -846,17 +846,12 @@ public class OperatorSystemController extends SystemController{
      * @param params Parameters to search by
      */
     private void searchBikeTypes(String params){
-        /**
-         * TODO: Type searching
-         * BODY: Code is commented out below, just needs DataFetcher method.
-         */
-
-        /*
-         * Store the search results in a new list and pass that to fillTypesTable.
-         * Do not override the global bikeTypes List, as this list is needed in full elsewhere in the program.
-         */
-        //ObservableList<Type> result = <DataFetcher method for searching bike types>
-        //fillTypesTable(result)
+        try {
+            ObservableList result = DataFetcher.getBikeTypes(params);
+            fillTypesTable(result);
+        } catch (EmptyDatasetException e) {
+            return;
+        }
     }
 
     /**
@@ -864,17 +859,12 @@ public class OperatorSystemController extends SystemController{
      * @param params Parameters to search by
      */
     private void searchEquipmentTypes(String params){
-        /**
-         * TODO: Type searching
-         * BODY: Code is commented out below, just needs DataFetcher method.
-         */
-
-        /*
-         * Store the search results in a new list and pass that to fillTypesTable.
-         * Do not override the global equipmentTypes List, as this list is needed in full elsewhere in the program.
-         */
-        //ObservableList<Type> result = <DataFetcher method for searching equipment types>
-        //fillTypesTable(result)
+        try {
+            ObservableList result = DataFetcher.getEquipmentTypes(params);
+            fillTypesTable(result);
+        } catch (EmptyDatasetException e) {
+            return;
+        }
     }
 
     /**

@@ -367,11 +367,11 @@ public class DataFetcher {
      * @return ObservableList of all the types
      * @throws EmptyDatasetException if there are no types in operation
      */
-    static ObservableList<Type> getBikeTypes() throws EmptyDatasetException {
+    static ObservableList<Type> getBikeTypes(String search) throws EmptyDatasetException {
         ObservableList<Type> type = FXCollections.observableArrayList();
 
         Query q = new Query();
-        Results res = q.executeQuery("read", "fetchBikeTypes", "return_type=table");
+        Results res = q.executeQuery("read", "fetchBikeTypes", "return_type=table&search=" + search);
 
         if(res == null || res.isEmpty()) {
             throw new EmptyDatasetException("Empty Dataset: No bike types to return", false);
@@ -561,11 +561,11 @@ public class DataFetcher {
      * @return ObservableList of all the types
      * @throws EmptyDatasetException if there are no types in operation
      */
-    static ObservableList<Type> getEquipmentTypes() throws EmptyDatasetException {
+    static ObservableList<Type> getEquipmentTypes(String search) throws EmptyDatasetException {
         ObservableList<Type> type = FXCollections.observableArrayList();
 
         Query q = new Query();
-        Results res = q.executeQuery("read", "fetchEquipmentTypes", "return_type=table");
+        Results res = q.executeQuery("read", "fetchEquipmentTypes", "return_type=table&search=" + search);
 
         if(res == null || res.isEmpty()) {
             throw new EmptyDatasetException("Empty Dataset: No equipment types to return.", false);
