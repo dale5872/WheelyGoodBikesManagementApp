@@ -234,7 +234,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="typesTab">
+                  <AnchorPane fx:id="typesTab" visible="false">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -339,7 +339,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="userTab" visible="false">
+                  <AnchorPane fx:id="userTab">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
@@ -347,11 +347,16 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="20.0">
                                        <children>
-                                          <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@Profile_Picture_Default.png" />
-                                             </image>
-                                          </ImageView>
+                                          <StackPane onDragDropped="#droppedImage" onDragEntered="#dragEntered" onDragExited="#dragExit" prefHeight="150.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@Profile_Picture_Default.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="dragDropLabel" text="Drag an image here to change..." textFill="WHITE" visible="false" />
+                                             </children>
+                                          </StackPane>
                                           <VBox alignment="CENTER_LEFT">
                                              <children>
                                                 <Label fx:id="userAccountName" text="Firstname Secondname" textFill="WHITE">
