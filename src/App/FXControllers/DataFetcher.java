@@ -1,13 +1,12 @@
 package App.FXControllers;
 
 import App.Classes.*;
-import DatabaseConnector.InsertFailedException;
-import DatabaseConnector.Query;
-import DatabaseConnector.Results;
+import DatabaseConnector.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.swing.plaf.InsetsUIResource;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -416,6 +415,16 @@ public class DataFetcher {
      * @throws InsertFailedException if insert failed
      */
     static void addBikeType(Type type) throws InsertFailedException {
+        File f = new File(type.getImage());
+        String filename = f.getName();
+
+        try {
+            //uploads the file and sets the URL to the path on the server
+            type.setImage(UploadFile.uploadFile(type.getImage()));
+        } catch (FileNotFoundException | HTTPErrorException e) {
+            throw new InsertFailedException(e.getMessage());
+        }
+
         Query q = new Query("create", "addBikeType", "bike_type=" + type.getName()
                 + "&pricePerHour=" + type.getPrice()
                 + "&image=" + type.getImage());

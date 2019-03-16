@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -37,11 +38,19 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="imageUrlField" prefHeight="30.0" prefWidth="300.0">
+                        <TextField fx:id="imageUrlField" onDragDone="#getFilename" prefHeight="0.0" prefWidth="300.0" promptText="Drag File Here...">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
+                        <StackPane fx:id="dragBox" onDragDropped="#getFilename" onDragEntered="#dragOver" onDragExited="#dragExited" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <children>
+                              <Label text="Drop file here..." />
+                           </children>
+                        </StackPane>
                      </children>
                   </VBox>
                   <VBox>
