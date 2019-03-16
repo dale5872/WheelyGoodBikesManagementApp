@@ -36,8 +36,8 @@ public class OptionsList {
     public static ObservableList<String> createTypeNameList(ObservableList<Type> types){
         ObservableList<String> names = FXCollections.observableArrayList();
 
-        for(int i = 0; i < types.size(); i++){
-            names.add(types.get(i).getName());
+        for(Type t : types){
+            names.add(t.getName());
         }
 
         return names;
@@ -53,8 +53,7 @@ public class OptionsList {
     public static Type findTypeByName(ObservableList<Type> list, String nameToFind) throws ListItemNotFoundException {
         Type type = null;
 
-        for(int i = 0; i < list.size(); i++){
-            Type t = list.get(i);
+        for(Type t : list){
             if(t.getName().equals(nameToFind)){
                 type = t;
             }
@@ -62,7 +61,7 @@ public class OptionsList {
 
         if(type == null){
             throw new ListItemNotFoundException();
-        }else {
+        }else{
             return type;
         }
     }
@@ -76,15 +75,16 @@ public class OptionsList {
     public static ObservableList<String> createLocationNameList(ObservableList<Location> locations){
         ObservableList<String> names = FXCollections.observableArrayList();
 
-        for(int i = 0; i < locations.size(); i++){
-            names.add(locations.get(i).getName());
+        for(Location l : locations){
+            names.add(l.getName());
         }
 
         return names;
     }
 
     /**
-     * Searches for a location in a list by the location's name     * @param list The list of locations to search
+     * Searches for a location in a list by the location's name
+     * @param list The list of locations to search
      * @param nameToFind The location name to search for
      * @return The location if found
      * @throws ListItemNotFoundException if location cannot be found
@@ -92,8 +92,7 @@ public class OptionsList {
     public static Location findLocationByName(ObservableList<Location> list, String nameToFind) throws ListItemNotFoundException {
         Location loc = null;
 
-        for(int i = 0; i < list.size(); i++){
-            Location l = list.get(i);
+        for(Location l : list){
             if(l.getName().equals(nameToFind)){
                 loc = l;
             }
@@ -101,7 +100,7 @@ public class OptionsList {
 
         if(loc == null){
             throw new ListItemNotFoundException();
-        }else {
+        }else{
             return loc;
         }
     }

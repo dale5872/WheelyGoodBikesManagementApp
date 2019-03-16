@@ -879,7 +879,12 @@ public class DataFetcher {
         HashMap<String, String> filenames = new HashMap<>();
 
         Query q = new Query();
-        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "report=" + report + "&location_id=" + location);
+        Results res;
+        try{
+            res = q.executeQuery("reports", "fetchStoredReportFilenames", "report=" + report + "&location_id=" + location);
+        }catch(Exception ex){
+            return null;
+        }
 
         String[] headers = res.getHeaders();
 

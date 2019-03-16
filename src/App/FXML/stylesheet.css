@@ -73,7 +73,7 @@
 }
 
 .table{
-	-fx-font-size: 16px;
+	-fx-font-size: 14px;
 }
 
 .contactBox{
@@ -87,4 +87,38 @@
 
 .price-column{
 	-fx-alignment: CENTER-RIGHT;
+}
+
+.axis{
+	-fx-tick-label-fill: white;
+	-fx-tick-label-font-size: 14px;
+}
+
+.axis-label{
+	-fx-text-fill: white;
+	-fx-font-size: 14px;
+}
+
+.reports-accordion{
+	-fx-box-border: #6B6B6B;
+}
+
+.inner-accordion-pane{
+	-fx-background-color: #6B6B6B;
+}
+
+.accordion-pane > .title{
+	-fx-background-color: #2AD1BB;
+}
+
+.accordion-pane > .title:hover{
+	-fx-background-color: #25B29F;
+}
+
+.accordion-pane > .title:pressed{
+	-fx-background-color: #1A7F70;
+}
+
+.combo-box{
+	-fx-font-size: 14px;
 }

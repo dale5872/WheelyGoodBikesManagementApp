@@ -90,11 +90,17 @@ public class ManagerSystemController extends SystemController{
     @FXML private DatePicker generateStartDate;
     @FXML private DatePicker generateEndDate;
     @FXML private ComboBox generateReportType;
+    @FXML private CheckBox generateCheckbox1;
+    @FXML private CheckBox generateCheckbox2;
+    @FXML private CheckBox generateCheckbox3;
+    @FXML private CheckBox generateCheckbox4;
+    @FXML private CheckBox generateCheckbox5;
+    @FXML private Button generateReportBtn;
 
     /** Load Saved Report **/
     @FXML private ComboBox savedReportType;
     @FXML private ComboBox savedReportName;
-    @FXML private DatePicker savedReportDate;
+    @FXML private Button loadReportBtn;
 
     /**
      * The initialise method is called when the form first loads
@@ -123,14 +129,14 @@ public class ManagerSystemController extends SystemController{
         setDropdownOptions();
 
         //hide the graphs
-        barChart.setVisible(false);
+        //barChart.setVisible(false);
         lineChart.setVisible(false);
-        savedReportName.setDisable(true);
     }
 
     @Override
     public void setEmployee(EmployeeAccount e) {
         super.setEmployee(e);
+        getReportNames();
 
         try {
             loadBikes("", "");
@@ -163,11 +169,11 @@ public class ManagerSystemController extends SystemController{
         rentalsFilter.getSelectionModel().selectFirst();
 
         //Set report type dropdowns
-        ObservableList<String> reportTypes = FXCollections.observableArrayList();
-        reportTypes.add("General");
-        reportTypes.add("Revenue");
+        ObservableList<String> reportTypes = FXCollections.observableArrayList("General", "Revenue");
         generateReportType.setItems(reportTypes);
         savedReportType.setItems(reportTypes);
+        generateReportType.getSelectionModel().selectFirst();
+        savedReportType.getSelectionModel().selectFirst();
     }
 
     /**
@@ -508,32 +514,99 @@ public class ManagerSystemController extends SystemController{
     }
 
     @FXML
-    protected void checkDisabledControls(Event e) {
+    protected void enableDisableGenerateFields(Event e) {
+        boolean atLeastOneCheckbox = checkCheckBoxes();
+        boolean hasStartDate = (generateStartDate.getValue() != null);
+        boolean hasEndDate = (generateEndDate.getValue() != null);
+        boolean needsEndDate;
+
+        /* Enable or disable the end date chooser */
         String reportType = (String)generateReportType.getSelectionModel().getSelectedItem();
         switch(reportType) {
             case "General":
-                generateEndDate.setVisible(false);
+                generateEndDate.setDisable(true);
+                needsEndDate = false;
                 break;
             case "Revenue":
-                generateEndDate.setVisible(true);
+            default:
+                generateEndDate.setDisable(false);
+                needsEndDate = true;
                 break;
+        }
 
+        /*
+         * The generate button is disabled if AT LEAST ONE of the following is true:
+         *  - There is no checkbox selected
+         *  - There is no start date selected
+         *  - An end date is needed AND none is selected
+         * If all are false, the generate button is enabled
+         */
+        if((atLeastOneCheckbox == false)
+                || (hasStartDate == false)
+                || ((needsEndDate == true) && (hasEndDate == false))){
+            generateReportBtn.setDisable(true);
+        }else{
+            generateReportBtn.setDisable(false);
+        }
+    }
+
+    /**
+     * Checks that at least one checkbox is selected
+     * @return TRUE if at least one checbox is selected, false otherwise
+     */
+    private boolean checkCheckBoxes(){
+        if(generateCheckbox1.isSelected()){
+            return true;
+        }
+
+        if(generateCheckbox2.isSelected()){
+            return true;
+        }
+
+        if(generateCheckbox3.isSelected()){
+            return true;
+        }
+
+        if(generateCheckbox4.isSelected()){
+            return true;
+        }
+
+        if(generateCheckbox5.isSelected()){
+            return true;
+        }
+
+        return false;
+    }
+
+    @FXML
+    protected void getReportNames() {
+        savedReportName.setDisable(false);
+        enableDisableLoadButton();
+
+        String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
+
+        //Set saved reports dropdown
+        HashMap<String, String> savedReports = DataFetcher.getFilenameDropdownValues(reportType, this.employee.getLocation().getLocationID());
+        if(savedReports != null) {
+            ObservableList<String> reports = OptionsList.createList(savedReports);
+            savedReportName.setItems(reports);
+            equipmentFilter.getSelectionModel().selectFirst();
+        }else{
+            savedReportName.getItems().clear();
         }
     }
 
     @FXML
-    protected void getReportNames(Event e) {
-            savedReportName.setDisable(false);
+    protected void enableDisableLoadButton(){
+        boolean reportTypeSelected = !(savedReportType.getSelectionModel().isEmpty());
+        boolean reportFileSelected = !(savedReportName.getSelectionModel().isEmpty());
 
-            String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
-
-            //Set saved reports dropdown
-            HashMap<String, String> savedReports = DataFetcher.getFilenameDropdownValues(reportType, this.employee.getLocation().getLocationID());
-            ObservableList<String> reports = OptionsList.createList(savedReports);
-            savedReportName.setItems(reports);
-            equipmentFilter.getSelectionModel().selectFirst();
+        if(reportTypeSelected && reportFileSelected){
+            loadReportBtn.setDisable(false);
+        }else{
+            loadReportBtn.setDisable(true);
+        }
     }
-
 
     private void generateGeneralReport() throws ErrorException {
         clearAndHideGraphs();

@@ -273,114 +273,190 @@
                         </AnchorPane>
                         <AnchorPane fx:id="reportsTab">
                             <children>
-                                <VBox prefHeight="502.0" prefWidth="467.0">
+                                <HBox layoutY="-2.0" prefHeight="843.0" prefWidth="1502.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <Label text="Generate New Report">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" />
-                                            </VBox.margin>
-                                        </Label>
-                                        <HBox prefHeight="40.0" prefWidth="467.0">
+                                        <VBox spacing="20.0">
                                             <children>
-                                                <Label prefWidth="100.0" text="Start Date:">
-                                                    <HBox.margin>
-                                                        <Insets />
-                                                    </HBox.margin>
-                                                </Label>
-                                                <DatePicker fx:id="generateStartDate" prefHeight="27.0" prefWidth="300.0" />
-                                            </children>
-                                        </HBox>
-                                        <HBox prefHeight="40.0" prefWidth="200.0">
-                                            <children>
-                                                <Label prefWidth="100.0" text="End Date:">
-                                                    <HBox.margin>
-                                                        <Insets />
-                                                    </HBox.margin>
-                                                </Label>
-                                                <DatePicker fx:id="generateEndDate" prefHeight="27.0" prefWidth="300.0" />
-                                            </children>
-                                        </HBox>
-                                        <HBox prefHeight="40.0" prefWidth="200.0">
-                                            <children>
-                                                <Label prefWidth="100.0" text="Report Type:" />
-                                                <ComboBox fx:id="generateReportType" onAction="#checkDisabledControls" prefWidth="300.0" />
-                                            </children>
-                                        </HBox>
-                                        <VBox prefHeight="200.0" prefWidth="100.0">
-                                            <children>
-                                                <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
-                                                    <VBox.margin>
-                                                        <Insets bottom="10.0" />
-                                                    </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
-                                                    <VBox.margin>
-                                                        <Insets bottom="10.0" />
-                                                    </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
-                                                    <VBox.margin>
-                                                        <Insets bottom="10.0" />
-                                                    </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
-                                                    <VBox.margin>
-                                                        <Insets bottom="10.0" />
-                                                    </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefWidth="200.0" text="CheckBox">
-                                                    <VBox.margin>
-                                                        <Insets bottom="10.0" />
-                                                    </VBox.margin>
-                                                </CheckBox>
+                                                <Accordion styleClass="reports-accordion">
+                                                    <panes>
+                                                        <TitledPane animated="false" styleClass="accordion-pane" text="New Report">
+                                                            <content>
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="inner-accordion-pane">
+                                                                    <children>
+                                                                        <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                            <children>
+                                                                                <VBox spacing="10.0">
+                                                                                    <children>
+                                                                                        <HBox alignment="CENTER_LEFT">
+                                                                                            <children>
+                                                                                                <Label prefWidth="100.0" text="Start Date:" textFill="WHITE">
+                                                                                                    <HBox.margin>
+                                                                                                        <Insets />
+                                                                                                    </HBox.margin>
+                                                                                                    <font>
+                                                                                                        <Font size="14.0" />
+                                                                                                    </font>
+                                                                                                </Label>
+                                                                                                <DatePicker fx:id="generateStartDate" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
+                                                                                            </children>
+                                                                                        </HBox>
+                                                                                        <HBox alignment="CENTER_LEFT">
+                                                                                            <children>
+                                                                                                <Label prefWidth="100.0" text="End Date:" textFill="WHITE">
+                                                                                                    <HBox.margin>
+                                                                                                        <Insets />
+                                                                                                    </HBox.margin>
+                                                                                                    <font>
+                                                                                                        <Font size="14.0" />
+                                                                                                    </font>
+                                                                                                </Label>
+                                                                                                <DatePicker fx:id="generateEndDate" disable="true" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
+                                                                                            </children>
+                                                                                        </HBox>
+                                                                                        <HBox alignment="CENTER_LEFT">
+                                                                                            <children>
+                                                                                                <Label prefWidth="100.0" text="Report Type:" textFill="WHITE">
+                                                                                                    <font>
+                                                                                                        <Font size="14.0" />
+                                                                                                    </font>
+                                                                                                </Label>
+                                                                                                <ComboBox fx:id="generateReportType" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
+                                                                                            </children>
+                                                                                        </HBox>
+                                                                                    </children>
+                                                                                </VBox>
+                                                                                <VBox spacing="5.0">
+                                                                                    <children>
+                                                                                        <CheckBox fx:id="generateCheckbox1" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
+                                                                                            <VBox.margin>
+                                                                                                <Insets />
+                                                                                            </VBox.margin>
+                                                                                            <font>
+                                                                                                <Font size="14.0" />
+                                                                                            </font>
+                                                                                        </CheckBox>
+                                                                                        <CheckBox fx:id="generateCheckbox2" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
+                                                                                            <VBox.margin>
+                                                                                                <Insets />
+                                                                                            </VBox.margin>
+                                                                                            <font>
+                                                                                                <Font size="14.0" />
+                                                                                            </font>
+                                                                                        </CheckBox>
+                                                                                        <CheckBox fx:id="generateCheckbox3" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
+                                                                                            <VBox.margin>
+                                                                                                <Insets />
+                                                                                            </VBox.margin>
+                                                                                            <font>
+                                                                                                <Font size="14.0" />
+                                                                                            </font>
+                                                                                        </CheckBox>
+                                                                                        <CheckBox fx:id="generateCheckbox4" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
+                                                                                            <VBox.margin>
+                                                                                                <Insets />
+                                                                                            </VBox.margin>
+                                                                                            <font>
+                                                                                                <Font size="14.0" />
+                                                                                            </font>
+                                                                                        </CheckBox>
+                                                                                        <CheckBox fx:id="generateCheckbox5" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
+                                                                                            <VBox.margin>
+                                                                                                <Insets />
+                                                                                            </VBox.margin>
+                                                                                            <font>
+                                                                                                <Font size="14.0" />
+                                                                                            </font>
+                                                                                        </CheckBox>
+                                                                                    </children>
+                                                                                </VBox>
+                                                                                <HBox alignment="CENTER_RIGHT">
+                                                                                    <children>
+                                                                                        <Button fx:id="generateReportBtn" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Generate" textOverrun="CLIP" />
+                                                                                    </children>
+                                                                                </HBox>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                            </content>
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </TitledPane>
+                                                        <TitledPane animated="false" styleClass="accordion-pane" text="Load Report">
+                                                            <content>
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="inner-accordion-pane">
+                                                                    <children>
+                                                                        <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                            <children>
+                                                                                <VBox alignment="CENTER" spacing="10.0">
+                                                                                    <children>
+                                                                                        <VBox>
+                                                                                            <children>
+                                                                                                <HBox alignment="CENTER_LEFT">
+                                                                                                    <children>
+                                                                                                        <Label prefWidth="100.0" text="Report Type:" textFill="WHITE">
+                                                                                                            <font>
+                                                                                                                <Font size="14.0" />
+                                                                                                            </font>
+                                                                                                        </Label>
+                                                                                                        <ComboBox fx:id="savedReportType" onAction="#getReportNames" prefHeight="30.0" prefWidth="250.0" />
+                                                                                                    </children>
+                                                                                                </HBox>
+                                                                                            </children>
+                                                                                        </VBox>
+                                                                                        <HBox alignment="CENTER_LEFT">
+                                                                                            <children>
+                                                                                                <Label prefWidth="100.0" text="Report Name:" textFill="WHITE">
+                                                                                                    <font>
+                                                                                                        <Font size="14.0" />
+                                                                                                    </font>
+                                                                                                </Label>
+                                                                                                <ComboBox fx:id="savedReportName" onAction="#enableDisableLoadButton" prefHeight="30.0" prefWidth="250.0" />
+                                                                                            </children>
+                                                                                        </HBox>
+                                                                                    </children>
+                                                                                </VBox>
+                                                                                <HBox alignment="CENTER_RIGHT">
+                                                                                    <children>
+                                                                                        <Button fx:id="loadReportBtn" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadSavedReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
+                                                                                    </children>
+                                                                                </HBox>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                            </content>
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </TitledPane>
+                                                    </panes>
+                                                </Accordion>
                                             </children>
                                         </VBox>
-                                        <Button fx:id="generateReport" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Generate" textOverrun="CLIP" />
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="1.0" layoutY="511.0" prefHeight="326.0" prefWidth="463.0">
-                                    <children>
-                                        <Label text="Load Saved Report">
-                                            <VBox.margin>
-                                                <Insets bottom="5.0" />
-                                            </VBox.margin>
-                                        </Label>
-                                        <HBox prefHeight="40.0" prefWidth="200.0">
+                                        <StackPane HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Label prefWidth="100.0" text="Report Type:" />
-                                                <ComboBox fx:id="savedReportType" onAction="#getReportNames" prefWidth="300.0" />
+                                                <BarChart fx:id="barChart" animated="false" styleClass="graph">
+                                                    <xAxis>
+                                                        <CategoryAxis fx:id="barXAxis" side="BOTTOM" />
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <NumberAxis fx:id="barYAxis" side="LEFT" />
+                                                    </yAxis>
+                                                </BarChart>
+                                                <LineChart fx:id="lineChart" animated="false" styleClass="graph">
+                                                    <xAxis>
+                                                        <CategoryAxis fx:id="lineXAxis" label="Dates" side="BOTTOM" />
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <NumberAxis fx:id="lineYAxis" label="Revenue in £" side="LEFT" />
+                                                    </yAxis>
+                                                </LineChart>
                                             </children>
-                                        </HBox>
-                                        <HBox prefHeight="40.0" prefWidth="200.0">
-                                            <children>
-                                                <Label prefWidth="100.0" text="Report Name:" />
-                                                <ComboBox fx:id="savedReportName" prefWidth="300.0" />
-                                            </children>
-                                        </HBox>
-                                        <Button fx:id="generateReport1" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadSavedReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Load" textOverrun="CLIP" />
+                                        </StackPane>
                                     </children>
-                                </VBox>
-                                <Separator layoutX="460.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="845.0" prefWidth="16.0" />
-                                <AnchorPane layoutX="473.0" layoutY="8.0" prefHeight="828.0" prefWidth="1024.0">
-                                    <children>
-                                        <BarChart fx:id="barChart" prefHeight="635.0" prefWidth="1011.0">
-                                            <xAxis>
-                                                <CategoryAxis fx:id="barXAxis" side="BOTTOM" />
-                                            </xAxis>
-                                            <yAxis>
-                                                <NumberAxis fx:id="barYAxis" side="LEFT" />
-                                            </yAxis>
-                                        </BarChart>
-                                        <LineChart fx:id="lineChart" prefHeight="633.0" prefWidth="1019.0">
-                                            <xAxis>
-                                                <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
-                                            </xAxis>
-                                            <yAxis>
-                                                <NumberAxis fx:id="lineYAxis" side="LEFT" />
-                                            </yAxis>
-                                        </LineChart>
-                                    </children>
-                                </AnchorPane>
+                                </HBox>
                             </children></AnchorPane>
                         <AnchorPane fx:id="userTab" visible="false">
                             <children>
