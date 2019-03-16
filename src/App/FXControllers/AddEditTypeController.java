@@ -14,6 +14,7 @@ public class AddEditTypeController extends PopupController{
     @FXML private Label allFieldsWarning;
 
     @FXML private TextField nameField;
+    @FXML private TextField imageUrlField;
     @FXML private TextField priceField;
 
     @FXML private Label priceWarning;
@@ -28,6 +29,7 @@ public class AddEditTypeController extends PopupController{
         this.existingType = type;
 
         nameField.setText(this.existingType.getName());
+        imageUrlField.setText(this.existingType.getImage());
         priceField.setText(Double.toString(this.existingType.getPrice()));
 
         confirmBtn.setText("Update");
@@ -47,8 +49,8 @@ public class AddEditTypeController extends PopupController{
 
             /* Set new values */
             type.setName(nameField.getText());
+            type.setImage(imageUrlField.getText());
             type.setPrice(Double.parseDouble(priceField.getText()));
-            type.setImage("");
 
             /* Pass back to parent controller */
             OperatorSystemController controller = (OperatorSystemController) super.parentController;
@@ -98,6 +100,10 @@ public class AddEditTypeController extends PopupController{
     @SuppressWarnings("Duplicates")
     private boolean checkForBlankFields(){
         if(nameField.getText().equals("")){
+            return true;
+        }
+
+        if(imageUrlField.getText().equals("")){
             return true;
         }
 

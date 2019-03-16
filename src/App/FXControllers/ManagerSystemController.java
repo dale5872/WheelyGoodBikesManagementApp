@@ -62,7 +62,8 @@ public class ManagerSystemController extends SystemController{
     @FXML private TextField equipmentSearch;
 
     /** Rentals Tab **/
-    //Search
+    //Filter and search
+    @FXML private ComboBox rentalsFilter;
     @FXML private TextField rentalSearch;
 
     //Table
@@ -155,6 +156,11 @@ public class ManagerSystemController extends SystemController{
         ObservableList<String> options = FXCollections.observableArrayList("Solved", "Unsolved");
         penaltiesViewOption.setItems(options);
         penaltiesViewOption.getSelectionModel().selectFirst();
+
+        //Set the rentals filter dropdown
+        ObservableList<String> rentalsOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
+        rentalsFilter.setItems(rentalsOptions);
+        rentalsFilter.getSelectionModel().selectFirst();
 
         //Set report type dropdowns
         ObservableList<String> reportTypes = FXCollections.observableArrayList();
@@ -274,9 +280,16 @@ public class ManagerSystemController extends SystemController{
 
     @FXML
     protected void filterAndSearchRentals(Event e) {
+        //rentalsTable.getItems().clear();
+
         String search = rentalSearch.getText();
 
-        loadBikeRentals(search);
+        boolean showingBikes = rentalsFilter.getSelectionModel().getSelectedItem().equals("Bikes");
+        if(showingBikes){
+            loadBikeRentals(search);
+        }else{
+            loadEquipmentRentals(search);
+        }
 
     }
 
