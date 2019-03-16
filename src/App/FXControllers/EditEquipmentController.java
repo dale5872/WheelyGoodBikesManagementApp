@@ -48,13 +48,7 @@ public class EditEquipmentController extends PopupController{
         if(validateInput() == true){
             /* Set location */
             String locName = (String) equipmentLocation.getSelectionModel().getSelectedItem();
-            Location loc;
-            try {
-                loc = OptionsList.findLocationByName(locations, locName);
-            }catch(ListItemNotFoundException ex){
-                new ShowMessageBox().show("An error has occurred: location " + locName + " could not be found. Bike or equipment could not be updated.");
-                return;
-            }
+            Location loc = OptionsList.findLocationByName(locations, locName);
             equipment.setLocation(loc);
 
             /* Set status */

@@ -48,14 +48,8 @@ public class DataFetcher {
 
                 /* Get location */
                 String locationName = (String) res.getElement(r,"locationName");
-                Location loc;
-                try {
-                    loc = OptionsList.findLocationByName(locations, locationName);
-                    acc.setLocation(loc);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Accounts could not be loaded.");
-                    throw new EmptyDatasetException("Empty Dataset: No accounts to return.", true);
-                }
+                Location loc = OptionsList.findLocationByName(locations, locationName);
+                acc.setLocation(loc);
 
                 acc.setUserID(Integer.parseInt((String)res.getElement(r,"userID")));
 
@@ -273,33 +267,21 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: No bikes to return.", false);
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
                 e.setID(Integer.parseInt((String) res.getElement(r, "bikeID")));
 
                 /* Get type */
-                String typeName = (String) res.getElement(r,"bikeName") + "blah";
-                Type type;
-                try{
-                    type = OptionsList.findTypeByName(types, typeName);
-                    e.setType(type);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Bikes could not be loaded.");
-                    throw new EmptyDatasetException("Empty Dataset: No bikes to return.", true);
-                }
+                String typeName = (String) res.getElement(r,"bikeName");
+                Type type = OptionsList.findTypeByName(types, typeName);
+                e.setType(type);
 
                 /* Get location */
                 String locationName = (String) res.getElement(r,"name");
-                Location loc;
-                try {
-                    loc = OptionsList.findLocationByName(locations, locationName);
-                    e.setLocation(loc);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Bikes could not be loaded.");
-                    throw new EmptyDatasetException("Empty Dataset: No bikes to return.", true);
-                }
+                Location loc = OptionsList.findLocationByName(locations, locationName);
+                e.setLocation(loc);
 
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
@@ -334,25 +316,13 @@ public class DataFetcher {
 
             /* Get type */
             String typeName = (String)res.getElement(0,"bikeName");
-            Type type;
-            try{
-                type = OptionsList.findTypeByName(types, typeName);
-                e.setType(type);
-            }catch(ListItemNotFoundException ex){
-                new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Bike could not be loaded.");
-                throw new EmptyDatasetException("Empty Dataset: No bikes to return.", true);
-            }
+            Type type = OptionsList.findTypeByName(types, typeName);
+            e.setType(type);
 
             /* Get location */
             String locationName = (String) res.getElement(0,"name");
-            Location loc;
-            try {
-                loc = OptionsList.findLocationByName(locations, locationName);
-                e.setLocation(loc);
-            }catch(ListItemNotFoundException ex){
-                new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Bike could not be loaded.");
-                throw new EmptyDatasetException("Empty Dataset: No bikes to return.", true);
-            }
+            Location loc = OptionsList.findLocationByName(locations, locationName);
+            e.setLocation(loc);
 
             e.setStatus((String)res.getElement(0,"bikeStatus"));
             e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
@@ -515,7 +485,7 @@ public class DataFetcher {
 
         //check we have results
         if(res == null || res.isEmpty()) {
-            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
+            throw new EmptyDatasetException("Empty Dataset: No getEquipment to return.", false);
         } else {
             for(int r = 0; r < res.getRows(); r++) {
                 Equipment e = new Equipment();
@@ -523,25 +493,13 @@ public class DataFetcher {
 
                 /* Get type */
                 String typeName = (String) res.getElement(r,"equipmentName");
-                Type type;
-                try{
-                    type = OptionsList.findTypeByName(types, typeName);
-                    e.setType(type);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Equipment could not be loaded.");
-                    throw new EmptyDatasetException("Empty Dataset: No equipment to return.", true);
-                }
+                Type type = OptionsList.findTypeByName(types, typeName);
+                e.setType(type);
 
                 /* Get location */
                 String locationName = (String) res.getElement(r,"name");
-                Location loc;
-                try {
-                    loc = OptionsList.findLocationByName(locations, locationName);
-                    e.setLocation(loc);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Equipment could not be loaded.");
-                    throw new EmptyDatasetException("Empty Dataset: No equipment to return.", true);
-                }
+                Location loc = OptionsList.findLocationByName(locations, locationName);
+                e.setLocation(loc);
 
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
                 e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
@@ -766,7 +724,7 @@ public class DataFetcher {
     }
 
     static ObservableList<Rental> getBikeRentals(Location managerLoc, String params,
-                                                 ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {
+                                             ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {
         ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
         String searchParameters = "location_id=" + managerLoc.getLocationID() + "&search=" + params;
@@ -834,8 +792,8 @@ public class DataFetcher {
         }
     }
 
-    static Results getSavedReport(String filename) throws EmptyDatasetException {
-        Query q = new Query("reports", "fetchStoredReport", "filename=" + filename);
+    static Results getSavedReport(String report, int location, String filename) throws EmptyDatasetException {
+        Query q = new Query("reports", "fetchStoredReport", "report=" + report + "&location_id=" + location + "&filename=" + filename);
         Results res = q.executeQuery();
 
         if(res == null || res.isEmpty()) {
@@ -870,11 +828,11 @@ public class DataFetcher {
         return accountTypes;
     }
 
-    static HashMap<String, String> getFilenameDropdownValues() {
+    static HashMap<String, String> getFilenameDropdownValues(String report, int location) {
         HashMap<String, String> filenames = new HashMap<>();
 
         Query q = new Query();
-        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "");
+        Results res = q.executeQuery("reports", "fetchStoredReportFilenames", "report=" + report + "&location_id=" + location);
 
         String[] headers = res.getHeaders();
 

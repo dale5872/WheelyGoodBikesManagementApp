@@ -47,10 +47,9 @@ public class OptionsList {
      * Searches for a type in a list by the type's name
      * @param list The list of types to search
      * @param nameToFind The type name to search for
-     * @return The type if found
-     * @throws ListItemNotFoundException if type cannot be found
+     * @return The type if found, null otherwise (unsafe)
      */
-    public static Type findTypeByName(ObservableList<Type> list, String nameToFind) throws ListItemNotFoundException{
+    public static Type findTypeByName(ObservableList<Type> list, String nameToFind){
         Type type = null;
 
         for(int i = 0; i < list.size(); i++){
@@ -60,11 +59,7 @@ public class OptionsList {
             }
         }
 
-        if(type == null){
-            throw new ListItemNotFoundException();
-        }else {
-            return type;
-        }
+        return type;
     }
 
     /**
@@ -84,26 +79,21 @@ public class OptionsList {
     }
 
     /**
-     * Searches for a location in a list by the location's name
+     * Searches for a locations in a list by the locations's name
      * @param list The list of locations to search
      * @param nameToFind The location name to search for
-     * @return The location if found
-     * @throws ListItemNotFoundException if location cannot be found
+     * @return The location if found, null otherwise (unsafe)
      */
-    public static Location findLocationByName(ObservableList<Location> list, String nameToFind) throws ListItemNotFoundException{
-        Location loc = null;
+    public static Location findLocationByName(ObservableList<Location> list, String nameToFind){
+        Location location = null;
 
         for(int i = 0; i < list.size(); i++){
             Location l = list.get(i);
             if(l.getName().equals(nameToFind)){
-                loc = l;
+                location = l;
             }
         }
 
-        if(loc == null){
-            throw new ListItemNotFoundException();
-        }else {
-            return loc;
-        }
+        return location;
     }
 }

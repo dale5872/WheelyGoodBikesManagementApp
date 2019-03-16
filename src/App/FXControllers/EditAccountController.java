@@ -65,13 +65,7 @@ public class EditAccountController extends AccountPopupController{
 
             /* Get location */
             String locationName = (String) workLocationCombo.getValue();
-            Location loc;
-            try {
-                loc = OptionsList.findLocationByName(locations, locationName);
-            }catch(ListItemNotFoundException ex){
-                new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Account could not be updated.");
-                return;
-            }
+            Location loc = OptionsList.findLocationByName(locations, locationName);
             newAccount.setLocation(loc);
 
             /* Pass newAccount back to parent form */

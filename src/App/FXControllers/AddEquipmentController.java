@@ -72,30 +72,14 @@ public class AddEquipmentController extends PopupController{
             String typeName = (String) type.getSelectionModel().getSelectedItem();
             Type type;
             if(categoryName.equals("Bike")){
-                try{
-                    type = OptionsList.findTypeByName(bikeTypes, typeName);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Bike could not be added.");
-                    return;
-                }
+                type = OptionsList.findTypeByName(bikeTypes, typeName);
             }else{
-                try{
-                    type = OptionsList.findTypeByName(equipmentTypes, typeName);
-                }catch(ListItemNotFoundException ex){
-                    new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Equipment could not be added.");
-                    return;
-                }
+                type = OptionsList.findTypeByName(equipmentTypes, typeName);
             }
 
             /* Get location */
             String locName = (String) equipmentLocation.getSelectionModel().getSelectedItem();
-            Location loc;
-            try{
-                loc = OptionsList.findLocationByName(locations, locName);
-            }catch(ListItemNotFoundException ex){
-                new ShowMessageBox().show("An error has occurred: location " + locName + " could not be found. Bike or equipment could not be added.");
-                return;
-            }
+            Location loc = OptionsList.findLocationByName(locations, locName);
 
             /* Get quantity */
             int quantity = Integer.parseInt(this.quantityField.getText());
