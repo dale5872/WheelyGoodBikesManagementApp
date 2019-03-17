@@ -27,25 +27,14 @@ import java.util.*;
  */
 public class ManagerSystemController extends SystemController{
     @FXML private ToggleButton bikesTabButton; //Gets the bikes tab button object
-    @FXML private ToggleButton penaltiesTabButton; //Gets the penalties tab button object
     @FXML private ToggleButton rentalsTabButton; //Gets the rentals tab button object
     @FXML private ToggleButton reportsTabButton; //Gets the reports tab button object
     @FXML private ToggleButton userTabButton; //Gets the user's account tab button object
 
     @FXML private AnchorPane bikesTab; //Gets the bikes tab object
-    @FXML private AnchorPane penaltiesTab; //Gets the penalties tab object
     @FXML private AnchorPane rentalsTab; //Gets the rentals tab object
     @FXML private AnchorPane reportsTab; //Gets the reports tab object
     @FXML private AnchorPane userTab; //Gets the user tab object
-
-    /** Penalties tab */
-    @FXML private ComboBox penaltiesViewOption;
-    @FXML private TextField penaltiesSearch;
-
-    @FXML private TableView penaltiesTable;
-
-    @FXML private Button solvePenalty;
-    @FXML private Button viewPenalty;
 
     /** Equipment Tab **/
     //Table
@@ -110,7 +99,6 @@ public class ManagerSystemController extends SystemController{
         /* Initialise the tabButtons list and add all tab buttons to it */
         super.tabButtons = new ArrayList<>();
         super.tabButtons.add(bikesTabButton);
-        super.tabButtons.add(penaltiesTabButton);
         super.tabButtons.add(rentalsTabButton);
         super.tabButtons.add(reportsTabButton);
         super.tabButtons.add(userTabButton);
@@ -118,7 +106,6 @@ public class ManagerSystemController extends SystemController{
         /* Initialise the tabs list and add all tabs to it */
         super.tabs = new ArrayList<>();
         super.tabs.add(bikesTab);
-        super.tabs.add(penaltiesTab);
         super.tabs.add(rentalsTab);
         super.tabs.add(reportsTab);
         super.tabs.add(userTab);
@@ -157,11 +144,6 @@ public class ManagerSystemController extends SystemController{
         equipmentFilterOptions.add(0, "All");
         equipmentFilter.setItems(equipmentFilterOptions);
         equipmentFilter.getSelectionModel().selectFirst();
-
-        //Set the penalties view dropdown
-        ObservableList<String> options = FXCollections.observableArrayList("Solved", "Unsolved");
-        penaltiesViewOption.setItems(options);
-        penaltiesViewOption.getSelectionModel().selectFirst();
 
         //Set the rentals filter dropdown
         ObservableList<String> rentalsOptions = FXCollections.observableArrayList("Bikes", "Other Equipment");
@@ -408,70 +390,6 @@ public class ManagerSystemController extends SystemController{
             }catch(InsertFailedException ex){
                 return;
             }
-        }
-    }
-
-    /**
-     * Handles filtering a searching penalties in the table
-     */
-    @FXML
-    protected void filterAndSearchPenalties(){
-        setSolveViewPenaltyButtons();
-
-        boolean showingSolved = penaltiesViewOption.getSelectionModel().getSelectedItem().equals("Solved");
-        String searchParams = penaltiesSearch.getText();
-
-        /* Show appropriate button */
-        if(showingSolved){
-            solvePenalty.setVisible(false);
-            viewPenalty.setVisible(true);
-        }else{
-            solvePenalty.setVisible(true);
-            viewPenalty.setVisible(false);
-        }
-
-        /**
-         * TODO: Implement loading/searching penalties
-         */
-    }
-
-    /**
-     * Load penalties from the database according to some parameters and display the results in the table
-     * @param params Parameters to load by
-     */
-    private void loadPenalties(String params){
-        /**
-         * TODO: Implement loading/searching penalties
-         */
-    }
-
-    @FXML
-    protected void showSolvePenaltyDialog(){
-
-    }
-
-    @FXML
-    protected void showViewPenaltyDialog(){
-
-    }
-
-    /**
-     * Enable the solve/view penalty buttons if an item in the table is selected, disable otherwise
-     */
-    @FXML
-    protected void setSolveViewPenaltyButtons(){
-        boolean itemSelected = !penaltiesTable.getSelectionModel().isEmpty();
-        boolean showingSolved = penaltiesViewOption.getSelectionModel().getSelectedItem().equals("Solved");
-
-        if(itemSelected){
-            if(showingSolved){
-                viewPenalty.setDisable(false);
-            }else{
-                solvePenalty.setDisable(false);
-            }
-        }else{
-            viewPenalty.setDisable(true);
-            solvePenalty.setDisable(true);
         }
     }
 

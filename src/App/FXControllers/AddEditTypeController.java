@@ -63,7 +63,9 @@ public class AddEditTypeController extends PopupController{
     private void displayImage(String imagePath){
         Image image;
 
-        boolean isUrl = (imagePath.startsWith("http:")) || (imagePath.startsWith("https:"));
+        boolean isUrl = imagePath.startsWith("http:")
+                || imagePath.startsWith("https:")
+                || imagePath.startsWith("www.");
 
         if(isUrl){
             image = new Image(imagePath);
