@@ -902,6 +902,12 @@ public class DataFetcher {
         return accountTypes;
     }
 
+    /**
+     * Gets the dropdown values for the stored reports based on the report type
+     * @param report Report type
+     * @param location location to get the reports from
+     * @return HashMap of the reports
+     */
     static HashMap<String, String> getFilenameDropdownValues(String report, int location) {
         HashMap<String, String> filenames = new HashMap<>();
 
@@ -924,13 +930,35 @@ public class DataFetcher {
         return filenames;
     }
 
+    /**
+     * Takes the local path and fetches the file to upload, then sends
+     * the file to the server script to store on the server
+     * @param filePath local path to the file
+     * @throws InsertFailedException if failed to upload
+     */
     static String uploadFile(String filePath) throws InsertFailedException {
        try {
+           if(checkIfWebLink(filePath)) {
+               return filePath;
+           }
             //uploads the file and sets the URL to the path on the server
             return UploadFile.uploadFile(filePath);
         } catch (FileNotFoundException | HTTPErrorException e) {
             throw new InsertFailedException(e.getMessage());
         }
+
+    }
+
+    /**
+     * Checks if the link stored within the equipment/bike type is a weblink
+     * @param filePath path to the file (local or URL)
+     * @return True if it is a weblink, false if not
+     */
+    static boolean checkIfWebLink(String filePath) {
+        //Check if the link is a weblink, if is then ignore
+        return filePath.startsWith("http:") ||
+                filePath.startsWith("https:") ||
+                filePath.startsWith("www.");
 
     }
 }
