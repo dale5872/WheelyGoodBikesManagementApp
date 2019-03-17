@@ -101,7 +101,7 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="accountsTab" visible="false">
+                  <AnchorPane fx:id="accountsTab">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -145,14 +145,14 @@
                               </HBox>
                               <TableView fx:id="accountsTable" editable="true" onMouseClicked="#setEditDeleteAccountButtons" styleClass="table" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                  <columns>
-                                    <TableColumn id="tableID" fx:id="accountsID" prefWidth="75.0" text="ID" />
-                                    <TableColumn id="tableUsername" fx:id="accountsUsername" prefWidth="250.0" text="Username" />
-                                    <TableColumn id="tableFirstName" fx:id="accountsFirstName" maxWidth="272.2955627441406" prefWidth="150.0" text="First Name" />
-                                    <TableColumn id="tableLastName" fx:id="accountsLastName" maxWidth="200.0" prefWidth="150.0" text="Last Name" />
-                                    <TableColumn id="tableEmail" fx:id="accountsEmail" prefWidth="200.0" text="Email" />
-                                    <TableColumn id="tablePhoneNumber" fx:id="accountsPhoneNumber" prefWidth="150.0" text="Phone Number" />
-                                    <TableColumn id="tableAccountType" fx:id="accountsAccountType" prefWidth="150.0" text="Account Type" />
-                                    <TableColumn id="tableLocation" fx:id="accountsLocation" maxWidth="150.0" prefWidth="150.0" text="Location" />
+                                    <TableColumn id="tableID" fx:id="accountsID" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                    <TableColumn id="tableUsername" fx:id="accountsUsername" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Username" />
+                                    <TableColumn id="tableFirstName" fx:id="accountsFirstName" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="First Name" />
+                                    <TableColumn id="tableLastName" fx:id="accountsLastName" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Last Name" />
+                                    <TableColumn id="tableEmail" fx:id="accountsEmail" maxWidth="1.7976931348623157E308" prefWidth="300.0" text="Email" />
+                                    <TableColumn id="tablePhoneNumber" fx:id="accountsPhoneNumber" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Phone Number" />
+                                    <TableColumn id="tableAccountType" fx:id="accountsAccountType" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Account Type" />
+                                    <TableColumn id="tableLocation" fx:id="accountsLocation" maxWidth="1.7976931348623157E308" prefWidth="300.0" text="Location" />
                                  </columns>
                                  <VBox.margin>
                                     <Insets />
@@ -204,11 +204,11 @@
                               </HBox>
                               <TableView fx:id="equipmentTable" onMouseClicked="#setEditDeleteEquipmentButtons" styleClass="table" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                  <columns>
-                                    <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
-                                    <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
-                                    <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
-                                    <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" styleClass="price-column" text="Price" />
-                                    <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
+                                    <TableColumn fx:id="equipmentID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                    <TableColumn fx:id="equipmentType" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Type" />
+                                    <TableColumn fx:id="equipmentLocation" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Location" />
+                                    <TableColumn fx:id="equipmentPrice" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Price" />
+                                    <TableColumn fx:id="equipmentStatus" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Status" />
                                  </columns>
                                  <VBox.margin>
                                     <Insets />
@@ -268,10 +268,10 @@
                               </HBox>
                               <TableView fx:id="typesTable" onMouseClicked="#setEditDeleteTypeButtons" styleClass="table" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                  <columns>
-                                    <TableColumn fx:id="typeID" editable="false" prefWidth="75.0" text="ID" />
-                                    <TableColumn fx:id="typeName" editable="false" prefWidth="200.0" text="Name" />
-                                    <TableColumn fx:id="typePrice" editable="false" prefWidth="150.0" styleClass="price-column" text="Price" />
-                                    <TableColumn fx:id="typeImageURL" editable="false" prefWidth="150.0" styleClass="price-column" text="Image URL" />
+                                    <TableColumn fx:id="typeID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                    <TableColumn fx:id="typeName" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Name" />
+                                    <TableColumn fx:id="typePrice" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Price" />
+                                    <TableColumn fx:id="typeImageURL" editable="false" maxWidth="1.7976931348623157E308" prefWidth="800.0" styleClass="price-column" text="Image URL" />
                                  </columns>
                                  <VBox.margin>
                                     <Insets />
@@ -319,8 +319,8 @@
                                  <children>
                                     <TableView fx:id="locationsTable" onMouseClicked="#setEditDeleteLocationButtons" styleClass="table" HBox.hgrow="ALWAYS">
                                        <columns>
-                                          <TableColumn fx:id="locationsID" editable="false" prefWidth="75.0" text="ID" />
-                                          <TableColumn fx:id="locationsName" editable="false" prefWidth="500.0" text="Name" />
+                                          <TableColumn fx:id="locationsID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                          <TableColumn fx:id="locationsName" editable="false" maxWidth="1.7976931348623157E308" prefWidth="500.0" text="Name" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets />
@@ -339,7 +339,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="userTab">
+                  <AnchorPane fx:id="userTab" visible="false">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>

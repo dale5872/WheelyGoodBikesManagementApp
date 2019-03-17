@@ -142,11 +142,11 @@
                                             <children>
                                                 <TableView fx:id="equipmentTable" styleClass="table" HBox.hgrow="ALWAYS">
                                                     <columns>
-                                                        <TableColumn fx:id="equipmentID" editable="false" prefWidth="75.0" text="ID" />
-                                                        <TableColumn fx:id="equipmentType" editable="false" prefWidth="200.0" text="Type" />
-                                                        <TableColumn fx:id="equipmentLocation" editable="false" prefWidth="200.0" text="Location" />
-                                                        <TableColumn fx:id="equipmentPrice" editable="false" prefWidth="150.0" styleClass="price-column" text="Price" />
-                                                        <TableColumn fx:id="equipmentStatus" editable="false" prefWidth="200.0" text="Status" />
+                                                        <TableColumn fx:id="equipmentID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                                        <TableColumn fx:id="equipmentType" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Type" />
+                                                        <TableColumn fx:id="equipmentLocation" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Location" />
+                                                        <TableColumn fx:id="equipmentPrice" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Price" />
+                                                        <TableColumn fx:id="equipmentStatus" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Status" />
                                                     </columns>
                                                     <VBox.margin>
                                                         <Insets />
@@ -199,10 +199,10 @@
                                         </HBox>
                                         <TableView fx:id="penaltiesTable" onMouseClicked="#setSolveViewPenaltyButtons" styleClass="table" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn fx:id="penaltiesID" editable="false" prefWidth="75.0" text="ID" />
-                                                <TableColumn fx:id="penaltiesUsername" editable="false" prefWidth="200.0" text="Username" />
-                                                <TableColumn fx:id="penaltiesReason" editable="false" prefWidth="150.0" styleClass="price-column" text="Reason" />
-                                                <TableColumn fx:id="penaltiesStatus" editable="false" prefWidth="150.0" styleClass="price-column" text="Status" />
+                                                <TableColumn fx:id="penaltiesID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                                                <TableColumn fx:id="penaltiesUsername" editable="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Username" />
+                                                <TableColumn fx:id="penaltiesReason" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Reason" />
+                                                <TableColumn fx:id="penaltiesStatus" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Status" />
                                             </columns>
                                         </TableView>
                                         <HBox alignment="CENTER_RIGHT">
@@ -253,15 +253,15 @@
                                         </HBox>
                                         <TableView fx:id="rentalsTable" styleClass="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn fx:id="rentalsID" editable="false" prefWidth="100.0" text="Rental ID" />
-                                                <TableColumn fx:id="rentalsEquipmentID" editable="false" prefWidth="120.0" text="Equipment ID" />
-                                                <TableColumn fx:id="rentalsEquipmentName" prefWidth="150.0" text="Equipment Name" />
-                                                <TableColumn fx:id="rentalsEquipmentPrice" prefWidth="150.0" styleClass="price-column" text="Equipment Price" />
-                                                <TableColumn fx:id="rentalsStartTime" prefWidth="200.0" text="Start Time" />
-                                                <TableColumn fx:id="rentalsReturnTime" prefWidth="200.0" text="Return Time" />
-                                                <TableColumn fx:id="rentalsTotalPrice" prefWidth="100.0" text="Total Price" />
-                                                <TableColumn fx:id="rentalsLocation" prefWidth="250.0" text="Location" />
-                                                <TableColumn fx:id="rentalsStatus" prefWidth="150.0" text="Status" />
+                                                <TableColumn fx:id="rentalsID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="Rental ID" />
+                                                <TableColumn fx:id="rentalsEquipmentID" editable="false" maxWidth="1.7976931348623157E308" prefWidth="120.0" text="Equipment ID" />
+                                                <TableColumn fx:id="rentalsEquipmentName" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Equipment Name" />
+                                                <TableColumn fx:id="rentalsEquipmentPrice" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Equipment Price" />
+                                                <TableColumn fx:id="rentalsStartTime" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Start Time" />
+                                                <TableColumn fx:id="rentalsReturnTime" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Return Time" />
+                                                <TableColumn fx:id="rentalsTotalPrice" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="Total Price" />
+                                                <TableColumn fx:id="rentalsLocation" maxWidth="1.7976931348623157E308" prefWidth="250.0" text="Location" />
+                                                <TableColumn fx:id="rentalsStatus" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Status" />
                                             </columns>
                                             <VBox.margin>
                                                 <Insets />

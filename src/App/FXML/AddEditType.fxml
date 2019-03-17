@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -31,26 +32,38 @@
                         </TextField>
                      </children>
                   </VBox>
-                  <VBox>
+                  <VBox spacing="5.0">
                      <children>
-                        <Label text="Image URL" textFill="WHITE">
+                        <Label text="Image" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="imageUrlField" onDragDone="#getFilename" prefHeight="0.0" prefWidth="300.0" promptText="Drag File Here...">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
                         <StackPane fx:id="dragBox" onDragDropped="#getFilename" onDragEntered="#dragOver" onDragExited="#dragExited" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                            <children>
+                              <ImageView fx:id="imageDisplay" fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
                               <Label text="Drop file here..." />
                            </children>
                         </StackPane>
+                        <HBox spacing="5.0">
+                           <children>
+                              <TextField fx:id="imageUrlField" onDragDone="#getFilename" prefHeight="30.0" prefWidth="300.0" promptText="Drag File Here...">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#chooseImage" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #2AD1BB;" text="...">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="-0.0" />
+                                 </HBox.margin></Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox>
