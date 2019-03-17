@@ -935,28 +935,25 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to upload
      */
     static String uploadFile(String filePath) throws InsertFailedException {
-       try {
-           if(checkIfWebLink(filePath)) {
-               return filePath;
-           }
-            //uploads the file and sets the URL to the path on the server
-            return UploadFile.uploadFile(filePath);
-        } catch (FileNotFoundException | HTTPErrorException e) {
-            throw new InsertFailedException(e.getMessage());
+        if(filePath.startsWith("http:")){
+            if(isValidImageUrl(filePath)){
+                return filePath;
+            }else{
+                throw new InsertFailedException("Could not update image: " + filePath + " is not a valid URL/image.");
+            }
+        }else{
+            try{
+                //Uploads the file and sets the URL to the path on the server
+                return UploadFile.uploadFile(filePath);
+            }catch(FileNotFoundException | HTTPErrorException e){
+                throw new InsertFailedException(e.getMessage());
+            }
         }
-
     }
 
-    /**
-     * Checks if the link stored within the equipment/bike type is a weblink
-     * @param filePath path to the file (local or URL)
-     * @return True if it is a weblink, false if not
-     */
-    static boolean checkIfWebLink(String filePath) {
-        //Check if the link is a weblink, if is then ignore
-        return filePath.startsWith("http:") ||
-                filePath.startsWith("https:") ||
-                filePath.startsWith("www.");
-
+    private static boolean isValidImageUrl(String url){
+        return url.endsWith(".png")
+                || url.endsWith(".jpg")
+                || url.endsWith(".jpeg");
     }
 }
