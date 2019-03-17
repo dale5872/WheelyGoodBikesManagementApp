@@ -37,6 +37,10 @@ public class ImageBrowser {
      * @return A String of the absolute path to the image, NULL if no image has been chosen
      */
     public String getImagePath(){
-        return this.image.getAbsolutePath();
+        if(image != null) {
+            return this.image.getAbsolutePath();
+        }else{
+            return null;
+        }
     }
 }

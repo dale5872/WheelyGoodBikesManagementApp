@@ -9,5 +9,6 @@ public class ShowMessageBox {
 
         MessageBoxController controller = (MessageBoxController) loader.getController();
         controller.setMessage(message);
+        controller.setAlwaysOnTop(true);
     }
 }

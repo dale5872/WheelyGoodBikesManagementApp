@@ -2,6 +2,7 @@ package App.FXControllers;
 
 import App.Classes.Type;
 
+import DatabaseConnector.InsertFailedException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,7 +47,7 @@ public class AddEditTypeController extends PopupController{
     }
 
     /**
-     * Set the existing bike/equipment type
+     * Set the existing bike/equipment type, if there is one
      * @param type
      */
     public void setExistingType(Type type){
@@ -107,6 +108,15 @@ public class AddEditTypeController extends PopupController{
     protected void confirm(){
         if(validateInput() == true){
             Type type;
+            String imageUrl;
+
+            /* Attempt to upload image file - cancel confirm if it can't be uploaded */
+            try{
+                stage.setAlwaysOnTop(false);
+                imageUrl = DataFetcher.uploadFile(imageUrlField.getText());
+            }catch(InsertFailedException ex){
+                return;
+            }
 
             /* Instantiate type */
             if(existingType == null){ //Creating a new type
@@ -117,7 +127,7 @@ public class AddEditTypeController extends PopupController{
 
             /* Set new values */
             type.setName(nameField.getText());
-            type.setImage(imageUrlField.getText());
+            type.setImage(imageUrl);
             type.setPrice(Double.parseDouble(priceField.getText()));
 
             /* Pass back to parent controller */

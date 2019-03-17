@@ -443,8 +443,6 @@ public class DataFetcher {
      * @throws InsertFailedException if insert failed
      */
     static void addBikeType(Type type) throws InsertFailedException {
-        uploadFile(type);
-
         Query q = new Query("create", "addBikeType", "bike_type=" + type.getName()
                 + "&pricePerHour=" + type.getPrice()
                 + "&image=" + type.getImage());
@@ -480,8 +478,6 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateBikeType(Type type) throws InsertFailedException{
-        uploadFile(type);
-
         String params = "bike_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&bike_type_id=" + type.getID();
         Query q = new Query("update", "updateBikeType", params);
 
@@ -640,8 +636,6 @@ public class DataFetcher {
      * @throws InsertFailedException if insert failed
      */
     static void addEquipmentType(Type type) throws InsertFailedException {
-        uploadFile(type);
-
         Query q = new Query("create", "addEquipmentType", "equipment_type=" + type.getName()
                 + "&pricePerHour=" + type.getPrice()
                 + "&image=" + type.getImage());
@@ -677,8 +671,6 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateEquipmentType(Type type) throws InsertFailedException{
-        uploadFile(type);
-
         String params = "equipment_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&equipment_type_id=" + type.getID();
         Query q = new Query("update", "updateEquipmentType", params);
 
@@ -932,13 +924,10 @@ public class DataFetcher {
         return filenames;
     }
 
-    private static void uploadFile(Type type) throws InsertFailedException {
-        File f = new File(type.getImage());
-        String filename = f.getName();
-
-        try {
+    static String uploadFile(String filePath) throws InsertFailedException {
+       try {
             //uploads the file and sets the URL to the path on the server
-            type.setImage(UploadFile.uploadFile(type.getImage()));
+            return UploadFile.uploadFile(filePath);
         } catch (FileNotFoundException | HTTPErrorException e) {
             throw new InsertFailedException(e.getMessage());
         }
