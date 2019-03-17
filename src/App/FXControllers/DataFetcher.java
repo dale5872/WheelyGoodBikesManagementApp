@@ -443,8 +443,6 @@ public class DataFetcher {
      * @throws InsertFailedException if insert failed
      */
     static void addBikeType(Type type) throws InsertFailedException {
-        uploadFile(type);
-
         Query q = new Query("create", "addBikeType", "bike_type=" + type.getName()
                 + "&pricePerHour=" + type.getPrice()
                 + "&image=" + type.getImage());
@@ -480,8 +478,6 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateBikeType(Type type) throws InsertFailedException{
-        uploadFile(type);
-
         String params = "bike_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&bike_type_id=" + type.getID();
         Query q = new Query("update", "updateBikeType", params);
 
@@ -640,8 +636,6 @@ public class DataFetcher {
      * @throws InsertFailedException if insert failed
      */
     static void addEquipmentType(Type type) throws InsertFailedException {
-        uploadFile(type);
-
         Query q = new Query("create", "addEquipmentType", "equipment_type=" + type.getName()
                 + "&pricePerHour=" + type.getPrice()
                 + "&image=" + type.getImage());
@@ -677,8 +671,6 @@ public class DataFetcher {
      * @param type The type to update
      */
     static void updateEquipmentType(Type type) throws InsertFailedException{
-        uploadFile(type);
-
         String params = "equipment_type=" + type.getName() + "&pricePerHour=" + type.getPrice() + "&image=" + type.getImage() + "&equipment_type_id=" + type.getID();
         Query q = new Query("update", "updateEquipmentType", params);
 
@@ -941,19 +933,14 @@ public class DataFetcher {
     /**
      * Takes the local path and fetches the file to upload, then sends
      * the file to the server script to store on the server
-     * @param type Type object
+     * @param filePath local path to the file
      * @throws InsertFailedException if failed to upload
      */
-    private static void uploadFile(Type type) throws InsertFailedException {
-        if(checkIfWebLink(type)) {
-            return;
-        }
-
-        File f = new File(type.getImage());
-
-        try {
+    private static String uploadFile(String filePath) throws InsertFailedException {
+       try {
+           checkIfWebLink(filePath);
             //uploads the file and sets the URL to the path on the server
-            type.setImage(UploadFile.uploadFile(type.getImage()));
+            return UploadFile.uploadFile(filePath);
         } catch (FileNotFoundException | HTTPErrorException e) {
             throw new InsertFailedException(e.getMessage());
         }
@@ -962,15 +949,14 @@ public class DataFetcher {
 
     /**
      * Checks if the link stored within the equipment/bike type is a weblink
-     * @param type Type object
+     * @param filePath path to the file (local or URL)
      * @return True if it is a weblink, false if not
      */
-    static boolean checkIfWebLink(Type type) {
+    static boolean checkIfWebLink(String filePath) {
         //Check if the link is a weblink, if is then ignore
-        String imageLink = type.getImage();
-        return imageLink.startsWith("http:") ||
-                imageLink.startsWith("https:") ||
-                imageLink.startsWith("www.");
+        return filePath.startsWith("http:") ||
+                filePath.startsWith("https:") ||
+                filePath.startsWith("www.");
 
     }
 }

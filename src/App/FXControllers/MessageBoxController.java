@@ -13,12 +13,11 @@ public class MessageBoxController extends Controller{
         messageLabel.setText(message);
     }
 
-    public void initialize() {
-
+    public void setAlwaysOnTop(boolean b){
+        super.stage.setAlwaysOnTop(b);
     }
 
     public void closeMessageBox() {
         this.stage.close();
     }
-
 }
