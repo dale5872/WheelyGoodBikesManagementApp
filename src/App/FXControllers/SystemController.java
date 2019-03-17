@@ -4,10 +4,9 @@ import App.Classes.EmployeeAccount;
 import App.Classes.Location;
 import App.Classes.Type;
 import App.JavaFXLoader;
-import DatabaseConnector.UploadFile;
+import DatabaseConnector.InsertFailedException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,10 +22,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 public class SystemController extends Controller{
     protected EmployeeAccount employee;
+
+    protected static HashMap<String, String> accountTypes;
 
     protected static ObservableList<Type> bikeTypes;
     protected static ObservableList<Type> equipmentTypes;
@@ -38,7 +40,7 @@ public class SystemController extends Controller{
 
     @FXML private AnchorPane parentPane;
 
-    /** Account Tab **/
+    /** Account Profile Tab **/
     @FXML protected Label userAccountID;
     @FXML protected Label userAccountUsername;
     @FXML protected Label userAccountName;
@@ -58,12 +60,13 @@ public class SystemController extends Controller{
 
     @FXML protected HBox confirmContactContainer;
 
-    /** Profile tab **/
     @FXML private Label dragDropLabel;
     @FXML private ImageView profileImageView;
 
     public SystemController(){
         super();
+
+        accountTypes = DataFetcher.getAccountTypes();
 
         bikeTypes = loadBikeTypes();
         equipmentTypes = loadEquipmentTypes();
@@ -207,8 +210,9 @@ public class SystemController extends Controller{
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void dragOver(DragEvent e) {
-        profileImageView.setOpacity(0.25);
+        showDragDropMessage();
 
         Dragboard board = e.getDragboard();
 
@@ -223,12 +227,6 @@ public class SystemController extends Controller{
         }
 
         e.consume();
-
-    }
-
-    @FXML
-    protected void dragExit(DragEvent e) {
-        profileImageView.setOpacity(1.00);
     }
 
     @FXML
@@ -242,17 +240,7 @@ public class SystemController extends Controller{
             File file = board.getFiles().get(0);
             String filename = file.getAbsolutePath();
 
-            try {
-                //upload image and show on screen
-                this.employee.setProfilePicture(UploadFile.uploadFile(filename));
-                //update account
-                DataFetcher.updateAccount(this.employee, this.employee, 3);
-                changeImageView();
-                success = true;
-            } catch (Exception exc) {
-                System.err.println(exc.getMessage());
-                exc.printStackTrace();
-            }
+            success = updateProfilePicture(filename);
         } else {
             System.err.println("No files dropped!");
         }
@@ -263,28 +251,71 @@ public class SystemController extends Controller{
     }
 
     @FXML
-    protected void showDragDropMessage(Event e) {
+    protected void showDragDropMessage() {
         dragDropLabel.setVisible(true);
         profileImageView.setOpacity(0.25);
     }
 
     @FXML
-    protected void removeDragDropMessage(Event e) {
+    protected void removeDragDropMessage() {
         dragDropLabel.setVisible(false);
         profileImageView.setOpacity(1.00);
     }
 
     private void changeImageView() {
-        try {
-            String imagePath = this.employee.getProfilePicture();
-            Image i = new Image(imagePath); //image path must be stored in a local String otherwise NullPointerException
+        String imagePath = this.employee.getProfilePicture();
+
+        if(imagePath != null){
+            Image image = new Image(imagePath);
 
             profileImageView.setFitHeight(200);
             profileImageView.setFitWidth(200);
-            profileImageView.setImage(i);
-        } catch (NullPointerException e ) {
-            e.printStackTrace();
+            profileImageView.setImage(image);
         }
     }
 
+    /**
+     * Shows an image browser to select a new profile picture
+     */
+    @FXML
+    protected void selectNewProfilePicture(){
+        ImageBrowser imageBrowser = new ImageBrowser("Change Profile Picture");
+        imageBrowser.showBrowser(stage);
+        String filePath = imageBrowser.getImagePath();
+
+        if(filePath != null) {
+            updateProfilePicture(filePath);
+        }
+    }
+
+    /**
+     * Updates the profile picture from a given file path
+     * @param filePath The file path of the new image
+     */
+    private boolean updateProfilePicture(String filePath){
+        String imageUrl;
+
+        /* Attempt to upload image file - show error and cancel if it can't be uploaded */
+        try{
+            imageUrl = DataFetcher.uploadFile(filePath);
+        }catch(InsertFailedException ex){
+            return false;
+        }
+
+        /* Attempt to update account - show error and cancel if it can't be updated */
+        try {
+            /* Get the account type and map it to its system index */
+            String accountType = employee.getAccType();
+            int accountTypeIndex = Integer.parseInt(accountTypes.get(accountType));
+
+            /* Update account */
+            this.employee.setProfilePicture(imageUrl);
+            DataFetcher.updateAccount(employee, employee, accountTypeIndex);
+        }catch(InsertFailedException ex){
+            return false;
+        }
+
+        changeImageView();
+        return true;
+    }
 }

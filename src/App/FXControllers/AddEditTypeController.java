@@ -7,15 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 
 import java.io.File;
 
@@ -28,7 +24,7 @@ public class AddEditTypeController extends PopupController{
 
     @FXML private TextField nameField;
 
-    @FXML private StackPane dragBox;
+    @FXML private Label dragDropLabel;
     @FXML private ImageView imageDisplay;
     @FXML private TextField imageUrlField;
 
@@ -112,7 +108,6 @@ public class AddEditTypeController extends PopupController{
 
             /* Attempt to upload image file - cancel confirm if it can't be uploaded */
             try{
-                stage.setAlwaysOnTop(false);
                 imageUrl = DataFetcher.uploadFile(imageUrlField.getText());
             }catch(InsertFailedException ex){
                 return;
@@ -223,10 +218,8 @@ public class AddEditTypeController extends PopupController{
             String filename = file.getAbsolutePath();
 
             displayImage(filename);
-            imageUrlField.setText(filename);
 
             success = true;
-
         } else {
             System.err.println("No files dropped!");
         }
@@ -236,8 +229,9 @@ public class AddEditTypeController extends PopupController{
     }
 
     @FXML
+    @SuppressWarnings("Duplicates")
     protected void dragOver(DragEvent e) {
-        dragBox.setEffect(new InnerShadow(BlurType.THREE_PASS_BOX, Color.WHITE,2,0,0,0));
+        showDragDropMessage();
 
         Dragboard board = e.getDragboard();
 
@@ -255,7 +249,14 @@ public class AddEditTypeController extends PopupController{
     }
 
     @FXML
-    protected void dragExited(DragEvent e) {
-        dragBox.setEffect(new InnerShadow(BlurType.THREE_PASS_BOX, Color.WHITE,0,0,0,0));
+    protected void showDragDropMessage() {
+        dragDropLabel.setVisible(true);
+        imageDisplay.setOpacity(0.25);
+    }
+
+    @FXML
+    protected void removeDragDropMessage() {
+        dragDropLabel.setVisible(false);
+        imageDisplay.setOpacity(1.00);
     }
 }

@@ -101,7 +101,7 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="accountsTab">
+                  <AnchorPane fx:id="accountsTab" visible="false">
                      <children>
                         <VBox prefHeight="1020.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -339,7 +339,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="userTab" visible="false">
+                  <AnchorPane fx:id="userTab">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="833.0" prefHeight="940.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
@@ -347,9 +347,9 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="20.0">
                                        <children>
-                                          <StackPane onDragDropped="#droppedImage" onDragExited="#dragExit" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
+                                          <StackPane onDragDropped="#droppedImage" onDragExited="#removeDragDropMessage" onDragOver="#dragOver" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" prefHeight="150.0" prefWidth="200.0">
                                              <children>
-                                                <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@Profile_Picture_Default.png" />
                                                    </image>
@@ -434,7 +434,7 @@
                                        <children>
                                           <VBox alignment="CENTER" prefWidth="200.0">
                                              <children>
-                                                <Button fx:id="changeProfilePicture" mnemonicParsing="false" prefWidth="150.0" styleClass="green-button" text="Change...">
+                                                <Button mnemonicParsing="false" onAction="#selectNewProfilePicture" prefWidth="150.0" styleClass="green-button" text="Change...">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>

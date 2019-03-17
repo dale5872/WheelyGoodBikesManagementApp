@@ -39,18 +39,18 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <StackPane fx:id="dragBox" onDragDropped="#getFilename" onDragEntered="#dragOver" onDragExited="#dragExited" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
+                        <StackPane fx:id="dragBox" onDragDropped="#getFilename" onDragEntered="#dragOver" onDragExited="#removeDragDropMessage" onDragOver="#dragOver" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" prefHeight="150.0" prefWidth="200.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                            <children>
                               <ImageView fx:id="imageDisplay" fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
-                              <Label text="Drop file here..." />
+                              <Label fx:id="dragDropLabel" text="Drag an image here to change" visible="false" />
                            </children>
                         </StackPane>
-                        <HBox spacing="5.0">
+                        <HBox prefWidth="300.0" spacing="5.0">
                            <children>
-                              <TextField fx:id="imageUrlField" onDragDone="#getFilename" prefHeight="30.0" prefWidth="300.0" promptText="Drag File Here...">
+                              <TextField fx:id="imageUrlField" onDragDone="#getFilename" prefHeight="30.0" prefWidth="265.0" promptText="Drag File Here...">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

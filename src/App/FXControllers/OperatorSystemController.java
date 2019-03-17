@@ -116,9 +116,6 @@ public class OperatorSystemController extends SystemController{
     //Filter and Search
     @FXML private TextField locationSearch;
 
-    //fields
-    private static HashMap<String, String> accountTypes;
-
     /**
      * The initialise method is called when the form first loads
      */
@@ -141,9 +138,6 @@ public class OperatorSystemController extends SystemController{
 
         //Set the first tab as active
         TabSwitcher.setToFirstTab(tabButtons, tabs);
-
-        //Load in account types
-        accountTypes = DataFetcher.getAccountTypes();
 
         //Load data into tables
         loadEmployeeAccounts("");
