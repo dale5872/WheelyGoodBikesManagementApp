@@ -938,7 +938,9 @@ public class DataFetcher {
      */
     static String uploadFile(String filePath) throws InsertFailedException {
        try {
-           checkIfWebLink(filePath);
+           if(checkIfWebLink(filePath)) {
+               return filePath;
+           }
             //uploads the file and sets the URL to the path on the server
             return UploadFile.uploadFile(filePath);
         } catch (FileNotFoundException | HTTPErrorException e) {
