@@ -117,7 +117,6 @@ public class AddEditTypeController extends PopupController{
 
             /* Set new values */
             type.setName(nameField.getText());
-            type.setImage(imageUrlField.getText());
             type.setPrice(Double.parseDouble(priceField.getText()));
 
             /* Pass back to parent controller */
