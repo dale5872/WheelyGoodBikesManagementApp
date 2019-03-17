@@ -936,7 +936,7 @@ public class DataFetcher {
      * @param filePath local path to the file
      * @throws InsertFailedException if failed to upload
      */
-    private static String uploadFile(String filePath) throws InsertFailedException {
+    static String uploadFile(String filePath) throws InsertFailedException {
        try {
            checkIfWebLink(filePath);
             //uploads the file and sets the URL to the path on the server
