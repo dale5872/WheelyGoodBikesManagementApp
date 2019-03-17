@@ -5,25 +5,14 @@ import App.Classes.*;
 import App.JavaFXLoader;
 import DatabaseConnector.InsertFailedException;
 
-import DatabaseConnector.UploadFile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.InnerShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
-import javafx.scene.paint.Color;
 
-import java.io.File;
 import java.util.*;
 
 /**

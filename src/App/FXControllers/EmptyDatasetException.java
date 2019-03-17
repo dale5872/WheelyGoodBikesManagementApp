@@ -1,7 +1,5 @@
 package App.FXControllers;
 
-import App.JavaFXLoader;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -5,8 +5,6 @@ import DatabaseConnector.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javax.swing.plaf.InsetsUIResource;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

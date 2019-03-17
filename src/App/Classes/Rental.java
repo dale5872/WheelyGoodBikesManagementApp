@@ -2,7 +2,6 @@ package App.Classes;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Rental {

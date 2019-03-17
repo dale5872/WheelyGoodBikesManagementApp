@@ -1,4 +1,3 @@
-/** TODO: Documentation */
 package App.Classes;
 
 public class EmployeeAccount extends Account{

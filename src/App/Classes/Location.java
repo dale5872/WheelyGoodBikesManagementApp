@@ -1,8 +1,5 @@
 package App.Classes;
 
-import DatabaseConnector.Query;
-import DatabaseConnector.Results;
-
 public class Location {
     private int locationID;
     private String name;

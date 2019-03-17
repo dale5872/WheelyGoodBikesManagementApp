@@ -4,7 +4,6 @@ import App.FXControllers.Controller;
 
 import App.FXControllers.FatalErrorException;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

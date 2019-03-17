@@ -1,7 +1,5 @@
 package DatabaseConnector;
 
-import App.FXControllers.ShowMessageBox;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
