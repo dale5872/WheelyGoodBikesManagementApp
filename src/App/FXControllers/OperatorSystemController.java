@@ -116,9 +116,6 @@ public class OperatorSystemController extends SystemController{
     //Filter and Search
     @FXML private TextField locationSearch;
 
-    /** Profile tab **/
-    @FXML private Label dragDropLabel;
-    @FXML private ImageView profileImageView;
     //fields
     private static HashMap<String, String> accountTypes;
 
@@ -156,9 +153,6 @@ public class OperatorSystemController extends SystemController{
         fillLocationsTable(locations);
 
         setDropdownOptions();
-
-        //set profile picture
-        changeImageView();
     }
 
     /**
@@ -1320,80 +1314,6 @@ public class OperatorSystemController extends SystemController{
             }catch(InsertFailedException e1){
                 return;
             }
-        }
-    }
-
-    @FXML
-    protected void dragEntered(DragEvent e) {
-        profileImageView.setOpacity(0.25);
-
-        Dragboard board = e.getDragboard();
-
-        boolean isAccepted = board.getFiles().get(0).getName().toLowerCase().endsWith(".png")
-                || board.getFiles().get(0).getName().toLowerCase().endsWith(".jpeg")
-                || board.getFiles().get(0).getName().toLowerCase().endsWith(".jpg");
-
-        if(board.hasFiles()) {
-            if(isAccepted) {
-                e.acceptTransferModes(TransferMode.LINK);
-            }
-        } else {
-            e.consume();
-        }
-    }
-
-    @FXML
-    protected void dragExit(DragEvent e) {
-        profileImageView.setOpacity(1.00);
-    }
-
-    @FXML
-    protected void droppedImage(DragEvent e) {
-        Boolean success = false;
-
-        Dragboard board = e.getDragboard();
-        if(board.hasFiles()) {
-            File file = board.getFiles().get(0);
-            String filename = file.getAbsolutePath();
-
-            try {
-                //upload image and show on screen
-                this.employee.setProfilePicture(UploadFile.uploadFile(filename));
-                //update account
-                DataFetcher.updateAccount(this.employee, this.employee, 3);
-                changeImageView();
-                success = true;
-            } catch (Exception exc) {
-
-            }
-        } else {
-            System.err.println("No files dropped!");
-        }
-
-        e.setDropCompleted(success);
-        e.consume();
-    }
-
-    @FXML
-    protected void showDragDropMessage(Event e) {
-        dragDropLabel.setVisible(true);
-        profileImageView.setOpacity(0.25);
-    }
-
-    @FXML
-    protected void removeDragDropMessage(Event e) {
-        dragDropLabel.setVisible(false);
-        profileImageView.setOpacity(1.00);
-    }
-
-    private void changeImageView() {
-        try {
-            Image i = new Image(getClass().getResourceAsStream(this.employee.getProfilePicture()));
-            profileImageView.setFitHeight(200);
-            profileImageView.setFitWidth(200);
-            profileImageView.setImage(i);
-        } catch (NullPointerException e ) {
-            return;
         }
     }
 

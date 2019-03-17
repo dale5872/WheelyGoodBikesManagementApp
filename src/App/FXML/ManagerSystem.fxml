@@ -466,11 +466,16 @@
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="20.0">
                                                     <children>
-                                                        <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@Profile_Picture_Default.png" />
-                                                            </image>
-                                                        </ImageView>
+                                          <StackPane onDragDropped="#droppedImage" onDragExited="#dragExit" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
+                                             <children>
+                                                              <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" pickOnBounds="true" preserveRatio="true">
+                                                                  <image>
+                                                                      <Image url="@Profile_Picture_Default.png" />
+                                                                  </image>
+                                                              </ImageView>
+                                                <Label fx:id="dragDropLabel" text="Drag an image here to change..." textFill="WHITE" visible="false" />
+                                             </children>
+                                          </StackPane>
                                                         <VBox alignment="CENTER_LEFT">
                                                             <children>
                                                                 <Label fx:id="userAccountName" text="Firstname Secondname" textFill="WHITE">

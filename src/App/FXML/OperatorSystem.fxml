@@ -347,7 +347,7 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="20.0">
                                        <children>
-                                          <StackPane onDragDropped="#droppedImage" onDragEntered="#dragEntered" onDragExited="#dragExit" prefHeight="150.0" prefWidth="200.0">
+                                          <StackPane onDragDropped="#droppedImage" onDragExited="#dragExit" onDragOver="#dragOver" prefHeight="150.0" prefWidth="200.0">
                                              <children>
                                                 <ImageView fx:id="profileImageView" fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showDragDropMessage" onMouseExited="#removeDragDropMessage" pickOnBounds="true" preserveRatio="true">
                                                    <image>

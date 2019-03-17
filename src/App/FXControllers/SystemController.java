@@ -4,17 +4,25 @@ import App.Classes.EmployeeAccount;
 import App.Classes.Location;
 import App.Classes.Type;
 import App.JavaFXLoader;
+import DatabaseConnector.UploadFile;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
 import java.util.List;
 
 public class SystemController extends Controller{
@@ -49,6 +57,10 @@ public class SystemController extends Controller{
     @FXML protected Button contactDetailsViewBtn;
 
     @FXML protected HBox confirmContactContainer;
+
+    /** Profile tab **/
+    @FXML private Label dragDropLabel;
+    @FXML private ImageView profileImageView;
 
     public SystemController(){
         super();
@@ -103,6 +115,9 @@ public class SystemController extends Controller{
         userAccountPhoneTextbox.setText(employee.getPhoneNumber());
         userAccountType.setText(employee.getAccType());
         userAccountLocation.setText(employee.getLocation().getName());
+
+        //set profile picture
+        changeImageView();
     }
 
     /**
@@ -190,4 +205,86 @@ public class SystemController extends Controller{
         employee = null;
         super.stage.close();
     }
+
+    @FXML
+    protected void dragOver(DragEvent e) {
+        profileImageView.setOpacity(0.25);
+
+        Dragboard board = e.getDragboard();
+
+        boolean isAccepted = board.getFiles().get(0).getName().toLowerCase().endsWith(".png")
+                || board.getFiles().get(0).getName().toLowerCase().endsWith(".jpeg")
+                || board.getFiles().get(0).getName().toLowerCase().endsWith(".jpg");
+
+        if(board.hasFiles()) {
+            if(isAccepted) {
+                e.acceptTransferModes(TransferMode.LINK);
+            }
+        }
+
+        e.consume();
+
+    }
+
+    @FXML
+    protected void dragExit(DragEvent e) {
+        profileImageView.setOpacity(1.00);
+    }
+
+    @FXML
+    protected void droppedImage(DragEvent e) {
+        profileImageView.setOpacity(0.00);
+        Boolean success = false;
+        System.out.println("Dropped");
+
+        Dragboard board = e.getDragboard();
+        if(board.hasFiles()) {
+            File file = board.getFiles().get(0);
+            String filename = file.getAbsolutePath();
+
+            try {
+                //upload image and show on screen
+                this.employee.setProfilePicture(UploadFile.uploadFile(filename));
+                //update account
+                DataFetcher.updateAccount(this.employee, this.employee, 3);
+                changeImageView();
+                success = true;
+            } catch (Exception exc) {
+                System.err.println(exc.getMessage());
+                exc.printStackTrace();
+            }
+        } else {
+            System.err.println("No files dropped!");
+        }
+
+        e.setDropCompleted(success);
+        e.consume();
+        profileImageView.setOpacity(1.00);
+    }
+
+    @FXML
+    protected void showDragDropMessage(Event e) {
+        dragDropLabel.setVisible(true);
+        profileImageView.setOpacity(0.25);
+    }
+
+    @FXML
+    protected void removeDragDropMessage(Event e) {
+        dragDropLabel.setVisible(false);
+        profileImageView.setOpacity(1.00);
+    }
+
+    private void changeImageView() {
+        try {
+            String imagePath = this.employee.getProfilePicture();
+            Image i = new Image(imagePath); //image path must be stored in a local String otherwise NullPointerException
+
+            profileImageView.setFitHeight(200);
+            profileImageView.setFitWidth(200);
+            profileImageView.setImage(i);
+        } catch (NullPointerException e ) {
+            e.printStackTrace();
+        }
+    }
+
 }

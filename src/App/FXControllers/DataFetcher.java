@@ -131,6 +131,33 @@ public class DataFetcher {
     }
 
     /**
+     * Suspends a user with their ID number and supplies a reason for doing so
+     * @param id users ID number
+     * @param reason reason given
+     * @throws InsertFailedException could not suspend user
+     */
+    static void suspendUser(int id, String reason) throws InsertFailedException {
+        Query q = new Query("create", "addSuspendedUser", "user_id=" + id + "&reason=" + reason);
+
+        if(!q.insertQuery()) {
+            throw new InsertFailedException("Failed to suspend User");
+        }
+    }
+
+    /**
+     * Unsuspends user with the given id
+     * @param id users ID number
+     * @throws EmptyDatasetException Could not find suspended user
+     */
+    static void unsuspendUser(int id) throws EmptyDatasetException {
+        Query q = new Query("delete", "unsuspendUser", "user_id=" + id);
+
+        if(!q.insertQuery()) {
+            throw new EmptyDatasetException("Could not find the user", true);
+        }
+    }
+
+    /**
      * Adds a new user to the database through the data from the @param acc object,
      * then returns the account's user id once added to the database and returns
      * that value
