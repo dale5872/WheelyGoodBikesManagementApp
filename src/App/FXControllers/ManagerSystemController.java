@@ -432,7 +432,6 @@ public class ManagerSystemController extends SystemController{
 
     @FXML
     protected void enableDisableGenerateFields(Event e) {
-        boolean atLeastOneCheckbox = checkCheckBoxes();
         boolean hasStartDate = (generateStartDate.getValue() != null);
         boolean hasEndDate = (generateEndDate.getValue() != null);
         boolean needsEndDate;
@@ -453,46 +452,16 @@ public class ManagerSystemController extends SystemController{
 
         /*
          * The generate button is disabled if AT LEAST ONE of the following is true:
-         *  - There is no checkbox selected
          *  - There is no start date selected
          *  - An end date is needed AND none is selected
          * If all are false, the generate button is enabled
          */
-        if((atLeastOneCheckbox == false)
-                || (hasStartDate == false)
+        if((hasStartDate == false)
                 || ((needsEndDate == true) && (hasEndDate == false))){
             generateReportBtn.setDisable(true);
         }else{
             generateReportBtn.setDisable(false);
         }
-    }
-
-    /**
-     * Checks that at least one checkbox is selected
-     * @return TRUE if at least one checbox is selected, false otherwise
-     */
-    private boolean checkCheckBoxes(){
-        if(generateCheckbox1.isSelected()){
-            return true;
-        }
-
-        if(generateCheckbox2.isSelected()){
-            return true;
-        }
-
-        if(generateCheckbox3.isSelected()){
-            return true;
-        }
-
-        if(generateCheckbox4.isSelected()){
-            return true;
-        }
-
-        if(generateCheckbox5.isSelected()){
-            return true;
-        }
-
-        return false;
     }
 
     @FXML

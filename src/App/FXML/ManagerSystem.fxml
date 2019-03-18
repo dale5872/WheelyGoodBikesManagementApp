@@ -238,50 +238,6 @@
                                                                                         </HBox>
                                                                                     </children>
                                                                                 </VBox>
-                                                                                <VBox spacing="5.0">
-                                                                                    <children>
-                                                                                        <CheckBox fx:id="generateCheckbox1" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox2" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox3" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox4" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox5" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                    </children>
-                                                                                </VBox>
                                                                                 <HBox alignment="CENTER_RIGHT">
                                                                                     <children>
                                                                                         <Button fx:id="generateReportBtn" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateReport" prefHeight="35.0" prefWidth="117.0" styleClass="green-button" text="Generate" textOverrun="CLIP" />
