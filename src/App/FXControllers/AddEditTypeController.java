@@ -107,11 +107,14 @@ public class AddEditTypeController extends PopupController{
             /* Attempt to upload image file - cancel confirm if it can't be uploaded */
             try{
                 imageUrl = DataFetcher.uploadFile(imageUrlField.getText());
+                if(imageUrl == null){
+                    return;
+                }
             }catch(InsertFailedException ex){
                 return;
             }
 
-            /* Instantiate type */
+            /* Instantiate type */;
             if(existingType == null){ //Creating a new type
                 type = new Type();
             }else{

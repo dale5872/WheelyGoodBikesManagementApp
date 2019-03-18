@@ -1,5 +1,6 @@
 package App.FXControllers;
 
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -12,5 +13,6 @@ public class Controller {
      */
     public void setStage(Stage stage){
         this.stage = stage;
+        stage.getIcons().add(new Image(Controller.class.getResourceAsStream("Logo.png")));
     }
 }

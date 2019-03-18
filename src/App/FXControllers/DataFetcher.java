@@ -1042,7 +1042,7 @@ public class DataFetcher {
                 //Uploads the file and sets the URL to the path on the server
                 return UploadFile.uploadFile(filePath);
             }catch(FileNotFoundException | HTTPErrorException e){
-                throw new InsertFailedException(e.getMessage());
+                return null;
             }
         }
     }
