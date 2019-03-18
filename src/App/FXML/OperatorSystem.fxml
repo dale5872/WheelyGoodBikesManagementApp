@@ -26,35 +26,23 @@
                                 </HBox>
                                 <HBox alignment="BOTTOM_CENTER" layoutX="300.0" maxHeight="-Infinity" prefHeight="60.0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <ToggleButton fx:id="accountsTabButton" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Accounts" textOverrun="CLIP">
+                                        <ToggleButton fx:id="accountsTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" styleClass="nav-bar-tab" text="Accounts" textOverrun="CLIP">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
                                             <HBox.margin>
                                                 <Insets />
                                             </HBox.margin>
-                                            <styleClass>
-                                                <String fx:value="nav-bar-tab" />
-                                                <String fx:value="nav-bar-tab-active" />
-                                            </styleClass>
                                         </ToggleButton>
-                                        <ToggleButton fx:id="bikesTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Equipment" textOverrun="CLIP">
+                                        <ToggleButton fx:id="bikesTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" styleClass="nav-bar-tab" text="Equipment" textOverrun="CLIP">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
-                                            <styleClass>
-                                                <String fx:value="nav-bar-tab" />
-                                                <String fx:value="nav-bar-tab-inactive" />
-                                            </styleClass>
                                         </ToggleButton>
-                                        <ToggleButton fx:id="locationsTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" text="Locations" textOverrun="CLIP">
+                                        <ToggleButton fx:id="locationsTabButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchTab" prefHeight="60.0" prefWidth="150.0" styleClass="nav-bar-tab" text="Locations" textOverrun="CLIP">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
-                                            <styleClass>
-                                                <String fx:value="nav-bar-tab" />
-                                                <String fx:value="nav-bar-tab-inactive" />
-                                            </styleClass>
                                         </ToggleButton>
                                     </children>
                                 </HBox>
@@ -66,8 +54,7 @@
                                             </font>
                                             <styleClass>
                                                 <String fx:value="nav-bar-tab" />
-                                                <String fx:value="nav-bar-tab-inactive" />
-                                                <String fx:value="account-button-inactive" />
+                                                <String fx:value="account-button" />
                                             </styleClass>
                                             <HBox.margin>
                                                 <Insets />
@@ -76,14 +63,10 @@
                                                 <Insets bottom="-4.0" left="-4.0" right="-4.0" top="-4.0" />
                                             </padding>
                                         </ToggleButton>
-                                        <ToggleButton fx:id="logoutButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" text="Log Out" textOverrun="CLIP">
+                                        <ToggleButton fx:id="logoutButton" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="60.0" prefWidth="120.0" styleClass="nav-bar-tab" text="Log Out" textOverrun="CLIP">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
-                                            <styleClass>
-                                                <String fx:value="nav-bar-tab" />
-                                                <String fx:value="nav-bar-tab-inactive" />
-                                            </styleClass>
                                             <HBox.margin>
                                                 <Insets />
                                             </HBox.margin>

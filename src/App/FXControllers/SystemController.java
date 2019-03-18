@@ -23,7 +23,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 
 public class SystemController extends Controller{
     protected EmployeeAccount employee;
@@ -35,8 +34,7 @@ public class SystemController extends Controller{
     protected static ObservableList<Location> locations;
 
     /* Controls */
-    protected List<ToggleButton> tabButtons; //List to store all tab buttons
-    protected List<AnchorPane> tabs; //List to store all tabs;
+    protected TabSwitcher tabSwitcher;
 
     @FXML private AnchorPane parentPane;
 
@@ -195,7 +193,7 @@ public class SystemController extends Controller{
     @FXML
     protected void switchTab(ActionEvent e){
         ToggleButton clickedButton = (ToggleButton) e.getSource();
-        TabSwitcher.switchTab(tabButtons, tabs, clickedButton);
+        tabSwitcher.switchToClickedButton(clickedButton);
     }
 
     /**

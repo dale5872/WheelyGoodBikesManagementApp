@@ -38,37 +38,25 @@
 	-fx-font-size: 20px;
 	-fx-font-weight: bold;
 	-fx-background-radius: 0;
-}
-
-.nav-bar-tab-inactive{
 	-fx-background-color: #5E5E5E;
 	-fx-text-fill: white;
 }
 
-.nav-bar-tab-active{
+.nav-bar-tab:hover, .nav-bar-tab:selected{
 	-fx-background-color: #2AD1BB;
 	-fx-text-fill: black;
 }
 
-.nav-bar-tab:hover{
-	-fx-background-color: #2AD1BB;
-	-fx-text-fill: black;
-}
-
-.nav-bar-tab:pressed{
+.nav-bar-tab:pressed, .nav-bar-tab:selected:pressed{
 	-fx-background-color: #25B29F;
 	-fx-text-fill: black;
 }
 
-.nav-bar-tab:disabled{
-	-fx-opacity: 1;
-}
-
-.account-button-inactive{
+.account-button{
 	-fx-graphic: url("Profile_Round_White_Small.png");
 }
 
-.account-button-inactive:hover, .account-button-inactive:pressed, .account-button-active {
+.account-button:hover, .account-button:pressed, .account-button:selected {
 	-fx-graphic: url("Profile_Round_Black_Small.png");
 }
 

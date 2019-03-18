@@ -96,22 +96,15 @@ public class ManagerSystemController extends SystemController{
      */
     @SuppressWarnings("Duplicates")
     public void initialize(){
-        /* Initialise the tabButtons list and add all tab buttons to it */
-        super.tabButtons = new ArrayList<>();
-        super.tabButtons.add(bikesTabButton);
-        super.tabButtons.add(rentalsTabButton);
-        super.tabButtons.add(reportsTabButton);
-        super.tabButtons.add(userTabButton);
+        /* Initialise the tab switcher and set to first tab */
+        List<Tab> tabs = new ArrayList<>();
+        tabs.add(new Tab(bikesTab, bikesTabButton));
+        tabs.add(new Tab(rentalsTab, rentalsTabButton));
+        tabs.add(new Tab(reportsTab, reportsTabButton));
+        tabs.add(new Tab(userTab, userTabButton));
 
-        /* Initialise the tabs list and add all tabs to it */
-        super.tabs = new ArrayList<>();
-        super.tabs.add(bikesTab);
-        super.tabs.add(rentalsTab);
-        super.tabs.add(reportsTab);
-        super.tabs.add(userTab);
-
-        //Set the first tab as active
-        TabSwitcher.setToFirstTab(tabButtons, tabs);
+        super.tabSwitcher = new TabSwitcher(tabs);
+        super.tabSwitcher.switchToFirstTab();
 
         setDropdownOptions();
 
