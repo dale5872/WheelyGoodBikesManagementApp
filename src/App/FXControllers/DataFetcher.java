@@ -607,6 +607,57 @@ public class DataFetcher {
         return type;
     }
 
+    /**
+     * Returns a single Equipment object containing all the information of a selected bike
+     * @param id the bikeID
+     * @return Equipment object with all the bikes information
+     * @throws EmptyDatasetException if the bike cannot be found
+     */
+    static Equipment getSingleEquipment(int id, ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException {
+        Query q = new Query();
+
+        //get query based on location
+        q.updateQuery("read", "fetchSingleEquipment", "equipment_id=" + id);
+
+        Results res = q.executeQuery();
+
+        //check we have results
+        if(res == null || res.isEmpty()) {
+            throw new EmptyDatasetException("Empty Dataset: No equipment to return.", false);
+        } else {
+            Equipment e = new Equipment();
+            e.setID(Integer.parseInt((String) res.getElement(0, "equipmentID")));
+
+            /* Get type */
+            String typeName = (String)res.getElement(0,"equipmentName");
+            Type type;
+            try{
+                type = OptionsList.findTypeByName(types, typeName);
+                e.setType(type);
+            }catch(ListItemNotFoundException ex){
+                new ShowMessageBox().show("An error has occurred: type " + typeName + " could not be found. Equipment could not be loaded.");
+                throw new EmptyDatasetException("Empty Dataset: No Equipment to return.", true);
+            }
+
+            /* Get location */
+            String locationName = (String) res.getElement(0,"name");
+            Location loc;
+            try {
+                loc = OptionsList.findLocationByName(locations, locationName);
+                e.setLocation(loc);
+            }catch(ListItemNotFoundException ex){
+                new ShowMessageBox().show("An error has occurred: location " + locationName + " could not be found. Equipment could not be loaded.");
+                throw new EmptyDatasetException("Empty Dataset: No equipment to return.", true);
+            }
+
+            e.setStatus((String)res.getElement(0,"equipmentStatus"));
+            e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
+            e.setCategory("Equipment");
+            return e;
+        }
+
+    }
+
 
     /**
      * Adds a new equipment with the specified location to the database
@@ -796,12 +847,56 @@ public class DataFetcher {
         }
     }
 
+    /**
+     * Gets the bike rentals for the given location
+     * @param managerLoc current Manager Location object
+     * @param params search parameters
+     * @param types List of bike types
+     * @param locations list of locations
+     * @return a list of Rentals
+     * @throws EmptyDatasetException if there is no data to retrieve
+     * @throws InvalidParametersException if the parameters for the query are invalid
+     */
     static ObservableList<Rental> getBikeRentals(Location managerLoc, String params,
-                                                 ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {        ObservableList<Rental> rentals = FXCollections.observableArrayList();
-
+                                                 ObservableList<Type> types, ObservableList<Location> locations)
+            throws EmptyDatasetException, InvalidParametersException {
         String searchParameters = "location_id=" + managerLoc.getLocationID() + "&search=" + params;
         Query q = new Query("read", "fetchBikeRentals", searchParameters);
         Results res = q.executeQuery();
+
+        return fillRentalObject(res, types, locations, true);
+    }
+
+    /**
+     * Gets the equipment rentals for the given location
+     * @param managerLoc current Manager Location object
+     * @param params search parameters
+     * @param types List of equipment types
+     * @param locations list of locations
+     * @return a list of Rentals
+     * @throws EmptyDatasetException if there is no data to retrieve
+     * @throws InvalidParametersException if the parameters for the query are invalid
+     */
+    static ObservableList<Rental> getEquipmentRentals(Location managerLoc, String params, ObservableList<Type> types, ObservableList<Location> locations) throws EmptyDatasetException, InvalidParametersException {
+
+        String searchParameters = "location_id=" + managerLoc.getLocationID() + "&search=" + params;
+        Query q = new Query("read", "fetchEquipmentRentals", searchParameters);
+        Results res = q.executeQuery();
+
+        return fillRentalObject(res, types, locations, false);
+    }
+
+    /**
+     * Fills the Rentals list with the data from the Results objects passed into the method
+     * @param res results from the query of bikeRentals or equipmentRentals
+     * @param types list of bike or equipment types
+     * @param locations list of locations
+     * @return ObservableList of Rental objects
+     * @throws InvalidParametersException If the parameters are incorrect
+     * @throws EmptyDatasetException If there are no data to retrieve
+     */
+    static ObservableList<Rental> fillRentalObject(Results res, ObservableList<Type> types, ObservableList<Location> locations, boolean isBike) throws InvalidParametersException, EmptyDatasetException {
+        ObservableList<Rental> rentals = FXCollections.observableArrayList();
 
         //check we have results
         if(res == null || res.isEmpty()) {
@@ -810,9 +905,16 @@ public class DataFetcher {
             for(int r = 0; r < res.getRows(); r++) {
                 Rental newRental = new Rental();
                 //fill data
-                newRental.setID(Integer.parseInt((String) res.getElement(r, "bikeRentalID")));
+                //check if its a bike or equipment
+                if(isBike) {
+                    newRental.setID(Integer.parseInt((String) res.getElement(r, "bikeRentalID")));
+                    newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID")), types, locations));
+                } else {
+                    /** IMPLEMENT getSingleEquipment **/
+                    newRental.setID(Integer.parseInt((String) res.getElement(r, "equipmentRentalID")));
+                    newRental.setEquipment(getSingleEquipment(Integer.parseInt((String)res.getElement(r, "equipmentID")), types, locations));
+                }
                 newRental.setUser(getUser(Integer.parseInt((String)res.getElement(r, "userID"))));
-                newRental.setEquipment(getBike(Integer.parseInt((String)res.getElement(r, "bikeID")), types, locations));
                 newRental.setStatus((String)res.getElement(r, "status"));
                 //Get start and return times
                 try {
@@ -844,13 +946,7 @@ public class DataFetcher {
                 rentals.add(newRental);
             }
         }
-
         return rentals;
-
-    }
-
-    static ObservableList<Rental> getEquipmentRentals(Location managerLoc, String params, ObservableList<Type> types) throws EmptyDatasetException, InvalidParametersException {
-        return null;
     }
 
     static Results getReport(String report, String params) throws EmptyDatasetException {

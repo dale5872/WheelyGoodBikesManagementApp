@@ -292,7 +292,7 @@ public class ManagerSystemController extends SystemController{
 
     private void loadEquipmentRentals(String search) {
         try {
-            ObservableList<Rental> rental = DataFetcher.getEquipmentRentals(this.employee.getLocation(), "search=" + search, bikeTypes);
+            ObservableList<Rental> rental = DataFetcher.getEquipmentRentals(this.employee.getLocation(), "search=" + search, equipmentTypes, locations);
             fillRentalsTable(rental);
         } catch (EmptyDatasetException |InvalidParametersException | ErrorException e) {
             return;
