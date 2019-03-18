@@ -466,7 +466,7 @@
                                                     <children>
                                                         <VBox alignment="CENTER" prefWidth="200.0">
                                                             <children>
-                                                                <Button fx:id="selectNewProfilePicture" mnemonicParsing="false" prefWidth="150.0" styleClass="green-button" text="Change...">
+                                                                <Button mnemonicParsing="false" onAction="#selectNewProfilePicture" prefWidth="150.0" styleClass="green-button" text="Change...">
                                                                     <VBox.margin>
                                                                         <Insets />
                                                                     </VBox.margin>
