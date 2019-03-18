@@ -411,14 +411,20 @@ public class ManagerSystemController extends SystemController{
         String reportType = (String) savedReportType.getSelectionModel().getSelectedItem();
         String filename = (String) savedReportName.getSelectionModel().getSelectedItem();
 
+        Results bikeResults, equipmentResults;
+
         switch(reportType) {
             case "General":
                 barChart.setVisible(true);
-                insertDataToBarChart(DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename));
+                bikeResults = DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename);
+                equipmentResults = DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename + "e");
+                insertDataToBarChart(bikeResults, equipmentResults);
                 break;
             case "Revenue":
                 lineChart.setVisible(true);
-                insertDataToLineGraph(DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename));
+                bikeResults = DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename);
+                equipmentResults = DataFetcher.getSavedReport(reportType, this.employee.getLocation().getLocationID(), filename + "e");
+                insertDataToLineGraph(bikeResults, equipmentResults);
                 break;
         }
 
@@ -526,11 +532,12 @@ public class ManagerSystemController extends SystemController{
         String dateString = convertDate(generateStartDate.getValue());
 
         //get the data
-        String report = "generateDailyGeneralReport";
+        String bikeReport = "generateDailyGeneralReport";
+        String equipmentReport = "generateDailyGeneralEquipmentReport";
         String params = "location_id=" + this.employee.getLocation().getLocationID() + "&date=" + dateString;
 
         try {
-            insertDataToBarChart(DataFetcher.getReport(report, params));
+            insertDataToBarChart(DataFetcher.getReport(bikeReport, params), DataFetcher.getReport(equipmentReport, params));
             //setDropdownOptions();
         } catch (EmptyDatasetException exc) {
             return;
@@ -546,54 +553,77 @@ public class ManagerSystemController extends SystemController{
         String toDate = convertDate(generateEndDate.getValue());
 
         //get the data
-        String report = "generateRevenueReport";
+        String bikesReport = "generateRevenueReport";
+        String equipmentReport = "generateRevenueEquipmentReport";
         String params = "location_id=" + this.employee.getLocation().getLocationID() + "&fromDate=" + fromDate + "&toDate=" + toDate;
 
         try {
-            insertDataToLineGraph(DataFetcher.getReport(report, params));
+            Results bikeResults = DataFetcher.getReport(bikesReport, params);
+            Results equipmentResults = DataFetcher.getReport(equipmentReport, params);
+            insertDataToLineGraph(bikeResults, equipmentResults);
             //setDropdownOptions();
         } catch (EmptyDatasetException exc) {
             return;
         }
     }
 
-    private void insertDataToBarChart(Results res) {
+    private void insertDataToBarChart(Results bikeRes, Results equipmentRes) {
         String[] headers;
-        headers = res.getHeaders();
+        headers = bikeRes.getHeaders(); //headers will be the same for both results
 
         ObservableList<String> categories = FXCollections.observableArrayList();
 
-        XYChart.Series series = new XYChart.Series();
+        XYChart.Series bikeSeries = new XYChart.Series();
+        XYChart.Series equipmentSeries = new XYChart.Series();
+        bikeSeries.setName("Bikes");
+        equipmentSeries.setName("Equipment");
+
+        /** As this report has the same number of rows, we can input both at the same time **/
         //input data into chart
-        for(int i = 0; i < res.getCols(); i++) {
-            series.setName(headers[i]);
-            series.getData().add(new XYChart.Data<String, Integer>(headers[i], Integer.parseInt((String)res.getElement(0, i))));
+        for(int i = 0; i < bikeRes.getCols(); i++) {
+            bikeSeries.getData().add(new XYChart.Data<String, Integer>(headers[i], Integer.parseInt((String)bikeRes.getElement(0, i))));
+            equipmentSeries.getData().add(new XYChart.Data<String, Integer>(headers[i], Integer.parseInt((String)equipmentRes.getElement(0, i))));
+
             categories.add(headers[i]);
         }
 
         barXAxis.setCategories(categories);
-        barChart.getData().add(series);
+        barChart.getData().add(bikeSeries);
+        barChart.getData().add(equipmentSeries);
     }
 
-    private void insertDataToLineGraph(Results res) {
+    private void insertDataToLineGraph(Results bikeRes, Results equipmentRes) {
         String[] headers;
-        headers = res.getHeaders();
+        headers = bikeRes.getHeaders(); //too many dates to show at once
 
         lineXAxis.setLabel("Dates");
         lineYAxis.setLabel("Revenue in £");
 
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Revenue");
+        lineXAxis.setAutoRanging(true);
+        lineYAxis.setAutoRanging(true);
+
+        XYChart.Series bikeSeries = new XYChart.Series();
+        XYChart.Series equipmentSeries = new XYChart.Series();
+        bikeSeries.setName("Bikes");
+        equipmentSeries.setName("Equipment");
 
         ObservableList<String> categories = FXCollections.observableArrayList();
 
-        //input data into chart
-        for(int i = 0; i < res.getRows(); i++) {
-            series.getData().add(new XYChart.Data<String, Double>((String)res.getElement(i, "Date"), Double.parseDouble((String)res.getElement(i, "Revenue"))));
-            categories.add((String)res.getElement(i, "Date"));
+        //input bike data into chart
+        for(int i = 0; i < bikeRes.getRows(); i++) {
+            bikeSeries.getData().add(new XYChart.Data<String, Double>((String)bikeRes.getElement(i, "Date"), Double.parseDouble((String)bikeRes.getElement(i, "Revenue"))));
+            categories.add((String)bikeRes.getElement(i, "Date"));
         }
+
+        //input equipment data into chart
+        for(int i = 0; i < equipmentRes.getRows(); i++) {
+            equipmentSeries.getData().add(new XYChart.Data<String, Double>((String)equipmentRes.getElement(i, "Date"), Double.parseDouble((String)equipmentRes.getElement(i, "Revenue"))));
+        }
+
         lineXAxis.setCategories(categories);
-        lineChart.getData().add(series);
+        lineChart.getData().add(bikeSeries);
+        lineChart.getData().add(equipmentSeries);
+        lineChart.autosize();
 
     }
 
