@@ -66,7 +66,7 @@ public class LogInScreenController extends Controller{
         try {
             EmployeeAccount activeAccount = Authenticate.authorize(username, password);
             createAndShowMainWindow(activeAccount);
-        } catch (LoginFailedException | InvalidParametersException | NullPointerException e) {
+        } catch (Exception e) {
             incorrectCredentials.setVisible(true);
         }
     }

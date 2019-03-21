@@ -172,7 +172,7 @@
                                                 <TableColumn fx:id="rentalsEquipmentPrice" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="price-column" text="Equipment Price" />
                                                 <TableColumn fx:id="rentalsStartTime" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Start Time" />
                                                 <TableColumn fx:id="rentalsReturnTime" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Return Time" />
-                                                <TableColumn fx:id="rentalsTotalPrice" maxWidth="1.7976931348623157E308" prefWidth="100.0" text="Total Price" />
+                                                <TableColumn fx:id="rentalsTotalPrice" maxWidth="1.7976931348623157E308" prefWidth="100.0" styleClass="price-column" text="Total Price" />
                                                 <TableColumn fx:id="rentalsLocation" maxWidth="1.7976931348623157E308" prefWidth="250.0" text="Location" />
                                                 <TableColumn fx:id="rentalsStatus" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Status" />
                                             </columns>
@@ -236,50 +236,6 @@
                                                                                                 <ComboBox fx:id="generateReportType" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
                                                                                             </children>
                                                                                         </HBox>
-                                                                                    </children>
-                                                                                </VBox>
-                                                                                <VBox spacing="5.0">
-                                                                                    <children>
-                                                                                        <CheckBox fx:id="generateCheckbox1" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox2" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox3" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox4" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
-                                                                                        <CheckBox fx:id="generateCheckbox5" mnemonicParsing="false" onAction="#enableDisableGenerateFields" selected="true" text="CheckBox" textFill="WHITE">
-                                                                                            <VBox.margin>
-                                                                                                <Insets />
-                                                                                            </VBox.margin>
-                                                                                            <font>
-                                                                                                <Font size="14.0" />
-                                                                                            </font>
-                                                                                        </CheckBox>
                                                                                     </children>
                                                                                 </VBox>
                                                                                 <HBox alignment="CENTER_RIGHT">
@@ -466,7 +422,7 @@
                                                     <children>
                                                         <VBox alignment="CENTER" prefWidth="200.0">
                                                             <children>
-                                                                <Button fx:id="selectNewProfilePicture" mnemonicParsing="false" prefWidth="150.0" styleClass="green-button" text="Change...">
+                                                                <Button mnemonicParsing="false" onAction="#selectNewProfilePicture" prefWidth="150.0" styleClass="green-button" text="Change...">
                                                                     <VBox.margin>
                                                                         <Insets />
                                                                     </VBox.margin>
