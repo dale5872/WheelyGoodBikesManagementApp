@@ -10,15 +10,6 @@ public class Account {
     private String accType;
     private String profilePicture;
 
-    public Account(int userID, String username, String firstName, String lastName, String email, String phoneNumber, String accType) {
-        this.userID = userID;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
-
     public Account() {}
 
     public int getUserID () {

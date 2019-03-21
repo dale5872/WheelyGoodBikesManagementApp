@@ -1,24 +1,11 @@
 package App.Classes;
 
-import java.text.NumberFormat;
-
 public class Equipment {
-
     private int id;
     private String status;
-    private float price;
-    private String image;
     private Location location;
     private String category; //Bike or Equipment
     private Type type;
-
-    public Equipment(int id, String status, float price, String image, Location location) {
-        this.id = id;
-        this.status = status;
-        this.price = price;
-        this.image = image;
-        this.location = location;
-    }
 
     public Equipment() {}
 
@@ -34,7 +21,6 @@ public class Equipment {
      */
     @Deprecated
     public String getTypeName() {
-       // return this.typeName;
         return this.type.getName();
     }
 
@@ -51,28 +37,12 @@ public class Equipment {
         return this.status;
     }
 
-    public float getPrice() {
-        return this.price;
-    }
-
-    public String getImage() {
-        return this.image;
-    }
-
     public void setID(int id) {
         this.id = id;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public void setLocation(Location location) {
@@ -98,9 +68,14 @@ public class Equipment {
 
     public void setCategory(String category) { this.category = category; }
 
+    /**
+     * DO NOT DELETE
+     * This accessor is still used to display the formatted price in tables.
+     * @return
+     */
+    @Deprecated
     public String getFormattedPrice(){
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        return formatter.format(this.price);
+        return this.type.getFormattedPrice();
     }
 
     public void setType(Type type){

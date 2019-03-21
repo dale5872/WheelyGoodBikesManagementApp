@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Rental {
-
     private int id;
     private double cost;
     private Date startTime;
@@ -13,6 +12,8 @@ public class Rental {
     private String status;
     private Account user;
     private Equipment equipment;
+
+    public Rental(){}
 
     public void setID(int id) {
         this.id = id;
@@ -25,7 +26,7 @@ public class Rental {
     public void calculateCost() {
         long diff = returnTime.getTime() - startTime.getTime();
         int differentHours = (int) (diff / (60 * 60 * 1000));
-        this.cost = differentHours * this.equipment.getPrice();
+        this.cost = differentHours * this.equipment.getType().getPrice();
     }
 
     public void setStartTime(Date time) {
@@ -85,7 +86,7 @@ public class Rental {
 
     public String getEquipmentName() { return this.equipment.getType().getName(); }
 
-    public String getEquipmentPrice() { return this.equipment.getFormattedPrice(); }
+    public String getEquipmentPrice() { return this.equipment.getType().getFormattedPrice(); }
 
     public String getLocationName() { return this.equipment.getLocation().getName(); }
 

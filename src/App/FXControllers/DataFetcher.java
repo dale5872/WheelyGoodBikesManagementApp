@@ -327,7 +327,6 @@ public class DataFetcher {
                 }
 
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
-                e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 e.setCategory("Bike");
                 equipment.add(e);
             }
@@ -380,7 +379,6 @@ public class DataFetcher {
             }
 
             e.setStatus((String)res.getElement(0,"bikeStatus"));
-            e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
             e.setCategory("Bike");
             return e;
         }
@@ -572,7 +570,6 @@ public class DataFetcher {
                 }
 
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
-                e.setPrice(Float.parseFloat((String)res.getElement(r, "pricePerHour")));
                 e.setCategory("Equipment");
                 equipment.add(e);
             }
@@ -651,7 +648,6 @@ public class DataFetcher {
             }
 
             e.setStatus((String)res.getElement(0,"equipmentStatus"));
-            e.setPrice(Float.parseFloat((String)res.getElement(0, "pricePerHour")));
             e.setCategory("Equipment");
             return e;
         }

@@ -4,7 +4,6 @@ public class Location {
     private int locationID;
     private String name;
 
-
     public Location(int locationID, String name) {
         this.locationID = locationID;
         this.name = name;
