@@ -169,6 +169,54 @@ public class SystemController extends Controller{
     }
 
     /**
+     * Changes the logged in user's contact details, then switches back to non-editable view
+     * @param e
+     */
+    @FXML
+    protected void changeContactDetails(ActionEvent e){
+        boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
+        boolean emailBlank = userAccountEmailTextbox.getText().equals("");
+
+        if(phoneBlank || emailBlank) { //Blank check
+            new ShowMessageBox().show("You must enter an email address and phone number.");
+        }else{ //No blanks, so change
+            try{
+                /* Create a new EmployeeAccount object, with all the unchanged values*/
+                EmployeeAccount newAcc = new EmployeeAccount();
+                newAcc.setUserID(employee.getUserID());
+                newAcc.setEmployeeID(employee.getEmployeeID());
+                newAcc.setUsername(employee.getUsername());
+                newAcc.setFirstName(employee.getFirstName());
+                newAcc.setLastName(employee.getLastName());
+                newAcc.setLocation(employee.getLocation());
+                newAcc.setAccType(employee.getAccType());
+                newAcc.setProfilePicture(employee.getProfilePicture());
+
+                /* Pass the new phone number and email to newAcc */
+                String newPhone = userAccountPhoneTextbox.getText();
+                String newEmail = userAccountEmailTextbox.getText();
+                newAcc.setPhoneNumber(newPhone);
+                newAcc.setEmail(newEmail);
+
+                /* Get the account type index */
+                HashMap<String, String> accountTypes = DataFetcher.getAccountTypes();
+                int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
+
+                /* Update the account ion the database */
+                DataFetcher.updateAccount(employee, newAcc, accountType);
+
+                /* Update the account in this controller */
+                setEmployee(newAcc);
+
+                /* Switch back to non-editable view */
+                switchContactDetailsView(e);
+            }catch(InsertFailedException ex){
+                return;
+            }
+        }
+    }
+
+    /**
      * Shows the dialog to change the password of the active account
      */
     @FXML
@@ -177,12 +225,8 @@ public class SystemController extends Controller{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("ChangePassword", "Change Password", false);
 
-        disable();
-
         ChangePasswordController controller = (ChangePasswordController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setAccount(this.employee);
     }
 
@@ -263,8 +307,15 @@ public class SystemController extends Controller{
     private void changeImageView() {
         String imagePath = this.employee.getProfilePicture();
 
-        if(imagePath != null){
-            Image image = new Image(imagePath);
+        if(imagePath != null && !imagePath.toLowerCase().equals("null")){
+            Image image;
+
+            try{
+                image = new Image(imagePath);
+            }catch(Exception ex){
+                new ShowMessageBox().show("An error occurred when loading the image: " + imagePath + "\nProfile picture could not be loaded.");
+                return;
+            }
 
             profileImageView.setFitHeight(200);
             profileImageView.setFitWidth(200);

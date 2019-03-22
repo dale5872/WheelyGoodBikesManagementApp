@@ -342,12 +342,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddAccount", "Add Account", false);
 
-        super.disable();
-
         AddAccountController controller = (AddAccountController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setDropdownValues(accountTypes, locations);
     }
 
@@ -365,12 +361,8 @@ public class OperatorSystemController extends SystemController{
             JavaFXLoader loader = new JavaFXLoader();
             loader.loadNewFXWindow("EditAccount", "Edit Account", false);
 
-            super.disable();
-
             EditAccountController controller = (EditAccountController) loader.getController();
-            controller.setParentController(this);
-            controller.setOnCloseAction();
-            controller.setAlwaysOnTop(true);
+            controller.prepare(this);
             controller.setDropdownValues(accountTypes, locations);
 
             /* Pass the selected account to edit dialog */
@@ -390,12 +382,8 @@ public class OperatorSystemController extends SystemController{
             JavaFXLoader loader = new JavaFXLoader();
             loader.loadNewFXWindow("DeletionConfirmation", "Delete Account", false);
 
-            super.disable();
-
             DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
-            controller.setParentController(this);
-            controller.setOnCloseAction();
-            controller.setAlwaysOnTop(true);
+            controller.prepare(this);
             controller.setThingToDelete("account");
         }
     }
@@ -612,12 +600,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEquipment", "Add Equipment", false);
 
-        super.disable();
-
         AddEquipmentController controller = (AddEquipmentController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setDropdownValues(bikeTypes, equipmentTypes, locations);
     }
 
@@ -630,12 +614,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("EditEquipment", "Edit Equipment", false);
 
-        super.disable();
-
         EditEquipmentController controller = (EditEquipmentController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setDropdownValues(locations);
 
         /* Get the selected equipment and pass it to the controller */
@@ -652,12 +632,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("DeletionConfirmation", "Delete Equipment", false);
 
-        super.disable();
-
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
 
         if(equipmentView.getSelectionModel().getSelectedItem().equals("Bikes")){
             controller.setThingToDelete("bike");
@@ -885,12 +861,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditType", "Add Type", false);
 
-        super.disable();
-
         AddEditTypeController controller = (AddEditTypeController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
 
         boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
         controller.setIsBike(showingBikes);
@@ -906,12 +878,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditType", "Edit Type", false);
 
-        super.disable();
-
         AddEditTypeController controller = (AddEditTypeController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setExistingType(getSelectedType());
 
         boolean showingBikes = typesView.getSelectionModel().getSelectedItem().equals("Bikes");
@@ -930,12 +898,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("DeletionConfirmation", "Delete Type", false);
 
-        super.disable();
-
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
 
         if(showingBikes){
             controller.setThingToDelete("bike type");
@@ -1122,12 +1086,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditLocation", "Add Location", false);
 
-        super.disable();
-
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
     }
 
     /**
@@ -1139,12 +1099,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("AddEditLocation", "Edit Location", false);
 
-        super.disable();
-
         AddEditLocationController controller = (AddEditLocationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setLocation(getSelectedLocation());
     }
 
@@ -1157,12 +1113,8 @@ public class OperatorSystemController extends SystemController{
         JavaFXLoader loader = new JavaFXLoader();
         loader.loadNewFXWindow("DeletionConfirmation", "Delete Location", false);
 
-        super.disable();
-
         DeletionConfirmationController controller = (DeletionConfirmationController) loader.getController();
-        controller.setParentController(this);
-        controller.setOnCloseAction();
-        controller.setAlwaysOnTop(true);
+        controller.prepare(this);
         controller.setThingToDelete("location");
     }
 
@@ -1241,53 +1193,4 @@ public class OperatorSystemController extends SystemController{
             deleteLocation.setDisable(true);
         }
     }
-
-    /**
-     * Changes the logged in user's contact details, then switches back to non-editable view
-     * @param e
-     */
-    @FXML
-    @SuppressWarnings("Duplicates")
-    protected void changeContactDetails(ActionEvent e){
-        boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
-        boolean emailBlank = userAccountEmailTextbox.getText().equals("");
-
-        if(phoneBlank || emailBlank) { //Blank check
-            new ShowMessageBox().show("You must enter an email address and phone number.");
-        }else{ //No blanks, so change
-            try{
-                /* Create a new EmployeeAccount object, with all the unchanged values*/
-                EmployeeAccount newAcc = new EmployeeAccount();
-                newAcc.setUserID(employee.getUserID());
-                newAcc.setEmployeeID(employee.getEmployeeID());
-                newAcc.setUsername(employee.getUsername());
-                newAcc.setFirstName(employee.getFirstName());
-                newAcc.setLastName(employee.getLastName());
-                newAcc.setLocation(employee.getLocation());
-                newAcc.setAccType(employee.getAccType());
-
-                /* Pass the new phone number and email to newAcc */
-                String newPhone = userAccountPhoneTextbox.getText();
-                String newEmail = userAccountEmailTextbox.getText();
-                newAcc.setPhoneNumber(newPhone);
-                newAcc.setEmail(newEmail);
-
-                /* Get the account type index */
-                int accountType = Integer.parseInt(accountTypes.get(employee.getAccType()));
-
-                /* Update the account ion the database */
-                DataFetcher.updateAccount(employee, newAcc, accountType);
-
-                /* Update the account in this controller and the table */
-                setEmployee(newAcc);
-                filterAndSearchAccounts();
-
-                /* Switch back to non-editable view */
-                super.switchContactDetailsView(e);
-            }catch(InsertFailedException e1){
-                return;
-            }
-        }
-    }
-
 }

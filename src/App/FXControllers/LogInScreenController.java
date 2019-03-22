@@ -63,10 +63,11 @@ public class LogInScreenController extends Controller{
         String username = usernameField.getText();
         String password = passwordFieldHidden.getText();
 
-        try {
-            EmployeeAccount activeAccount = Authenticate.authorize(username, password);
+        EmployeeAccount activeAccount;
+        try{
+            activeAccount = Authenticate.authorize(username, password);
             createAndShowMainWindow(activeAccount);
-        } catch (Exception e) {
+        }catch (Exception e){
             incorrectCredentials.setVisible(true);
         }
     }
@@ -78,10 +79,6 @@ public class LogInScreenController extends Controller{
     private void createAndShowMainWindow(EmployeeAccount activeAccount) throws InvalidParametersException {
         String filename; //The name of the appropriate FXML file
 
-        /*
-         * renamed from getEmployeeType() to getAccType(). This should be clarified later
-         * We have 3 account types, 'Manager', 'Operator', 'Admin'
-         */
         switch(activeAccount.getAccType()){
             case "Manager":
                 filename = "ManagerSystem";

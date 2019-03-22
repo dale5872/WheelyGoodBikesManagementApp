@@ -32,7 +32,6 @@ public class AccountPopupController extends PopupController {
      * @param locations
      */
     protected void setDropdownValues(HashMap<String, String> accountTypes, ObservableList<Location> locations){
-
         this.accountTypes = accountTypes;
         this.locations = locations;
 

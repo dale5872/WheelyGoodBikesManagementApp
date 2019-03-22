@@ -6,23 +6,17 @@ public class PopupController extends Controller{
     protected SystemController parentController;
 
     /**
-     * Passes the parent controller in
-     * @param controller
+     * Sets and disables the parent controller
+     * Sets the on close action to ensure that the parent controller is re-enabled on closing the pop-up
+     * Sets the pop-up to always be on top
+     * @param controller The parent controller
      */
-    public void setParentController(SystemController controller){
+    public void prepare(SystemController controller){
         this.parentController = controller;
-    }
+        this.parentController.disable();
 
-    /**
-     * Ensures that the parent window is always re-enabled when this window is closed
-     * This method must be called AFTER the Stage and Parent Controller have been set
-     */
-    public void setOnCloseAction(){
         super.stage.setOnCloseRequest(e -> close());
-    }
-
-    public void setAlwaysOnTop(boolean b){
-        super.stage.setAlwaysOnTop(b);
+        super.stage.setAlwaysOnTop(true);
     }
 
     /**

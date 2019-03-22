@@ -79,11 +79,6 @@ public class ManagerSystemController extends SystemController{
     @FXML private DatePicker generateStartDate;
     @FXML private DatePicker generateEndDate;
     @FXML private ComboBox generateReportType;
-    @FXML private CheckBox generateCheckbox1;
-    @FXML private CheckBox generateCheckbox2;
-    @FXML private CheckBox generateCheckbox3;
-    @FXML private CheckBox generateCheckbox4;
-    @FXML private CheckBox generateCheckbox5;
     @FXML private Button generateReportBtn;
 
     /** Load Saved Report **/
@@ -109,7 +104,6 @@ public class ManagerSystemController extends SystemController{
         setDropdownOptions();
 
         //hide the graphs
-        //barChart.setVisible(false);
         lineChart.setVisible(false);
     }
 
@@ -336,54 +330,6 @@ public class ManagerSystemController extends SystemController{
             throw new ErrorException("An error has occured, check the log for details", true, e);
         }
 
-    }
-
-    /**
-     * Changes the logged in user's contact details, then switches back to non-editable view
-     * @param e
-     */
-    @FXML
-    @SuppressWarnings("Duplicates")
-    protected void changeContactDetails(ActionEvent e){
-        boolean phoneBlank = userAccountPhoneTextbox.getText().equals("");
-        boolean emailBlank = userAccountEmailTextbox.getText().equals("");
-
-        if(phoneBlank || emailBlank) { //Blank check
-            new ShowMessageBox().show("You must enter an email address and phone number.");
-        }else{ //No blanks, so change
-            try{
-                /* Create a new EmployeeAccount object, with all the unchanged values*/
-                EmployeeAccount newAcc = new EmployeeAccount();
-                newAcc.setUserID(employee.getUserID());
-                newAcc.setEmployeeID(employee.getEmployeeID());
-                newAcc.setUsername(employee.getUsername());
-                newAcc.setFirstName(employee.getFirstName());
-                newAcc.setLastName(employee.getLastName());
-                newAcc.setLocation(employee.getLocation());
-                newAcc.setAccType(employee.getAccType());
-
-                /* Pass the new phone number and email to newAcc */
-                String newPhone = userAccountPhoneTextbox.getText();
-                String newEmail = userAccountEmailTextbox.getText();
-                newAcc.setPhoneNumber(newPhone);
-                newAcc.setEmail(newEmail);
-
-                /* Get the account type index */
-                HashMap<String, String> accountTypes = DataFetcher.getAccountTypes();
-                int accountType = Integer.parseInt(accountTypes.get(newAcc.getAccType()));
-
-                /* Update the account ion the database */
-                DataFetcher.updateAccount(employee, newAcc, accountType);
-
-                /* Update the account in this controller */
-                setEmployee(newAcc);
-
-                /* Switch back to non-editable view */
-                super.switchContactDetailsView(e);
-            }catch(InsertFailedException ex){
-                return;
-            }
-        }
     }
 
     /** REPORTS METHODS **/
