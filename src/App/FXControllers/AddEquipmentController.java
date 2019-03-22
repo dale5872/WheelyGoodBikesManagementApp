@@ -101,7 +101,6 @@ public class AddEquipmentController extends PopupController{
 
             /* Create new equipment object */
             Equipment equipment = new Equipment();
-            equipment.setCategory(categoryName);
             equipment.setType(type);
             equipment.setLocation(loc);
             equipment.setStatus("Available");

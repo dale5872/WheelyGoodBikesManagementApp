@@ -327,7 +327,6 @@ public class DataFetcher {
                 }
 
                 e.setStatus((String)res.getElement(r,"bikeStatus"));
-                e.setCategory("Bike");
                 equipment.add(e);
             }
         }
@@ -379,7 +378,6 @@ public class DataFetcher {
             }
 
             e.setStatus((String)res.getElement(0,"bikeStatus"));
-            e.setCategory("Bike");
             return e;
         }
 
@@ -405,6 +403,7 @@ public class DataFetcher {
                 t.setName((String)res.getElement(r, "bikeType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
+                t.setCategory("Bike");
                 type.add(t);
             }
         }
@@ -418,7 +417,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void addBike(Equipment e) throws InsertFailedException, EmptyDatasetException {
-        if(e.getCategory().equals("Bike")) {
+        if(e.getType().getCategory().equals("Bike")) {
             Query q = new Query("create", "addBike", "bike_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus());
@@ -455,7 +454,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void updateBike(Equipment e) throws InsertFailedException {
-        if(e.getCategory().equals("Bike")) {
+        if(e.getType().getCategory().equals("Bike")) {
             Query q = new Query("update", "updateBike", "bike_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus() +
@@ -488,7 +487,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to delete
      */
     static void deleteBike(Equipment e) throws InsertFailedException {
-        if(e.getCategory().equals("Bike")) {
+        if(e.getType().getCategory().equals("Bike")) {
             Query q = new Query("delete", "deleteBike", "bike_id=" + e.getID());
 
             if (!q.insertQuery()) {
@@ -570,7 +569,6 @@ public class DataFetcher {
                 }
 
                 e.setStatus((String)res.getElement(r,"equipmentStatus"));
-                e.setCategory("Equipment");
                 equipment.add(e);
             }
         }
@@ -598,6 +596,7 @@ public class DataFetcher {
                 t.setName((String)res.getElement(r, "equipmentType"));
                 t.setPrice(Double.parseDouble((String)res.getElement(r, "pricePerHour")));
                 t.setImage((String)res.getElement(r, "image"));
+                t.setCategory("Equipment");
                 type.add(t);
             }
         }
@@ -648,7 +647,6 @@ public class DataFetcher {
             }
 
             e.setStatus((String)res.getElement(0,"equipmentStatus"));
-            e.setCategory("Equipment");
             return e;
         }
 
@@ -662,7 +660,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void addEquipment(Equipment e) throws InsertFailedException, EmptyDatasetException {
-        if(e.getCategory().equals("Equipment")) {
+        if(e.getType().getCategory().equals("Equipment")) {
             Query q = new Query("create", "addEquipment", "equipment_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus());
@@ -697,7 +695,7 @@ public class DataFetcher {
      * Scope: Package-private (No modifier)
      */
     static void updateEquipment(Equipment e) throws InsertFailedException {
-        if(e.getCategory().equals("Equipment")) {
+        if(e.getType().getCategory().equals("Equipment")) {
             Query q = new Query("update", "updateEquipment", "equipment_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus() +
@@ -730,7 +728,7 @@ public class DataFetcher {
      * @throws InsertFailedException if failed to delete
      */
     static void deleteEquipment(Equipment e) throws InsertFailedException {
-        if(e.getCategory().equals("Equipment")) {
+        if(e.getType().getCategory().equals("Equipment")) {
             Query q = new Query("delete", "deleteEquipment", "equipment_id=" + e.getID());
 
             if (!q.insertQuery()) {

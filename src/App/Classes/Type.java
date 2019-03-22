@@ -7,6 +7,7 @@ public class Type{
     private String name;
     private double price;
     private String image;
+    private String category; //Bike or Equipment
 
     public Type(){}
 
@@ -23,6 +24,10 @@ public class Type{
     }
 
     public void setImage(String url) { this.image = url; }
+
+    public void setCategory(String category){
+        this.category = category;
+    }
 
     public int getID(){
         return this.id;
@@ -42,4 +47,8 @@ public class Type{
     }
 
     public String getImage() { return this.image; }
+
+    public String getCategory(){
+        return this.category;
+    }
 }

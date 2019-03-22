@@ -64,10 +64,6 @@ public class Equipment {
         return this.location.getName();
     }
 
-    public String getCategory() { return this.category; }
-
-    public void setCategory(String category) { this.category = category; }
-
     /**
      * DO NOT DELETE
      * This accessor is still used to display the formatted price in tables.

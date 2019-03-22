@@ -36,7 +36,7 @@ public class EditEquipmentController extends PopupController{
         this.equipment = equipment;
 
         equipmentInfo.setText("ID: " + this.equipment.getID()
-                + "\nCategory: " + this.equipment.getCategory()
+                + "\nCategory: " + this.equipment.getType().getCategory()
                 + "\nType: " + this.equipment.getType().getName());
 
         equipmentLocation.setValue(this.equipment.getLocation().getName());
@@ -62,7 +62,7 @@ public class EditEquipmentController extends PopupController{
             equipment.setStatus(status);
 
             /* Pass back to Operator System */
-            if(equipment.getCategory().equals("Bike")){
+            if(equipment.getType().getCategory().equals("Bike")){
                 ((OperatorSystemController) super.parentController).updateBike(equipment);
             }else{
                 ((OperatorSystemController) super.parentController).updateEquipment(equipment);
