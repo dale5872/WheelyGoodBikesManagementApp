@@ -17,7 +17,7 @@ public class EditAccountController extends AccountPopupController{
      * @param locations
      */
     public void setDropdownValues(HashMap<String, String> accountTypes, ObservableList<Location> locations){
-        accountTypes.values().remove("User");
+        accountTypes.keySet().remove("User");
 
         super.setDropdownValues(accountTypes, locations);
     }
@@ -105,6 +105,10 @@ public class EditAccountController extends AccountPopupController{
      * @return TRUE if there are blank fields, FALSE if there are none
      */
     private boolean checkForBlankFields(){
+        if(accountTypeCombo.getSelectionModel().isEmpty()){
+            return true;
+        }
+
         if(workLocationCombo.getSelectionModel().isEmpty()){
             return true;
         }

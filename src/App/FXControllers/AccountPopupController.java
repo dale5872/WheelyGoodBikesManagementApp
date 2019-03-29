@@ -37,7 +37,6 @@ public class AccountPopupController extends PopupController {
 
         ObservableList<String> accountTypeOptions = OptionsList.createList(this.accountTypes);
         accountTypeCombo.setItems(accountTypeOptions);
-        accountTypeCombo.getSelectionModel().selectFirst();
 
         ObservableList<String> locationOptions = OptionsList.createLocationNameList(this.locations);
         workLocationCombo.setItems(locationOptions);

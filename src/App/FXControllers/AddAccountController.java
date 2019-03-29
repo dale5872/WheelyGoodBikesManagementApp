@@ -116,9 +116,13 @@ public class AddAccountController extends AccountPopupController{
      * @return TRUE if there are blank fields, FALSE if there are none
      */
     private boolean checkForBlankFields(){
-        if(!accountTypeCombo.getValue().equals("User")) { //Only need to check this if the account is not a user account
-            if (workLocationCombo.getSelectionModel().isEmpty()) {
-                return true;
+        if(accountTypeCombo.getSelectionModel().isEmpty()){
+            return true;
+        }else{
+            if(!accountTypeCombo.getValue().equals("User")){ //Only need to check this if the account is not a user account
+                if(workLocationCombo.getSelectionModel().isEmpty()){
+                    return true;
+                }
             }
         }
 
