@@ -458,7 +458,7 @@ public class DataFetcher {
             Query q = new Query("update", "updateBike", "bike_type=" + e.getType().getID() +
                     "&location_id=" + e.getLocation().getLocationID() +
                     "&status=" + e.getStatus() +
-                    "&equipment_id=" + e.getID());
+                    "&bike_id=" + e.getID());
 
             if (!q.insertQuery()) {
                 throw new InsertFailedException("Failed to change getEquipment " + e.getID());

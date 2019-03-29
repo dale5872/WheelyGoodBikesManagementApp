@@ -202,6 +202,16 @@
                                                                                     <children>
                                                                                         <HBox alignment="CENTER_LEFT">
                                                                                             <children>
+                                                                                                <Label prefWidth="100.0" text="Report Type:" textFill="WHITE">
+                                                                                                    <font>
+                                                                                                        <Font size="14.0" />
+                                                                                                    </font>
+                                                                                                </Label>
+                                                                                                <ComboBox fx:id="generateReportType" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
+                                                                                            </children>
+                                                                                        </HBox>
+                                                                                        <HBox alignment="CENTER_LEFT">
+                                                                                            <children>
                                                                                                 <Label prefWidth="100.0" text="Start Date:" textFill="WHITE">
                                                                                                     <HBox.margin>
                                                                                                         <Insets />
@@ -224,16 +234,6 @@
                                                                                                     </font>
                                                                                                 </Label>
                                                                                                 <DatePicker fx:id="generateEndDate" disable="true" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
-                                                                                            </children>
-                                                                                        </HBox>
-                                                                                        <HBox alignment="CENTER_LEFT">
-                                                                                            <children>
-                                                                                                <Label prefWidth="100.0" text="Report Type:" textFill="WHITE">
-                                                                                                    <font>
-                                                                                                        <Font size="14.0" />
-                                                                                                    </font>
-                                                                                                </Label>
-                                                                                                <ComboBox fx:id="generateReportType" onAction="#enableDisableGenerateFields" prefHeight="30.0" prefWidth="250.0" />
                                                                                             </children>
                                                                                         </HBox>
                                                                                     </children>
